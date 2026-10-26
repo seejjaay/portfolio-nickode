@@ -44,6 +44,13 @@ export function scrollToY(y: number) {
   else window.scrollTo({ top: y, behavior: "smooth" });
 }
 
+/** Re-measures the page for the smooth scroller and the pinned scenes: call after
+ *  the page's size changed under them (a restored route, for example). */
+export function refreshScroll() {
+  lenisInstance?.resize();
+  ScrollTrigger.refresh();
+}
+
 /** Smooth-scrolls to a section by id, landing where a native anchor would
  *  (honouring its scroll-margin-top). False if there is no such element. */
 export function scrollToSection(id: string) {

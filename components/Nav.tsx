@@ -63,8 +63,10 @@ const pad = (n: number) => String(n + 1).padStart(2, "0");
    rising in turn with their rules drawing, then the footer. Under reduced
    motion the same timeline just runs near-instantly. */
 export function Nav() {
-  const onHome = usePathname() === "/";
-  const active = useActiveSection(onHome);
+  const pathname = usePathname();
+  const onHome = pathname === "/";
+  // On a project page the Projects link is the active one (Figma 15:2).
+  const active = useActiveSection(onHome) ?? (pathname.startsWith("/projects/") ? "work" : null);
   const [open, setOpen] = useState(false);
 
   const headerRef = useRef<HTMLElement>(null);
@@ -170,7 +172,7 @@ export function Nav() {
       </header>
 
       {/* Hidden until the timeline plays (visibility keeps it out of the tab order). */}
-      <div id="nav-drawer" ref={drawerRef} className="invisible fixed inset-0 z-40">
+      <div id="nav-drawer" ref={drawerRef} className="invisible fixed inset-0 z-40 overflow-hidden">
         <div data-scrim onClick={() => setOpen(false)} className="nav-scrim absolute inset-0" />
         <div data-panel className="absolute right-0 top-0 flex h-full w-[440px] max-w-full flex-col border-l border-border-strong bg-bg px-10 pb-10">
           <div className="flex h-[var(--nav-h)] shrink-0 items-center">

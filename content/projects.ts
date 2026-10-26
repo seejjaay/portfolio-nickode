@@ -14,17 +14,17 @@ export type Project = {
   features: { title: string; text: string }[];
   screenshots: { src: string; caption: string }[];
   tech: string[];
-  repo: { url: string; description: string; license?: string };
+  repo: { url: string; description: string; license?: string; stars?: number; forks?: number; language?: string };
   liveUrl?: string;
 };
 
 const features = [
-  { title: "Real-time updates", text: "Changes show up instantly across every open session." },
-  { title: "Secure login", text: "Sign-in with sessions, roles and sensible defaults." },
-  { title: "Responsive design", text: "Comfortable on a phone, a laptop and a wide monitor." },
-  { title: "Admin dashboard", text: "One place to manage content, users and settings." },
-  { title: "Search & filters", text: "Find anything quickly and narrow it down as you go." },
-  { title: "Fast performance", text: "Small bundles, cached data and lazy-loaded media." },
+  { title: "Real-time updates", text: "Changes sync instantly across every connected device, so users always see the latest data." },
+  { title: "Secure login", text: "Email and social sign-in with encrypted sessions and role-based access." },
+  { title: "Responsive design", text: "A layout that adapts cleanly from phones to wide desktop monitors." },
+  { title: "Admin dashboard", text: "A clear control panel for managing content, users and activity at a glance." },
+  { title: "Search & filters", text: "Fast, forgiving search with filters that narrow results in a single click." },
+  { title: "Fast performance", text: "Optimized loading and caching keep every page responsive under load." },
 ];
 
 const make = (index: number, title: string, category: string, featured = false): Project => ({
@@ -33,20 +33,20 @@ const make = (index: number, title: string, category: string, featured = false):
   title,
   category,
   featured,
-  summary: "One line on what this project is and who it is for.",
-  meta: { role: "Full-stack developer", year: "2025", timeline: "3 months", team: "Solo", client: "Client name", status: "Live" },
+  summary: "A one-line summary of what this project does, who it is for, and why it matters. Keep it short and specific.",
+  meta: { role: "Full-stack developer", year: "2026", timeline: "3 months", team: "Solo project", client: "Client or personal", status: "Live" },
   video: { src: "", poster: "", duration: "1:24" },
   overview: [
-    "The problem: describe what was broken or missing, and for whom.",
-    "The approach and result: describe what you built and what changed because of it.",
+    "Describe the problem this project set out to solve and who it was built for. Explain the context in two or three sentences so a visitor understands why it exists.",
+    "Then describe your approach: the decisions you made, the challenges you ran into, and what the finished result does. Mention the outcome or impact if you have numbers to share.",
   ],
   features,
-  screenshots: ["Home", "Dashboard", "Detail", "Settings", "Mobile", "Reports"].map((name, i) => ({
+  screenshots: ["Home", "Mobile", "Dashboard", "Detail", "Settings"].map((name, i) => ({
     src: "",
     caption: `SCREENSHOT 0${i + 1} · ${name.toUpperCase()}`,
   })),
-  tech: ["Next.js", "TypeScript", "PostgreSQL", "Tailwind"],
-  repo: { url: `github.com/username/${title.toLowerCase().replace(/\s+/g, "-")}`, description: "Short description of the repository.", license: "MIT" },
+  tech: ["React", "TypeScript", "Node.js", "PostgreSQL", "Tailwind CSS", "Figma", "AWS", "Docker"],
+  repo: { url: `github.com/username/${title.toLowerCase().replace(/\s+/g, "-")}`, description: "Short description of the repository: what it contains, how to run it locally, and where to find the documentation.", license: "MIT", stars: 128, forks: 24, language: "TypeScript" },
   liveUrl: "#",
 });
 

@@ -48,8 +48,7 @@ function RelatedCard({
   );
 
   return isProject ? (
-    // No prefetch: /projects/[slug] does not exist until step 10, and prefetching it logs a 404.
-    <Link href={`/projects/${item.slug}`} prefetch={false} className={cardBase}>
+    <Link href={`/projects/${item.slug}`} className={cardBase}>
       {inner}
     </Link>
   ) : (
