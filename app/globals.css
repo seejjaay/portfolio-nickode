@@ -124,6 +124,21 @@
     mask: url("/assets/ui/icon-arrow-up.svg") center / 100% 100% no-repeat;
   }
 
+  .icon-next-arrow {
+    display: block;
+    width: 96px;
+    height: 16px;
+    background-color: currentColor;
+    -webkit-mask: url("/assets/ui/icon-next-arrow.svg") center / 100% 100% no-repeat;
+    mask: url("/assets/ui/icon-next-arrow.svg") center / 100% 100% no-repeat;
+  }
+
+  /* Clips its content to the hero cutout's silhouette (the cutout's alpha). */
+  .hero-silhouette {
+    -webkit-mask: url("/assets/hero/hero-gray.webp") center / 100% 100% no-repeat;
+    mask: url("/assets/hero/hero-gray.webp") center / 100% 100% no-repeat;
+  }
+
   /* Theme toggle shows the icon for the theme you would switch to. Driven by
      the data-theme attribute so it is correct before React hydrates. */
   .theme-icon-moon {

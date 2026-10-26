@@ -1,7 +1,8 @@
+import { Hero } from "@/components/hero/Hero";
+
 /* Step 1 placeholder: empty sections at Figma's 1440 heights so the nav anchors
    and scroll-spy can be exercised. Each is replaced in its own build step. */
 const sections = [
-  { id: "hero", label: "Hero", height: 900, step: 3 },
   { id: "about", label: "About Me", height: 850, step: 4 },
   { id: "divider", label: "Titles divider", height: 222, step: 5 },
   { id: "work", label: "What I've done", height: 1177, step: 8 },
@@ -14,6 +15,7 @@ const sections = [
 export default function Home() {
   return (
     <>
+      <Hero />
       {sections.map(({ id, label, height, step }) => (
         <section
           key={id}
