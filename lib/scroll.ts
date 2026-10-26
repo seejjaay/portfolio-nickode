@@ -31,10 +31,27 @@ export function lockScroll(): () => void {
   };
 }
 
-/** Smooth-scrolls the page (Lenis when running, native otherwise). */
+/** Smooth-scrolls the page (Lenis when running, native otherwise). Longer trips
+ *  take a little longer, so a jump across the whole page reads as travel rather
+ *  than a blur. Under reduced motion it just goes there. */
 export function scrollToY(y: number) {
-  if (lenisInstance) lenisInstance.scrollTo(y, { duration: 1 });
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    window.scrollTo({ top: y, behavior: "auto" });
+    return;
+  }
+  const duration = Math.min(2.4, 1 + Math.abs(y - window.scrollY) / 8000);
+  if (lenisInstance) lenisInstance.scrollTo(y, { duration });
   else window.scrollTo({ top: y, behavior: "smooth" });
+}
+
+/** Smooth-scrolls to a section by id, landing where a native anchor would
+ *  (honouring its scroll-margin-top). False if there is no such element. */
+export function scrollToSection(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return false;
+  const margin = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+  scrollToY(Math.max(0, el.getBoundingClientRect().top + window.scrollY - margin));
+  return true;
 }
 
 /* How far past the About pin the visitor has scrolled, 0 to 1. The About scene

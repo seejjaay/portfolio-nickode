@@ -320,28 +320,18 @@
     border-color: var(--text);
   }
 
-  /* Menu drawer: a native <dialog> filling the viewport with the panel flush
-     right; clicking the scrim closes it. */
-  .nav-dialog {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    max-height: none;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    overflow: hidden;
-  }
-
-  .nav-dialog[open] {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .nav-dialog::backdrop {
+  /* Menu drawer scrim; the drawer itself is animated by GSAP (Nav.tsx). */
+  .nav-scrim {
     background: color-mix(in srgb, var(--bg) 72%, transparent);
+  }
+
+  /* Links nudge right on hover. */
+  .nav-link-label {
+    transition: transform 400ms var(--ease);
+  }
+
+  .nav-link:hover .nav-link-label {
+    transform: translateX(10px);
   }
 
   html.modal-open {
@@ -779,31 +769,11 @@
       animation: achv-out 260ms var(--ease) both;
     }
 
-    .nav-dialog[open]::backdrop {
-      animation: achv-fade 300ms var(--ease) both;
-    }
 
-    .nav-dialog[open] .nav-panel {
-      animation: nav-in 420ms var(--ease) both;
-    }
 
-    .nav-dialog.is-closing::backdrop {
-      animation: achv-fade 260ms var(--ease) reverse both;
-    }
 
-    .nav-dialog.is-closing .nav-panel {
-      animation: nav-in 260ms var(--ease) reverse both;
-    }
   }
 
-  @keyframes nav-in {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: none;
-    }
-  }
 
   @keyframes achv-fade {
     from {
