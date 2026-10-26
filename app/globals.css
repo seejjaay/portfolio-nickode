@@ -18,6 +18,9 @@
   /* "White" for mix-blend-mode: difference titles. In light mode it is the
      paper color, so the title reads dark over paper and light over dark art. */
   --blend-white: #ffffff;
+  /* Outlined type: light strokes on black render heavier in browsers than
+     Figma's, so dark uses a thinner stroke. Measured against Figma's stills. */
+  --outline-stroke: 0.5px;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --nav-h: 100px;
@@ -54,6 +57,7 @@
   --border: rgba(10, 10, 10, 0.1);
   --border-strong: rgba(10, 10, 10, 0.24);
   --blend-white: #f6f6f6;
+  --outline-stroke: 1px;
 }
 
 @media (min-width: 640px) {
@@ -224,6 +228,114 @@
   .hero-silhouette {
     -webkit-mask: url("/assets/hero/hero-gray.webp") center / 100% 100% no-repeat;
     mask: url("/assets/hero/hero-gray.webp") center / 100% 100% no-repeat;
+  }
+
+  /* Four-point star between marquee titles (Figma asset, 55% opacity baked in). */
+  .icon-separator {
+    display: block;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    background-color: var(--text);
+    -webkit-mask: url("/assets/ui/icon-separator.svg") center / 100% 100% no-repeat;
+    mask: url("/assets/ui/icon-separator.svg") center / 100% 100% no-repeat;
+  }
+
+  /* Marquee rows (DESIGN.md 7.3). A track of two identical groups slides by
+     one group (-50%), so the loop is seamless. --dur and --phase come from the
+     Marquee component. The rows keep moving on hover (by request; the spec
+     had them pause). */
+  .marquee-row {
+    overflow: hidden;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-left var(--dur, 90s) linear infinite;
+    animation-delay: calc(var(--dur, 90s) * var(--phase, 0) * -1);
+    will-change: transform;
+  }
+
+  .marquee-reverse {
+    animation-name: marquee-right;
+  }
+
+  @keyframes marquee-left {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes marquee-right {
+    from {
+      transform: translate3d(-50%, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  /* Reduced motion: no scrolling. Each row becomes a centred, wrapped list
+     (the duplicate group is hidden) and the edge fades go away. */
+  @media (prefers-reduced-motion: reduce) {
+    /* !important: these beat Tailwind's utility classes on the same elements. */
+    .titles-divider {
+      height: auto !important;
+      padding: 48px var(--gutter) !important;
+    }
+
+    .marquee-slot {
+      position: static !important;
+    }
+
+    .marquee-slot + .marquee-slot {
+      margin-top: 24px;
+    }
+
+    .marquee-row {
+      overflow: visible;
+    }
+
+    .marquee-track {
+      width: 100%;
+      animation: none;
+      transform: none;
+    }
+
+    .marquee-group {
+      flex-wrap: wrap;
+      flex-shrink: 1 !important;
+      justify-content: center;
+      max-width: 100%;
+      column-gap: 20px;
+      row-gap: 6px;
+      padding-right: 0 !important;
+    }
+
+    .marquee-group li {
+      gap: 20px !important;
+    }
+
+    .marquee-group li > span:first-child {
+      font-size: 24px !important;
+    }
+
+    .marquee-group .icon-separator {
+      width: 14px;
+      height: 14px;
+    }
+
+    .marquee-group[aria-hidden] {
+      display: none !important;
+    }
+
+    .marquee-fade {
+      display: none;
+    }
   }
 
   /* Theme toggle shows the icon for the theme you would switch to. Driven by

@@ -1,11 +1,11 @@
 import { AboutContent } from "@/components/about/AboutContent";
 import { AboutScene } from "@/components/about/AboutScene";
+import { TitlesDivider } from "@/components/divider/TitlesDivider";
 import { Hero } from "@/components/hero/Hero";
 
 /* Step 1 placeholder: empty sections at Figma's 1440 heights so the nav anchors
    and scroll-spy can be exercised. Each is replaced in its own build step. */
 const sections = [
-  { id: "divider", label: "Titles divider", height: 222, step: 5 },
   { id: "work", label: "What I've done", height: 1177, step: 8 },
   { id: "stack", label: "What I use", height: 1177, step: 9 },
   { id: "achievements", label: "What I have achieved", height: 917, step: 6 },
@@ -22,6 +22,7 @@ export default function Home() {
           <AboutContent />
         </AboutScene>
       </section>
+      <TitlesDivider />
       {sections.map(({ id, label, height, step }) => (
         <section
           key={id}
