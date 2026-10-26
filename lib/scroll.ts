@@ -31,6 +31,12 @@ export function lockScroll(): () => void {
   };
 }
 
+/** Smooth-scrolls the page (Lenis when running, native otherwise). */
+export function scrollToY(y: number) {
+  if (lenisInstance) lenisInstance.scrollTo(y, { duration: 1 });
+  else window.scrollTo({ top: y, behavior: "smooth" });
+}
+
 /* How far past the About pin the visitor has scrolled, 0 to 1. The About scene
    writes it every frame and the dot portrait reads it (no React state, so
    nothing re-renders while scrolling). */

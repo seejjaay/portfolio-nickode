@@ -24,13 +24,35 @@
   /* Achievement cards and modals (Figma 3:28, 18:2, 18:176). */
   --thumb-from: #4d4d4d;
   --thumb-to: #141414;
+  /* The laptop is a physical object, silver aluminium with a black screen, the
+     same in both themes (Figma 33:60). */
+  --laptop-deck-from: #8c8c8c;
+  --laptop-deck-to: #d9d9d9;
+  --laptop-edge-from: #9a9a9a;
+  --laptop-edge-to: #5c5c5c;
+  --laptop-rim: #c4c4c4;
+  --laptop-hinge: #6e6e6e;
+  --laptop-notch: #4a4a4a;
+  --laptop-line: #6a6a6a;
+  --laptop-camera: #2c2c2c;
+  --laptop-key: #101010;
+  --laptop-body: #0a0a0a;
+  --screen-bg: #050505;
+  --screen-card: #111111;
+  --screen-art-from: #2a2a2a;
+  --screen-art-to: #0c0c0c;
+  --screen-text: #ffffff;
+  --screen-muted: #9a9a9a;
+  --screen-eyebrow: #8a8a8a;
+  --screen-line: rgba(255, 255, 255, 0.14);
+  --screen-line-strong: rgba(255, 255, 255, 0.3);
   --media-from: #333333;
   --media-to: #0d0d0d;
   --overlay-btn: rgba(0, 0, 0, 0.45);
   --shadow-modal: rgba(0, 0, 0, 0.6);
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --nav-h: 100px;
+  --nav-h: 64px;
   --container: 1200px;
   --gutter: 24px;
 
@@ -284,8 +306,356 @@
     background: color-mix(in srgb, var(--bg) 72%, transparent);
   }
 
+  /* Floating logo and burger (no bar): a blurred pill keeps them readable over
+     whatever scrolls underneath. */
+  .nav-chip {
+    border: 1px solid var(--border-strong);
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: border-color 300ms var(--ease);
+  }
+
+  .nav-chip:hover {
+    border-color: var(--text);
+  }
+
+  /* Menu drawer: a native <dialog> filling the viewport with the panel flush
+     right; clicking the scrim closes it. */
+  .nav-dialog {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    overflow: hidden;
+  }
+
+  .nav-dialog[open] {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .nav-dialog::backdrop {
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+  }
+
   html.modal-open {
     overflow: hidden;
+  }
+
+  /* ---- What I've done: laptop scene (DESIGN.md 7.4) -------------------------
+     The screen content is sized in Figma pixels for a 972x597 display. */
+  .lp-track::after {
+    content: "";
+    display: block;
+    height: 400vh;
+  }
+
+  .lp-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  :root[data-theme="light"] .lp-stage {
+    background: var(--bg);
+  }
+
+  .lp-backdrop {
+    position: absolute;
+    inset: 40px 0 auto;
+    text-align: center;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14.58vw;
+    line-height: normal;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--text) 7%, transparent);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* The laptop is a three.js scene (LaptopScene) in world units of Figma px. The
+     carousel stays real DOM: .lp-css3d is a CSS 3D camera kept in step with the
+     WebGL one, and .lp-display rides on the screen mesh inside it, so the text is
+     as sharp as any page text. */
+  .lp-rig {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lp-gl {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 500ms var(--ease);
+    pointer-events: none;
+  }
+
+  .lp-gl[data-on] {
+    opacity: 1;
+  }
+
+  .lp-css3d {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* The screen content fades in with the laptop (same timing as .lp-gl), never
+     before it: it is hidden until the scene has drawn its first frame. */
+  .lp-css3d {
+    transition: opacity 500ms var(--ease), visibility 500ms;
+  }
+
+  .lp-css3d:not([data-ready]) {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .lp-css3d-view,
+  .lp-css3d-cam {
+    width: 100%;
+    height: 100%;
+  }
+
+  .lp-css3d-view {
+    transform-origin: 0 0;
+    pointer-events: none;
+  }
+
+  .lp-css3d-cam,
+  .lp-css3d-obj {
+    transform-style: preserve-3d;
+  }
+
+  .lp-css3d-obj {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 972px;
+    height: 597px;
+  }
+
+  /* No WebGL: the carousel sits on a plain screen panel, centred. */
+  .lp-css3d[data-flat] .lp-css3d-obj {
+    left: 50%;
+    top: 50%;
+    margin: -298px 0 0 -486px;
+    border-radius: 12px;
+    outline: 1px solid var(--screen-line);
+  }
+
+  .lp-display {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--screen-bg);
+    pointer-events: auto;
+  }
+
+  .lp-sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, rgba(255, 255, 255, 0.045), transparent 38%);
+    pointer-events: none;
+  }
+
+
+  /* ---- the carousel on the screen -------------------------------------- */
+  .lp-carousel {
+    position: absolute;
+    inset: 0;
+    color: var(--screen-text);
+    user-select: none;
+    touch-action: pan-y;
+  }
+
+  .lp-screen-eyebrow {
+    position: absolute;
+    top: 24px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    color: var(--screen-eyebrow);
+    white-space: nowrap;
+  }
+
+  .lp-card {
+    position: absolute;
+    left: 186px;
+    top: 104px;
+    overflow: hidden;
+    border: 1px solid var(--screen-line);
+    border-radius: 10px;
+    background: var(--screen-card);
+    translate: 0 calc((1 - var(--enter, 1)) * 24px);
+    opacity: var(--enter, 1);
+    will-change: transform;
+  }
+
+  .lp-card-art {
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(to bottom, var(--screen-art-from), var(--screen-art-to));
+  }
+
+  .lp-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-sizing: border-box;
+  }
+
+  .lp-card-shade {
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: 185px;
+    bottom: -1px;
+    background: linear-gradient(to bottom, transparent, #000);
+  }
+
+  .lp-card-index,
+  .lp-card-label,
+  .lp-card-title,
+  .lp-card-view {
+    position: absolute;
+    left: 23px;
+    white-space: nowrap;
+    font-family: var(--font-display);
+  }
+
+  .lp-card-index {
+    top: 21px;
+    font-size: 14px;
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.7);
+    opacity: var(--detail, 1);
+  }
+
+  .lp-card-label {
+    top: 285px;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--screen-muted);
+  }
+
+  .lp-card-title {
+    top: 307px;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--screen-text);
+  }
+
+  .lp-card-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .lp-card-view {
+    left: 429px;
+    top: 335px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    white-space: pre;
+    color: var(--screen-text);
+    opacity: var(--detail, 1);
+  }
+
+  .lp-card-dim {
+    position: absolute;
+    inset: -1px;
+    background: rgba(0, 0, 0, var(--dim, 0));
+    pointer-events: none;
+  }
+
+  .lp-nav {
+    position: absolute;
+    top: 506px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--screen-line-strong);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--screen-text);
+    font-family: var(--font-display);
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 20;
+  }
+
+  .lp-nav:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .lp-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 562px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 20;
+  }
+
+  .lp-dots button {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border: 0;
+    border-radius: 3px;
+    background: var(--screen-line-strong);
+    cursor: pointer;
+    transition: width 300ms var(--ease), background-color 300ms var(--ease);
+  }
+
+  .lp-dots button::before {
+    content: "";
+    position: absolute;
+    inset: -8px -4px;
+  }
+
+  .lp-dots button.is-active {
+    width: 24px;
+    background: var(--screen-text);
+  }
+
+  /* The carousel stays hidden until the scene opens the laptop. */
+  @media (prefers-reduced-motion: no-preference) {
+    .lp-display {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  /* Reduced motion: the laptop is already open with the carousel visible, no pin. */
+  @media (prefers-reduced-motion: reduce) {
+    .lp-track::after {
+      display: none;
+    }
+
+    .lp-stage {
+      position: relative;
+      height: 100svh;
+      min-height: 900px;
+    }
   }
 
   /* Experience mountain scene (DESIGN.md 7.7). The 200vh spacer after the stage
@@ -407,6 +777,31 @@
 
     .achv-dialog.is-closing .achv-panel {
       animation: achv-out 260ms var(--ease) both;
+    }
+
+    .nav-dialog[open]::backdrop {
+      animation: achv-fade 300ms var(--ease) both;
+    }
+
+    .nav-dialog[open] .nav-panel {
+      animation: nav-in 420ms var(--ease) both;
+    }
+
+    .nav-dialog.is-closing::backdrop {
+      animation: achv-fade 260ms var(--ease) reverse both;
+    }
+
+    .nav-dialog.is-closing .nav-panel {
+      animation: nav-in 260ms var(--ease) reverse both;
+    }
+  }
+
+  @keyframes nav-in {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: none;
     }
   }
 
