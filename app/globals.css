@@ -288,6 +288,89 @@
     overflow: hidden;
   }
 
+  /* Experience mountain scene (DESIGN.md 7.7). The 200vh spacer after the stage
+     is how long it stays pinned for (padding would not work: a sticky element
+     only travels within its container's content box). ExperienceScene turns
+     scroll progress into the mountain, orb and reveal. */
+  .exp-track::after {
+    content: "";
+    display: block;
+    height: 200vh;
+  }
+
+  .exp-stage {
+    position: sticky;
+    top: 0;
+    min-height: 100svh;
+  }
+
+  /* The art covers the first screen of the stage only (the stage can grow
+     taller than the viewport once the accordion opens). */
+  .exp-art {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .exp-intro {
+    position: absolute;
+    inset: calc(var(--nav-h) + 1.2vw) 0 auto;
+    text-align: center;
+    will-change: transform, opacity;
+  }
+
+  /* 170px orb with a soft edge (Figma eea24: solid to 72%, fading to the rim).
+     "White" blends with difference, so it inverts the art and text it crosses. */
+  .exp-orb {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 20;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    background: radial-gradient(
+      circle closest-side,
+      var(--blend-white) 0,
+      var(--blend-white) 72%,
+      transparent 100%
+    );
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  /* mix-blend-mode only sees what is inside the stage's own group, so in light
+     mode the stage carries the paper color for the orb to invert against. */
+  :root[data-theme="light"] .exp-stage {
+    background: var(--bg);
+  }
+
+  /* Header and rows wait for the scene to reveal them. */
+  @media (prefers-reduced-motion: no-preference) {
+    .exp-reveal {
+      opacity: 0;
+    }
+  }
+
+  /* Reduced motion: skip the mountain, no pin, show the final section. */
+  @media (prefers-reduced-motion: reduce) {
+    .exp-track::after {
+      display: none;
+    }
+
+    .exp-stage {
+      position: relative;
+    }
+
+    .exp-art,
+    .exp-orb {
+      display: none;
+    }
+  }
+
   /* Thin scrollbar for the See more list. */
   .achv-list {
     scrollbar-width: thin;
