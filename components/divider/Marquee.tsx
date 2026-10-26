@@ -1,15 +1,13 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import type { CSSProperties } from "react";
+import { useMarquee } from "@/lib/useMarquee";
 
-/* One infinite marquee row (DESIGN.md 7.3). The track holds two identical
-   groups and slides by exactly one group's width, so the loop has no seam.
-   The movement is a CSS animation (compositor only); this component just
-   measures one group to get a constant speed in px/s and to repeat the items
-   until a group is wider than the screen. It keeps moving on hover; reduced
-   motion shows a static wrapped list. */
-const MAX_REPEATS = 6; // safety cap on how many times the items repeat per group
-
+/* One infinite text marquee row (DESIGN.md 7.3). The track holds two identical
+   groups and slides by exactly one group's width, so the loop has no seam. The
+   movement is a CSS animation (compositor only); useMarquee measures the group
+   for a constant speed. It keeps moving on hover; reduced motion shows a static
+   wrapped list. */
 type Props = {
   items: readonly string[];
   speed: number; // px per second
@@ -19,29 +17,7 @@ type Props = {
 };
 
 export function Marquee({ items, speed, phase, reverse = false, outlined = false }: Props) {
-  const groupRef = useRef<HTMLUListElement>(null);
-  const [repeats, setRepeats] = useState(1);
-  const [duration, setDuration] = useState(90);
-
-  useLayoutEffect(() => {
-    // Reduced motion shows one wrapped list, so there is nothing to measure.
-    // (Measuring would also spin: a wrapped group is never wider than the screen.)
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const group = groupRef.current!;
-    const measure = () => {
-      const unit = group.scrollWidth / repeats;
-      if (!unit) return;
-      const need = Math.min(MAX_REPEATS, Math.max(1, Math.ceil(window.innerWidth / unit)));
-      if (need !== repeats) setRepeats(need);
-      else setDuration(group.scrollWidth / speed);
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(group);
-    document.fonts.ready.then(measure);
-    return () => ro.disconnect();
-  }, [repeats, speed]);
+  const { groupRef, repeats, duration } = useMarquee(speed);
 
   const text = outlined
     ? "text-transparent opacity-85 [-webkit-text-stroke:var(--outline-stroke)_var(--text)]"

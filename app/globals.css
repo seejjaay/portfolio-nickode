@@ -21,6 +21,13 @@
   /* Outlined type: light strokes on black render heavier in browsers than
      Figma's, so dark uses a thinner stroke. Measured against Figma's stills. */
   --outline-stroke: 0.5px;
+  /* Achievement cards and modals (Figma 3:28, 18:2, 18:176). */
+  --thumb-from: #4d4d4d;
+  --thumb-to: #141414;
+  --media-from: #333333;
+  --media-to: #0d0d0d;
+  --overlay-btn: rgba(0, 0, 0, 0.45);
+  --shadow-modal: rgba(0, 0, 0, 0.6);
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --nav-h: 100px;
@@ -58,6 +65,13 @@
   --border-strong: rgba(10, 10, 10, 0.24);
   --blend-white: #f6f6f6;
   --outline-stroke: 1px;
+  /* Thumbnails follow the light remap v' = 0.965 - 0.925v (section 3). */
+  --thumb-from: #afafaf;
+  --thumb-to: #e4e4e4;
+  --media-from: #cccccc;
+  --media-to: #ececec;
+  --overlay-btn: rgba(246, 246, 246, 0.7);
+  --shadow-modal: rgba(10, 10, 10, 0.28);
 }
 
 @media (min-width: 640px) {
@@ -230,6 +244,116 @@
     mask: url("/assets/hero/hero-gray.webp") center / 100% 100% no-repeat;
   }
 
+  /* Monochrome icons from /assets/icons, painted with currentColor. */
+  .mask-icon {
+    display: block;
+    flex-shrink: 0;
+    background-color: currentColor;
+    -webkit-mask: var(--icon) center / contain no-repeat;
+    mask: var(--icon) center / contain no-repeat;
+  }
+
+  /* Achievement cards: pause the hovered or focused row so a card can be read
+     and clicked (DESIGN.md 7.6). */
+  .achv-row:hover .marquee-track,
+  .achv-row:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Achievement modal: a native <dialog> filling the viewport; the panel is
+     centred in it and clicking outside the panel closes it. */
+  .achv-dialog {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    overflow: hidden;
+  }
+
+  .achv-dialog[open] {
+    display: grid;
+    place-items: center;
+  }
+
+  .achv-dialog::backdrop {
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+  }
+
+  html.modal-open {
+    overflow: hidden;
+  }
+
+  /* Thin scrollbar for the See more list. */
+  .achv-list {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  /* The certificate sheet is always a light sheet with dark ink (DESIGN.md
+     section 3); in light mode it gets a hairline so it does not vanish. */
+  .cert-sheet {
+    background: #f2f2f2;
+    color: #0a0a0a;
+  }
+
+  .cert-line {
+    background: rgba(10, 10, 10, 0.5);
+  }
+
+  :root[data-theme="light"] .cert-sheet {
+    border: 1px solid rgba(10, 10, 10, 0.14);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .achv-dialog[open]::backdrop {
+      animation: achv-fade 300ms var(--ease) both;
+    }
+
+    .achv-dialog[open] .achv-panel {
+      animation: achv-in 420ms var(--ease) both;
+    }
+
+    .achv-dialog.is-closing::backdrop {
+      animation: achv-fade 260ms var(--ease) reverse both;
+    }
+
+    .achv-dialog.is-closing .achv-panel {
+      animation: achv-out 260ms var(--ease) both;
+    }
+  }
+
+  @keyframes achv-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes achv-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes achv-out {
+    to {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+  }
+
   /* Four-point star between marquee titles (Figma asset, 55% opacity baked in). */
   .icon-separator {
     display: block;
@@ -333,8 +457,22 @@
       display: none !important;
     }
 
-    .marquee-fade {
+    .marquee-fade,
+    .achv-fade,
+    .achv-depth {
       display: none;
+    }
+
+    .achv-rows {
+      height: auto !important;
+      padding: 0 var(--gutter);
+    }
+
+    /* The static card list grows the section, so the button joins the flow. */
+    .achv-more {
+      position: static !important;
+      align-self: flex-end;
+      margin-right: var(--gutter);
     }
   }
 

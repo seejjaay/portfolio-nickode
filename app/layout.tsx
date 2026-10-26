@@ -39,7 +39,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body id="top">
+      {/* Browser extensions (ColorZilla's cz-shortcut-listen, Grammarly, etc.)
+          stamp attributes on <body> before React hydrates. */}
+      <body id="top" suppressHydrationWarning>
         <ScrollProvider />
         <SpaceBackground />
         <Nav />
