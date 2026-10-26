@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* Design tokens (DESIGN.md section 3). Dark is the default; light overrides.
+   Components use these through the Tailwind aliases below, never raw hex. */
+:root {
+  color-scheme: dark;
+
+  --bg: #000000;
+  --bg-raised: #0a0a0a;
+  --surface: #111111;
+  --surface-hover: #1a1a1a;
+  --text: #ffffff;
+  --text-2: #b3b3b3;
+  --text-muted: #7a7a7a;
+  --text-inverse: #000000;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.24);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --nav-h: 100px;
+  --container: 1200px;
+  --gutter: 24px;
+
+  /* Faint vignette for the space background. Dark is pure black, so it can
+     only lift the center; light darkens the edges like paper under a lamp. */
+  --vignette: radial-gradient(
+    ellipse at 50% 40%,
+    color-mix(in srgb, var(--text) 3%, transparent) 0%,
+    transparent 70%
+  );
+}
+
+:root[data-theme="light"] {
+  --vignette: radial-gradient(
+    ellipse at 50% 50%,
+    transparent 55%,
+    color-mix(in srgb, var(--text) 4%, transparent) 100%
+  );
+
+  color-scheme: light;
+
+  --bg: #f6f6f6;
+  --bg-raised: #ededed;
+  --surface: #e6e6e6;
+  --surface-hover: #dedede;
+  --text: #0a0a0a;
+  --text-2: #515151;
+  /* Figma shows #858585; darkened to pass AA on --bg */
+  --text-muted: #6b6b6b;
+  --text-inverse: #f6f6f6;
+  --border: rgba(10, 10, 10, 0.1);
+  --border-strong: rgba(10, 10, 10, 0.24);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --gutter: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: max(120px, calc((100vw - var(--container)) / 2));
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-raised: var(--bg-raised);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --font-display: var(--font-oswald), "Arial Narrow", sans-serif;
+  --font-body: var(--font-source-serif), Georgia, serif;
+
+  --radius-control: 4px;
+  --radius-card: 8px;
+  --radius-marquee: 16px;
+
+  --ease-brand: var(--ease);
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+  }
+
+  /* No background on body: the page background lives on html so the fixed
+     space canvas (z-index -1) can show through transparent sections. */
+  body {
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+  }
+
+  /* Anchored sections clear the fixed nav. */
+  section[id] {
+    scroll-margin-top: var(--nav-h);
+  }
+}
+
+@layer components {
+  /* Figma's arrow-up asset has a hard-coded white stroke, so it is applied as
+     a mask and colored by currentColor to follow the theme. */
+  .icon-arrow-up {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-color: currentColor;
+    -webkit-mask: url("/assets/ui/icon-arrow-up.svg") center / 100% 100% no-repeat;
+    mask: url("/assets/ui/icon-arrow-up.svg") center / 100% 100% no-repeat;
+  }
+
+  /* Theme toggle shows the icon for the theme you would switch to. Driven by
+     the data-theme attribute so it is correct before React hydrates. */
+  .theme-icon-moon {
+    display: none;
+  }
+
+  :root[data-theme="light"] .theme-icon-sun {
+    display: none;
+  }
+
+  :root[data-theme="light"] .theme-icon-moon {
+    display: block;
+  }
+}
