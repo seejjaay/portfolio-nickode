@@ -4,12 +4,12 @@ import { AchievementsSection } from "@/components/achievements/AchievementsSecti
 import { TitlesDivider } from "@/components/divider/TitlesDivider";
 import { ExperienceSection } from "@/components/experience/ExperienceSection";
 import { Hero } from "@/components/hero/Hero";
+import { StackSection } from "@/components/stack/StackSection";
 import { WorkSection } from "@/components/work/WorkSection";
 
 /* Step 1 placeholder: empty sections at Figma's 1440 heights so the nav anchors
    and scroll-spy can be exercised. Each is replaced in its own build step. */
 const placeholders = {
-  stack: { label: "What I use", height: 1177, step: 9 },
   contact: { label: "Contact", height: 977, step: 11 },
 } as const;
 
@@ -35,7 +35,7 @@ export default function Home() {
       </section>
       <TitlesDivider />
       <WorkSection />
-      <Placeholder id="stack" />
+      <StackSection />
       <AchievementsSection />
       <ExperienceSection />
       <Placeholder id="contact" />

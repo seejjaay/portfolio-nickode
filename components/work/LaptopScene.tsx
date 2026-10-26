@@ -1,13 +1,13 @@
 "use client";
 
 import { Environment, Lightformer } from "@react-three/drei";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { clamp, ease, lerp } from "@/lib/motion";
-import { CLOSED_DROP, LID_END, LID_OPEN, TILT, type SceneState } from "./laptop-motion";
+import { clamp, lerp } from "@/lib/motion";
+import { CLOSED_DROP, LID_OPEN, TILT, type SceneState } from "./laptop-motion";
 
 /* The 3D laptop (DESIGN.md 7.4). World units are Figma pixels, so the model is
    1000 wide with a 972x597 display, as in the design. The hinge is the origin:
@@ -178,6 +178,28 @@ function Laptop3D({ progress, place, onReady, reduced }: Props) {
   const glow = useRef<THREE.MeshBasicMaterial>(null);
   const tokens = useMemo(() => readTokens(), []);
   const { invalidate, gl, scene, camera } = useThree();
+
+  // Clicking the keyboard (the base) shuts an open laptop; clicking a closed one opens it.
+  const clickable = (part: "base" | "lid") => {
+    const lidNow = progress.current.lid;
+    return !reduced && (lidNow < 0.2 || (part === "base" && lidNow > 0.85));
+  };
+  const hit = (part: "base" | "lid") => ({
+    onClick: (e: ThreeEvent<MouseEvent>) => {
+      if (!clickable(part)) return;
+      e.stopPropagation();
+      progress.current.click?.(part);
+    },
+    onPointerOver: (e: ThreeEvent<PointerEvent>) => {
+      if (clickable(part)) {
+        e.stopPropagation();
+        gl.domElement.style.cursor = "pointer";
+      }
+    },
+    onPointerOut: () => {
+      gl.domElement.style.cursor = "";
+    },
+  });
   const compiled = useRef(false);
   const ready = useRef(false);
 
@@ -229,8 +251,7 @@ function Laptop3D({ progress, place, onReady, reduced }: Props) {
   useFrame((state) => {
     const { camera, size, clock } = state;
     const t = clock.elapsedTime;
-    const p = reduced ? 1 : progress.current.p;
-    const lidT = reduced ? 1 : ease(clamp(p / LID_END, 0, 1));
+    const lidT = reduced ? 1 : progress.current.lid;
     const idle = reduced ? 0 : 1 - lidT;
 
     lid.current!.rotation.x = -THREE.MathUtils.degToRad(lerp(0, 90 + LID_OPEN, lidT));
@@ -279,12 +300,13 @@ function Laptop3D({ progress, place, onReady, reduced }: Props) {
 
       <group ref={laptop}>
         {/* under-glow / shadow */}
-        <mesh position={[0, -90, 320]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={-1}>
+        <mesh position={[0, -90, 320]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={-1} raycast={() => null}>
           <planeGeometry args={[1400, 900]} />
           <meshBasicMaterial ref={glow} map={halo} color={tokens.glow} transparent opacity={0.3} depthWrite={false} toneMapped={false} />
         </mesh>
 
-        {/* base */}
+        {/* base: deck, keys, trackpad, hinge */}
+        <group {...hit("base")}>
         <mesh geometry={base} position={[0, -BASE_T / 2, BASE_D / 2 - 15]}>
           <meshPhysicalMaterial color={tokens.alu} metalness={1} roughness={0.32} envMapIntensity={1.1} />
         </mesh>
@@ -304,9 +326,10 @@ function Laptop3D({ progress, place, onReady, reduced }: Props) {
           <cylinderGeometry args={[6.5, 6.5, 860, 24]} />
           <meshStandardMaterial color={tokens.hinge} metalness={0.9} roughness={0.4} />
         </mesh>
+        </group>
 
         {/* lid: pivots about the hinge; local y is out of the back, -y out of the screen */}
-        <group ref={lid} position={[0, PIVOT_Y, 0]}>
+        <group ref={lid} position={[0, PIVOT_Y, 0]} {...hit("lid")}>
           <mesh geometry={shell} position={[0, LID_T / 2, LID_D / 2]}>
             <meshPhysicalMaterial color={tokens.alu} metalness={1} roughness={0.3} envMapIntensity={1.1} />
           </mesh>

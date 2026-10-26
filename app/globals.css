@@ -381,16 +381,46 @@
     inset: 0;
   }
 
+  /* The canvas takes clicks (the keyboard closes the laptop); the DOM screen sits
+     above it, so the carousel keeps its own. */
   .lp-gl {
     position: absolute;
     inset: 0;
     opacity: 0;
     transition: opacity 500ms var(--ease);
-    pointer-events: none;
   }
 
   .lp-gl[data-on] {
     opacity: 1;
+  }
+
+  /* A keyboard route to the same open/close click, visible only when focused. */
+  .lp-toggle {
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    z-index: 5;
+    translate: -50% 0;
+    padding: 8px 16px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    clip-path: inset(50%);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .lp-toggle:focus-visible {
+    clip-path: none;
+    width: auto;
+    height: auto;
   }
 
   .lp-css3d {
@@ -627,6 +657,86 @@
     background: var(--screen-text);
   }
 
+  /* ---- What I use: network scene (DESIGN.md 7.5) ----------------------------
+     Pinned 300vh; StackScene feeds scroll progress to the network canvas. */
+  .nw-track::after {
+    content: "";
+    display: block;
+    height: 300vh;
+  }
+
+  .nw-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .nw-backdrop {
+    position: absolute;
+    inset: 40px 0 auto;
+    text-align: center;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14.58vw;
+    line-height: normal;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--text) 7%, transparent);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* The 1200x760 network frame from Figma, centred in the stage. */
+  .nw-net,
+  .nw-ui {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(1200px, 100%);
+    height: min(760px, 100svh);
+    transform: translate(-50%, -50%);
+  }
+
+  .nw-ui {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .nw-hint {
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--text-muted);
+  }
+
+  .nw-expand {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    background: var(--overlay-btn);
+    color: var(--text);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: border-color 300ms var(--ease);
+  }
+
+  .nw-expand:hover {
+    border-color: var(--text);
+  }
+
   /* The carousel stays hidden until the scene opens the laptop. */
   @media (prefers-reduced-motion: no-preference) {
     .lp-display {
@@ -645,6 +755,23 @@
       position: relative;
       height: 100svh;
       min-height: 900px;
+    }
+
+    .nw-track::after {
+      display: none;
+    }
+
+    .nw-stage {
+      position: relative;
+      min-height: 800px;
+    }
+
+    .nw-ui {
+      opacity: 1;
+    }
+
+    .nw-hint {
+      display: none;
     }
   }
 

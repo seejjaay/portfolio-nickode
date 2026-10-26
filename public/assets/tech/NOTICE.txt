@@ -1,0 +1,2 @@
+Brand icons: Simple Icons (https://simpleicons.org), CC0 1.0. Trademarks belong to their owners.
+sql.svg, api.svg, aws.svg are plain line glyphs drawn for this project (no brand mark supplied by the icon set).
