@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Oswald, Source_Serif_4 } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
+import { ScrollProvider } from "@/components/ScrollProvider";
 import { SpaceBackground } from "@/components/SpaceBackground";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body id="top">
+        <ScrollProvider />
         <SpaceBackground />
         <Nav />
         <main className="pt-[var(--nav-h)]">{children}</main>

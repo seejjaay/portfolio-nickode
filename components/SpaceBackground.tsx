@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { readTokenRgb, type Rgb } from "@/lib/canvas";
 import { clamp, mulberry32 } from "@/lib/motion";
 
 /* Space background (DESIGN.md 5.1). A fixed canvas behind the page: blurred
@@ -41,7 +42,6 @@ const SHOT_EVERY = [15, 25] as const; // seconds between shooting stars
 const SHOT_DURATION = 0.9;
 
 type Star = { x: number; y: number; r: number; a: number };
-type Rgb = [number, number, number];
 type Shot = { x: number; y: number; dx: number; dy: number; start: number };
 
 function erf(x: number) {
@@ -53,20 +53,6 @@ function erf(x: number) {
     (((((1.061405429 * t - 1.453152027) * t + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t) *
       Math.exp(-x * x);
   return sign * y;
-}
-
-/* Reads the --text token and lets the canvas normalise it, so the token can be
-   any CSS color. */
-function readTextColor(ctx: CanvasRenderingContext2D): Rgb {
-  const raw = getComputedStyle(document.documentElement).getPropertyValue("--text").trim();
-  ctx.fillStyle = "#fff";
-  ctx.fillStyle = raw;
-  const n = ctx.fillStyle;
-  if (n.startsWith("#")) {
-    return [1, 3, 5].map((i) => parseInt(n.slice(i, i + 2), 16)) as Rgb;
-  }
-  const m = n.match(/[\d.]+/g);
-  return m ? ([+m[0], +m[1], +m[2]] as Rgb) : [255, 255, 255];
 }
 
 /* Pre-renders the five haze clouds. Each is a radial gradient shaped like a
@@ -146,7 +132,7 @@ export function SpaceBackground() {
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      rgb = readTextColor(ctx);
+      rgb = readTokenRgb(ctx, "--text");
       stars = makeStars(width, height);
       haze = buildHaze(width, rgb);
       measureScroll();

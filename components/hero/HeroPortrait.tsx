@@ -168,7 +168,7 @@ export function HeroPortrait() {
         alt="Portrait of NICK.ODE, seated, wearing sunglasses"
         width={2088}
         height={1530}
-        preload
+        loading="eager"
         fetchPriority="high"
         unoptimized
         draggable={false}

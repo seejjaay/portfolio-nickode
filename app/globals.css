@@ -15,6 +15,9 @@
   --text-inverse: #000000;
   --border: rgba(255, 255, 255, 0.1);
   --border-strong: rgba(255, 255, 255, 0.24);
+  /* "White" for mix-blend-mode: difference titles. In light mode it is the
+     paper color, so the title reads dark over paper and light over dark art. */
+  --blend-white: #ffffff;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --nav-h: 100px;
@@ -50,6 +53,7 @@
   --text-inverse: #f6f6f6;
   --border: rgba(10, 10, 10, 0.1);
   --border-strong: rgba(10, 10, 10, 0.24);
+  --blend-white: #f6f6f6;
 }
 
 @media (min-width: 640px) {
@@ -75,6 +79,7 @@
   --color-text-inverse: var(--text-inverse);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+  --color-blend-white: var(--blend-white);
 
   --font-display: var(--font-oswald), "Arial Narrow", sans-serif;
   --font-body: var(--font-source-serif), Georgia, serif;
@@ -131,6 +136,88 @@
     background-color: currentColor;
     -webkit-mask: url("/assets/ui/icon-next-arrow.svg") center / 100% 100% no-repeat;
     mask: url("/assets/ui/icon-next-arrow.svg") center / 100% 100% no-repeat;
+  }
+
+  .icon-download {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-color: currentColor;
+    -webkit-mask: url("/assets/ui/icon-download.svg") center / 100% 100% no-repeat;
+    mask: url("/assets/ui/icon-download.svg") center / 100% 100% no-repeat;
+  }
+
+  /* About wave scene (DESIGN.md 7.2.1). The stage is pinned by ScrollTrigger;
+     its height is the viewport, not content. */
+  .about-stage {
+    position: relative;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  /* Dark waves are the Figma black-sky B&W; light waves are the same print as
+     ink on paper. Only the visible one loads (the other is display: none). */
+  .wave-light {
+    display: none;
+  }
+
+  :root[data-theme="light"] .wave-dark {
+    display: none;
+  }
+
+  :root[data-theme="light"] .wave-light {
+    display: block;
+  }
+
+  /* mix-blend-mode only sees what is inside the half's own group, so in light
+     mode each half carries the paper color for the title to blend against. */
+  :root[data-theme="light"] .about-half {
+    background: var(--bg);
+  }
+
+  .about-divider {
+    display: none;
+  }
+
+  /* About content waits for the scene: it fades up 24px over 700ms with an
+     80ms stagger (--i) once the stage gets .is-open, and fades back out
+     without the stagger when scrolling back. */
+  @media (prefers-reduced-motion: no-preference) {
+    .about-reveal {
+      opacity: 0;
+      transform: translate3d(0, 24px, 0);
+      transition:
+        opacity 700ms var(--ease),
+        transform 700ms var(--ease);
+    }
+
+    .about-stage.is-open .about-reveal {
+      opacity: 1;
+      transform: none;
+      transition-delay: calc(var(--i) * 80ms);
+    }
+  }
+
+  /* Reduced motion: no pin, no split. The wave is a static divider above the
+     About content, which is simply shown. */
+  @media (prefers-reduced-motion: reduce) {
+    .about-stage {
+      height: auto;
+      overflow: visible;
+    }
+
+    .about-halves {
+      display: none;
+    }
+
+    .about-divider {
+      display: block;
+    }
+
+    .about-content-layer {
+      position: relative !important;
+      min-height: 100svh;
+    }
   }
 
   /* Clips its content to the hero cutout's silhouette (the cutout's alpha). */
