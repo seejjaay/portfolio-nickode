@@ -221,8 +221,9 @@
 
   /* About content waits for the scene: it fades up 24px over 700ms with an
      80ms stagger (--i) once the stage gets .is-open, and fades back out
-     without the stagger when scrolling back. */
-  @media (prefers-reduced-motion: no-preference) {
+     without the stagger when scrolling back. Only from 768px up: on a phone the
+     content is taller than the screen, so it gets the stacked layout below. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
     .about-reveal {
       opacity: 0;
       transform: translate3d(0, 24px, 0);
@@ -238,9 +239,9 @@
     }
   }
 
-  /* Reduced motion: no pin, no split. The wave is a static divider above the
-     About content, which is simply shown. */
-  @media (prefers-reduced-motion: reduce) {
+  /* Reduced motion, or a phone: no pin, no split. The wave is a static divider
+     above the About content, which is simply shown. */
+  @media (prefers-reduced-motion: reduce), (max-width: 767px) {
     .about-stage {
       height: auto;
       overflow: visible;
@@ -261,6 +262,30 @@
   }
 
   /* Clips its content to the hero cutout's silhouette (the cutout's alpha). */
+  /* Hero geometry variables: desktop is Figma's 1440x900 composition in cqw; on a
+     phone the stage is tall and the photo is bigger against a full-width wordmark. */
+  .hero-stage {
+    --wm-left: 3.4722cqw;
+    --wm-top: 20.9028cqw;
+    --wm-size: 24.8cqw;
+    --pt-left: 1.25cqw;
+    --pt-top: 15.4167cqw;
+    --pt-w: 72.5cqw;
+    --pt-h: 53.125cqw;
+  }
+
+  @media (max-width: 639px) {
+    .hero-stage {
+      --wm-left: 3.4722cqw;
+      --wm-top: 55cqw;
+      --wm-size: 24.8cqw;
+      --pt-left: -22cqw;
+      --pt-top: 43.6cqw;
+      --pt-w: 150cqw;
+      --pt-h: 110cqw;
+    }
+  }
+
   .hero-silhouette {
     -webkit-mask: url("/assets/hero/hero-gray.webp") center / 100% 100% no-repeat;
     mask: url("/assets/hero/hero-gray.webp") center / 100% 100% no-repeat;
@@ -735,6 +760,51 @@
 
   .nw-expand:hover {
     border-color: var(--text);
+  }
+
+  /* ---- Intro overlay (DESIGN.md 6) -------------------------------------------
+     Shown from the first frame when the <head> script has set <html data-intro>;
+     the Intro component takes over from there. The hero's corner labels wait for
+     the handoff, then fade in. */
+  .intro {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  html[data-intro] .intro {
+    display: block;
+  }
+
+  .intro-skip {
+    position: absolute;
+    right: 48px;
+    bottom: 40px;
+    z-index: 2;
+    padding: 8px 4px;
+    border: 0;
+    background: none;
+    color: var(--text-muted);
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    transition: color 300ms var(--ease);
+  }
+
+  .intro-skip:hover {
+    color: var(--text);
+  }
+
+  .intro-fade {
+    transition: opacity 800ms var(--ease) 100ms;
+  }
+
+  html[data-intro] .intro-fade {
+    opacity: 0;
   }
 
   /* The carousel stays hidden until the scene opens the laptop. */

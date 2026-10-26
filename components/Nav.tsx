@@ -81,6 +81,7 @@ export function Nav() {
     const drawer = drawerRef.current!;
     const burger = burgerRef.current!;
     const q = gsap.utils.selector(drawer);
+    let stopWaiting = () => {};
 
     const ctx = gsap.context(() => {
       const [top, mid, bottom] = burger.querySelectorAll("span");
@@ -102,12 +103,19 @@ export function Nav() {
         .fromTo(q("[data-foot]"), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, 0.55);
       tl.current = timeline;
 
-      // The logo and burger settle in on load.
+      // The logo and burger settle in on load, or after the intro's handoff.
       if (!reduced.current) {
-        gsap.from(header.children, { y: -18, opacity: 0, duration: 0.9, stagger: 0.1, delay: 0.3, ease: "power3.out", clearProps: "transform,opacity" });
+        const settle = () =>
+          gsap.from(header.children, { y: -18, opacity: 0, duration: 0.9, stagger: 0.1, delay: 0.3, ease: "power3.out", clearProps: "transform,opacity" });
+        if (document.documentElement.hasAttribute("data-intro")) {
+          gsap.set(header.children, { opacity: 0 });
+          window.addEventListener("intro-complete", settle, { once: true });
+          stopWaiting = () => window.removeEventListener("intro-complete", settle);
+        } else settle();
       }
     });
     return () => {
+      stopWaiting();
       ctx.revert();
       tl.current = null;
     };

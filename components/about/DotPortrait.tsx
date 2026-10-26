@@ -288,7 +288,7 @@ export function DotPortrait() {
       role="img"
       aria-label="Dot-matrix portrait of NICK.ODE"
       className="absolute -left-px -top-px touch-pan-y"
-      style={{ width: WIDTH, height: HEIGHT }}
+      style={{ width: "calc(100% + 2px)", height: "calc(100% + 2px)" }} // fills the box, which is 440x560 on desktop and scales down on a phone
     />
   );
 }

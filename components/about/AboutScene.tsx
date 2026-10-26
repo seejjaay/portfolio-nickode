@@ -62,7 +62,7 @@ export function AboutScene({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stage = stageRef.current!;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 767px)").matches) return; // static stack, see globals.css
 
     const ctx = gsap.context(() => {
       const waves = [...stage.querySelectorAll<HTMLElement>("[data-wave]")];

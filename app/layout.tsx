@@ -4,6 +4,8 @@ import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { ScrollProvider } from "@/components/ScrollProvider";
 import { SpaceBackground } from "@/components/SpaceBackground";
+import { Intro } from "@/components/intro/Intro";
+import { introInitScript } from "@/lib/intro";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
@@ -38,11 +40,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: introInitScript }} />
       </head>
       {/* Browser extensions (ColorZilla's cz-shortcut-listen, Grammarly, etc.)
           stamp attributes on <body> before React hydrates. */}
       <body id="top" suppressHydrationWarning>
         <ScrollProvider />
+        <Intro />
         <SpaceBackground />
         <Nav />
         <main className="pt-[var(--nav-h)]">{children}</main>

@@ -94,16 +94,19 @@ function RoleItem({
           aria-expanded={open}
           aria-controls={panelId}
           onClick={onToggle}
-          className="flex w-full cursor-pointer items-center gap-10 px-8 py-7 text-left"
+          className="flex w-full cursor-pointer items-center gap-4 px-5 py-5 text-left md:gap-10 md:px-8 md:py-7"
         >
-          <span className="w-[190px] shrink-0 font-display text-[13px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text-muted">
+          <span className="hidden w-[190px] shrink-0 font-display text-[13px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text-muted md:block">
             {role.period}
           </span>
           <span className="flex min-w-0 flex-1 flex-col gap-[6px]">
-            <span className="block font-display text-[32px] font-medium leading-[1.2] tracking-[0.03em] text-text">
+            <span className="block font-display text-[13px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text-muted md:hidden">
+              {role.period}
+            </span>
+            <span className="block font-display text-[24px] font-medium leading-[1.2] tracking-[0.03em] text-text md:text-[32px]">
               {role.title}
             </span>
-            <span className="block whitespace-pre text-[15px] italic leading-[1.5] text-text-muted">
+            <span className="block whitespace-normal text-[15px] italic leading-[1.5] text-text-muted md:whitespace-pre">
               {`${role.company}  ·  ${role.location}`}
             </span>
           </span>
@@ -128,7 +131,7 @@ function RoleItem({
         }`}
       >
         <div className="min-h-0 overflow-hidden">
-          <div className="flex gap-16 px-8 pb-10 pt-2">
+          <div className="flex flex-col gap-8 px-5 pb-8 pt-2 md:px-8 md:pb-10 lg:flex-row lg:gap-16">
             <div className="flex min-w-0 flex-1 flex-col gap-4">
               <p className="font-display text-[11px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">
                 What I did
@@ -143,7 +146,7 @@ function RoleItem({
               </ul>
             </div>
             {role.related.length > 0 && (
-              <div className="flex w-[480px] shrink-0 flex-col gap-[14px]">
+              <div className="flex w-full shrink-0 flex-col gap-[14px] lg:w-[480px]">
                 <p className="font-display text-[11px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">
                   Projects & events in this role
                 </p>

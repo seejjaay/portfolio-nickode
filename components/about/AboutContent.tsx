@@ -11,11 +11,11 @@ const reveal = (i: number) =>
 
 export function AboutContent() {
   return (
-    <div className="relative w-full px-[var(--gutter)] py-[120px]">
-      <div className="flex items-center gap-20">
+    <div className="relative w-full px-[var(--gutter)] py-16 md:py-[120px]">
+      <div className="flex flex-col gap-10 md:flex-row md:items-center md:gap-20">
         <div
           {...reveal(0)}
-          className={`${reveal(0).className} relative h-[560px] w-[440px] shrink-0 overflow-hidden rounded-card border border-border bg-bg-raised`}
+          className={`${reveal(0).className} relative aspect-[440/560] w-full max-w-[340px] shrink-0 overflow-hidden md:aspect-auto md:h-[560px] md:w-[440px] md:max-w-none rounded-card border border-border bg-bg-raised`}
         >
           <DotPortrait />
         </div>
@@ -28,7 +28,7 @@ export function AboutContent() {
             {about.eyebrow}
           </p>
           <div {...reveal(2)} className={`${reveal(2).className} flex flex-col gap-[14px]`}>
-            <h2 className="font-display text-[64px] font-medium uppercase leading-[1.1] tracking-[0.04em] text-text">
+            <h2 className="font-display text-[44px] font-medium md:text-[64px] uppercase leading-[1.1] tracking-[0.04em] text-text">
               {about.title}
             </h2>
             <span aria-hidden className="block h-[2px] w-8 bg-text" />
@@ -41,7 +41,7 @@ export function AboutContent() {
           </p>
           <dl
             {...reveal(4)}
-            className={`${reveal(4).className} grid w-full grid-cols-2 gap-x-12 gap-y-4 whitespace-nowrap rounded-control border border-border-strong p-7`}
+            className={`${reveal(4).className} grid w-full gap-x-12 sm:grid-cols-2 gap-y-4 whitespace-nowrap rounded-control border border-border-strong p-7`}
           >
             {about.info.map(({ key, value }) => (
               <div key={key} className="flex items-center gap-3">
@@ -68,7 +68,7 @@ export function AboutContent() {
       <span
         aria-hidden
         {...reveal(6)}
-        className={`${reveal(6).className} pointer-events-none absolute right-6 top-[80px] font-display text-[180px] font-semibold uppercase leading-[0.95] text-transparent [-webkit-text-stroke:2px_color-mix(in_srgb,var(--text)_14%,transparent)]`}
+        className={`${reveal(6).className} pointer-events-none absolute right-6 top-[24px] font-display text-[96px] md:top-[80px] md:text-[180px] font-semibold uppercase leading-[0.95] text-transparent [-webkit-text-stroke:2px_color-mix(in_srgb,var(--text)_14%,transparent)]`}
       >
         {about.number}
       </span>
