@@ -46,7 +46,7 @@ function Body({ a }: { a: Achievement }) {
           {a.title}
         </span>
         <span className="block whitespace-pre font-display text-[10px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-2">
-          {"VIEW DETAILS  →"}
+          VIEW DETAILS<span aria-hidden>{"  →"}</span>
         </span>
       </span>
     </>
@@ -66,7 +66,6 @@ export function AchievementCard({ a, onOpen, passive = false, decorative = false
       type="button"
       tabIndex={passive ? -1 : 0}
       aria-haspopup="dialog"
-      aria-label={`${a.title}, ${a.kind}, ${a.year}. View details`}
       onClick={(e) => onOpen(a, e.currentTarget)}
       className={`${card} ${interactive}`}
     >
