@@ -160,7 +160,7 @@ export function HeroPortrait() {
   return (
     <div
       ref={boxRef}
-      className="absolute touch-pan-y"
+      className="hero-photo absolute touch-pan-y"
       style={portraitBoxStyle}
     >
       <Image

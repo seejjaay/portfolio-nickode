@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 
 const MAX_REPEATS = 6; // safety cap on how many times the items repeat per group
+const MOBILE_SPEED = 0.6; // under 768px every marquee runs at 60% of its desktop speed (DESIGN.md 12)
 
 /* Shared by every marquee row. The row renders two identical groups; this
    measures the first one so the loop runs at a constant speed in px/s
@@ -24,7 +25,7 @@ export function useMarquee(speed: number) {
       if (!unit) return;
       const need = Math.min(MAX_REPEATS, Math.max(1, Math.ceil(window.innerWidth / unit)));
       if (need !== repeats) setRepeats(need);
-      else setDuration(group.scrollWidth / speed);
+      else setDuration(group.scrollWidth / (speed * (window.innerWidth < 768 ? MOBILE_SPEED : 1)));
     };
     measure();
     const ro = new ResizeObserver(measure);

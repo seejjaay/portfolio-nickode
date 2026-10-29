@@ -106,6 +106,7 @@ export function AboutScene({ children }: { children: ReactNode }) {
         end: () => `+=${window.innerHeight * PIN_LENGTH_VH}`,
         pin: true,
         pinSpacing: true,
+        anticipatePin: 1, // pins a frame early on fast scrolls so the stage never jumps as it locks
         invalidateOnRefresh: true,
         onRefresh: (self) => {
           titleHeight = titles[0].offsetHeight;
@@ -156,12 +157,11 @@ export function AboutScene({ children }: { children: ReactNode }) {
             >
               <div
                 data-wave
-                className="absolute left-0 top-0 aspect-1920/1291 min-h-[107.5%] w-full origin-bottom-left will-change-transform"
+                className="about-wave absolute left-0 top-0 aspect-1920/1291 min-h-[107.5%] w-full origin-bottom-left will-change-transform"
                 style={{ transform: `translate3d(0, ${WAVE_START * 100}svh, 0)` }}
               >
                 <WaveImage />
                 <WaveCanvas side={side} />
-                <div className={skyFade} />
               </div>
               <div
                 aria-hidden

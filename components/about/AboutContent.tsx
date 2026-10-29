@@ -3,7 +3,7 @@ import { about } from "@/content/about";
 import { DotPortrait } from "./DotPortrait";
 
 /* About content (DESIGN.md 7.2, Figma node 3:25): dot-matrix portrait left,
-   copy and info panel right, giant outlined 01 far right. Every revealed
+   copy and info panel right. Every revealed
    element fades up (700ms, 80ms stagger) when the wave scene opens; `--i` is
    its place in that order (see .about-reveal in globals.css). */
 const reveal = (i: number) =>
@@ -64,14 +64,6 @@ export function AboutContent() {
           </div>
         </div>
       </div>
-
-      <span
-        aria-hidden
-        {...reveal(6)}
-        className={`${reveal(6).className} pointer-events-none absolute right-6 top-[24px] font-display text-[96px] md:top-[80px] md:text-[180px] font-semibold uppercase leading-[0.95] text-transparent [-webkit-text-stroke:2px_color-mix(in_srgb,var(--text)_14%,transparent)]`}
-      >
-        {about.number}
-      </span>
     </div>
   );
 }

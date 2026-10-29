@@ -41,7 +41,9 @@ export function NetworkModal({ open, triggerRef, onClose, label }: Props) {
         >
           <MaskIcon name="close" width={16} />
         </button>
-        <p className="nw-hint pointer-events-none absolute bottom-3 left-0 right-0 text-center">DRAG TO ROTATE</p>
+        <p className="nw-hint pointer-events-none absolute bottom-3 left-0 right-0 text-center">
+          DRAG TO ROTATE<span className="nw-hint-touch"> · TAP A LOGO</span>
+        </p>
       </div>
     </dialog>
   );

@@ -6,8 +6,8 @@ import { StackScene } from "./StackScene";
 export function StackSection() {
   return (
     <section id="stack">
-      <div className="pb-14 pt-[120px]">
-        <SectionHeader eyebrow="03 — TECH STACK" title="WHAT I USE" />
+      <div className="pb-14 pt-[72px]">
+        <SectionHeader eyebrow="04 — TECH STACK" title="WHAT I USE" />
       </div>
       <StackScene />
     </section>

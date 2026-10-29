@@ -65,7 +65,9 @@ export function StackScene() {
         </p>
         <NetworkCanvas progress={progress} label={LABEL} className="nw-net" />
         <div ref={hintRef} className="nw-ui">
-          <p className="nw-hint">DRAG TO ROTATE</p>
+          <p className="nw-hint">
+            DRAG TO ROTATE<span className="nw-hint-touch"> · TAP A LOGO</span>
+          </p>
           <button
             ref={expandRef}
             type="button"

@@ -39,7 +39,8 @@ const iconProps = {
   "aria-hidden": true,
 } as const;
 
-export function ThemeToggle() {
+/* `look` replaces the default 40px outlined circle (the nav passes its 44px chip). */
+export function ThemeToggle({ look = "size-10 border border-border-strong hover:border-text" }: { look?: string }) {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const target = theme === "dark" ? "light" : "dark";
 
@@ -48,7 +49,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label={`Switch to ${target} theme`}
-      className="flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-strong text-text transition-colors duration-300 hover:border-text"
+      className={`flex shrink-0 cursor-pointer items-center justify-center rounded-full text-text transition-colors duration-300 ${look}`}
     >
       {/* Sun: shown in dark mode. Moon: shown in light mode (see globals.css). */}
       <svg {...iconProps} className="theme-icon-sun">

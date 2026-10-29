@@ -8,8 +8,8 @@ const label = "font-display text-[12px] font-normal uppercase leading-[1.5] trac
 
 export function ContactSection() {
   return (
-    <section id="contact" className="px-[var(--gutter)] pb-[120px] pt-[120px]">
-      <p className="font-display text-[13px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">06 — CONTACT</p>
+    <section id="contact" className="px-[var(--gutter)] pb-[96px] pt-[72px]">
+      <p className="font-display text-[13px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">07 — CONTACT</p>
       <h2 className="mt-10 font-display text-[clamp(44px,7.92vw,114px)] font-semibold uppercase leading-none tracking-[0.025em] text-text">
         LET&apos;S WORK TOGETHER
       </h2>
@@ -24,7 +24,7 @@ export function ContactSection() {
             <div>
               <dt className={label}>EMAIL</dt>
               <dd className="mt-[6px]">
-                <a href={`mailto:${contact.email}`} className="font-body text-[19px] leading-[34px] text-text transition-opacity duration-300 hover:opacity-70">
+                <a href={`mailto:${contact.email}`} className="font-body text-[19px] leading-[34px] text-text transition-opacity duration-300 hover:opacity-70 max-md:inline-flex max-md:min-h-11 max-md:items-center">
                   {contact.email}
                 </a>
               </dd>
@@ -36,14 +36,14 @@ export function ContactSection() {
             <div>
               <dt className={label}>SOCIALS</dt>
               <dd className="mt-[14px]">
-                <ul className="flex flex-col gap-[14px]">
+                <ul className="flex flex-col gap-[14px] max-md:gap-0">
                   {contact.socials.map((s) => (
                     <li key={s.label}>
                       <a
                         href={s.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex w-fit items-center gap-[10px] font-display text-[14px] font-medium uppercase leading-5 tracking-[0.12em] text-text"
+                        className="group flex w-fit items-center gap-[10px] font-display text-[14px] font-medium uppercase leading-5 tracking-[0.12em] text-text max-md:min-h-11"
                       >
                         {s.label}
                         <MaskIcon name="arrow-right" width={16} className="transition-transform duration-300 ease-brand group-hover:translate-x-1 motion-reduce:transition-none" />

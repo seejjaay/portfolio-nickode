@@ -17,5 +17,4 @@ export const about = {
     { key: "Socials", value: "@yourhandle" },
   ],
   cv: { label: "DOWNLOAD CV", href: "#" },
-  number: "01",
 } as const;

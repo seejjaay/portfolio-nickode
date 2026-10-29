@@ -6,8 +6,8 @@ import { AchievementRows } from "./AchievementRows";
    blurred third row. Cards open the certificate or event modal. */
 export function AchievementsSection() {
   return (
-    <section id="achievements" className="relative flex flex-col gap-14 py-[120px]">
-      <SectionHeader eyebrow="04 — ACHIEVEMENTS" title="WHAT I HAVE ACHIEVED" />
+    <section id="achievements" className="relative flex flex-col gap-14 py-[72px]">
+      <SectionHeader eyebrow="05 — ACHIEVEMENTS" title="WHAT I HAVE ACHIEVED" />
       <AchievementRows />
     </section>
   );

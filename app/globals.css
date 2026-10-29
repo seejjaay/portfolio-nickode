@@ -169,15 +169,6 @@
     mask: url("/assets/ui/icon-arrow-up.svg") center / 100% 100% no-repeat;
   }
 
-  .icon-next-arrow {
-    display: block;
-    width: 96px;
-    height: 16px;
-    background-color: currentColor;
-    -webkit-mask: url("/assets/ui/icon-next-arrow.svg") center / 100% 100% no-repeat;
-    mask: url("/assets/ui/icon-next-arrow.svg") center / 100% 100% no-repeat;
-  }
-
   .icon-download {
     display: block;
     width: 16px;
@@ -193,6 +184,25 @@
     position: relative;
     height: 100svh;
     overflow: hidden;
+  }
+
+  /* The stage opens with its top 61% empty (the title starts at 0.611 of the stage,
+     see TITLE_START in AboutScene). On the pinned desktop version most of that sky
+     is tucked under the hero (which sits above it in z-order), leaving about 120px
+     between the hero's bottom edge and the title instead of a screen of black. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+    .about-section {
+      margin-top: -52svh;
+    }
+  }
+
+  /* Phones: the hero's portrait composition ends well above its bottom edge, which
+     is empty now that the bottom labels are gone. Tuck the About content up into
+     that space, leaving about 150px under the photo. */
+  @media (max-width: 767px) {
+    .about-section {
+      margin-top: calc(-1 * max(0px, 100svh - 153.6vw - 88px));
+    }
   }
 
   /* Dark waves are the Figma black-sky B&W; light waves are the same print as
@@ -212,7 +222,17 @@
   /* mix-blend-mode only sees what is inside the half's own group, so in light
      mode each half carries the paper color for the title to blend against. */
   :root[data-theme="light"] .about-half {
-    background: var(--bg);
+    /* Faded in over the top 20% so the stage's edge (tucked under the hero) never
+       shows as a step against the page's vignette. The title's top never rises
+       above about 25% of the stage, so it always has paper behind it to blend with. */
+    background: linear-gradient(to bottom, transparent, var(--bg) 20%);
+  }
+
+  /* The wave's top fades out (a mask, not a --bg overlay), so its sky melts into
+     whatever is behind it instead of ending on a hard edge. */
+  .about-wave {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 17.6%);
+    mask-image: linear-gradient(to bottom, transparent, #000 17.6%);
   }
 
   .about-divider {
@@ -265,6 +285,9 @@
   /* Hero geometry variables: desktop is Figma's 1440x900 composition in cqw; on a
      phone the stage is tall and the photo is bigger against a full-width wordmark. */
   .hero-stage {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
     --wm-left: 3.4722cqw;
     --wm-top: 20.9028cqw;
     --wm-size: 24.8cqw;
@@ -272,6 +295,25 @@
     --pt-top: 15.4167cqw;
     --pt-w: 72.5cqw;
     --pt-h: 53.125cqw;
+    /* The photo is cut flat at the stage's bottom; fade the last 14% so it dissolves
+       into the page instead of ending on a hard line above About. The wordmark ends
+       at 77%, so it is untouched. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 86%, transparent);
+    mask-image: linear-gradient(to bottom, #000 86%, transparent);
+  }
+
+  /* Desktop: the whole 16:10 stage fits inside the 100svh hero (width
+     min(100%, 160svh)), centered horizontally and sitting on the bottom edge so
+     the photo's cut-off never floats; any spare height goes above, under the nav. */
+  @media (min-width: 40rem) {
+    .hero-stage {
+      --stage-w: min(100cqw, 160svh);
+      inset: auto;
+      bottom: 0;
+      left: calc((100cqw - var(--stage-w)) / 2);
+      width: var(--stage-w);
+      aspect-ratio: 16 / 10;
+    }
   }
 
   @media (max-width: 639px) {
@@ -283,6 +325,15 @@
       --pt-top: 43.6cqw;
       --pt-w: 150cqw;
       --pt-h: 110cqw;
+    }
+  }
+
+  /* On phones the photo ends partway down the hero, above the stage's own fade, so
+     it gets its own: the last 16% of the cutout dissolves instead of ending on a line. */
+  @media (max-width: 639px) {
+    .hero-photo {
+      -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent);
+      mask-image: linear-gradient(to bottom, #000 84%, transparent);
     }
   }
 
@@ -740,6 +791,17 @@
     color: var(--text-muted);
   }
 
+  /* Touch screens have no hover, so the hint also says how to see a logo's name. */
+  .nw-hint-touch {
+    display: none;
+  }
+
+  @media (hover: none) {
+    .nw-hint-touch {
+      display: inline;
+    }
+  }
+
   .nw-expand {
     position: absolute;
     right: 0;
@@ -845,6 +907,227 @@
     }
   }
 
+  /* Services folder and deck (DESIGN.md 7.3.1). The scene is laid out at a fixed
+     design size (variables below) and ServicesScene scales it to fit the stage via
+     --svc-k. The folder's closed centre is the scene's centre; the newest card's
+     resting bottom sits 90px into the folder after its 12% drop. Colors are all
+     existing tokens. */
+  .svc-stage {
+    position: relative;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .svc-scene {
+    --svc-w: 700px;
+    --svc-h: 900px;
+    --fw: 640px;
+    --fh: 260px;
+    --cw: 560px;
+    --ch: 340px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--svc-w);
+    height: var(--svc-h);
+    margin: calc(var(--svc-h) / -2) 0 0 calc(var(--svc-w) / -2);
+    transform: scale(var(--svc-k, 1));
+  }
+
+  @media (max-width: 767px) {
+    .svc-scene {
+      --svc-w: 390px;
+      --svc-h: 844px;
+      --fw: 300px;
+      --fh: 190px;
+      --cw: 342px;
+      --ch: 400px;
+    }
+  }
+
+  .svc-shift {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--svc-h) / 2 - var(--fh) / 2);
+    width: var(--fw);
+    height: var(--fh);
+    margin-left: calc(var(--fw) / -2);
+    will-change: transform;
+  }
+
+  .svc-float,
+  .svc-folder,
+  .svc-back {
+    position: absolute;
+    inset: 0;
+  }
+
+  .svc-folder {
+    perspective: 1400px;
+  }
+
+  .svc-back,
+  .svc-tab {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+  }
+
+  .svc-back {
+    border-radius: var(--radius-card);
+  }
+
+  /* The tab overlaps the panel's top edge by 1px so the two read as one shape. */
+  .svc-tab {
+    position: absolute;
+    left: 24px;
+    bottom: calc(100% - 1px);
+    display: flex;
+    align-items: center;
+    height: 30px;
+    padding: 0 16px;
+    border-bottom: 0;
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* Hinged on its bottom edge: rotateX(-100deg) swings the top toward the viewer and down. */
+  .svc-flap {
+    position: absolute;
+    inset: auto 0 0;
+    height: 88%;
+    background: var(--surface-hover);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-card);
+    transform-origin: 50% 100%;
+    will-change: transform;
+  }
+
+  .svc-cards {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    pointer-events: none;
+  }
+
+  /* Opaque so a stacked deck never shows the card behind through it: the card
+     surface (translucent --surface, as other cards) is laid over --bg. */
+  .svc-card {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--svc-h) / 2 - var(--fh) / 2 + var(--svc-h) * 0.12 + 90px - var(--ch));
+    display: flex;
+    flex-direction: column;
+    width: var(--cw);
+    height: var(--ch);
+    margin-left: calc(var(--cw) / -2);
+    padding: 32px;
+    background:
+      linear-gradient(color-mix(in srgb, var(--surface) 70%, transparent), color-mix(in srgb, var(--surface) 70%, transparent)),
+      var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    transform-origin: 50% 0; /* scaling about the top edge keeps each step back a full 28px */
+    will-change: transform, opacity;
+  }
+
+  .svc-veil {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--bg);
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity;
+  }
+
+  @media (max-width: 767px) {
+    .svc-card {
+      padding: 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .svc-card {
+      opacity: 0;
+    }
+
+    .svc-float {
+      animation: svc-float 7s ease-in-out infinite alternate;
+    }
+
+    .svc-stage.is-open .svc-float {
+      animation: none;
+    }
+  }
+
+  @keyframes svc-float {
+    from {
+      transform: rotate(-1deg);
+    }
+    to {
+      transform: rotate(1deg);
+    }
+  }
+
+  /* Reduced motion: no pin; the folder is shown open under the five cards as a plain list. */
+  @media (prefers-reduced-motion: reduce) {
+    .svc-stage {
+      height: auto;
+      overflow: visible;
+      padding: 24px var(--gutter) 120px;
+    }
+
+    .svc-scene {
+      position: static;
+      display: flex;
+      flex-direction: column;
+      width: auto;
+      max-width: var(--cw);
+      height: auto;
+      margin: 0 auto;
+      transform: none;
+    }
+
+    .svc-cards {
+      position: static;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .svc-card {
+      position: static;
+      width: auto;
+      height: auto;
+      min-height: 0;
+      margin: 0;
+    }
+
+    .svc-shift {
+      position: relative;
+      left: auto;
+      top: auto;
+      order: 2;
+      max-width: 100%;
+      margin: 48px auto 0;
+    }
+
+    .svc-flap {
+      transform: rotateX(-100deg);
+    }
+
+    .svc-veil {
+      display: none;
+    }
+  }
+
   /* Experience mountain scene (DESIGN.md 7.7). The 200vh spacer after the stage
      is how long it stays pinned for (padding would not work: a sticky element
      only travels within its container's content box). ExperienceScene turns
@@ -853,6 +1136,12 @@
     content: "";
     display: block;
     height: 200vh;
+  }
+
+  @media (max-width: 767px) {
+    .exp-track::after {
+      height: 150vh;
+    }
   }
 
   .exp-stage {
@@ -966,6 +1255,17 @@
       animation: achv-out 260ms var(--ease) both;
     }
 
+    /* Under 640px the modals are full-screen sheets that slide up from the bottom. */
+    @media (max-width: 639px) {
+      .achv-dialog[open] .achv-panel {
+        animation: achv-sheet-in 420ms var(--ease) both;
+      }
+
+      .achv-dialog.is-closing .achv-panel {
+        animation: achv-sheet-in 260ms var(--ease) reverse both;
+      }
+    }
+
 
 
 
@@ -988,6 +1288,15 @@
     }
     to {
       opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes achv-sheet-in {
+    from {
+      transform: translateY(100%);
+    }
+    to {
       transform: none;
     }
   }

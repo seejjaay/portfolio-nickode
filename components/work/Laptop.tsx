@@ -63,8 +63,13 @@ export function Laptop({ progress, children }: { progress: RefObject<SceneState>
       if (hasWebGL()) setMounted(true);
       else setFlat(true);
     };
-    const idle = window.requestIdleCallback?.(start, { timeout: 2500 });
-    const timer = idle === undefined ? window.setTimeout(start, 1200) : 0;
+    // Wait out first load (hydration, intro) before the idle slot, so three.js
+    // evaluating does not land inside the interactive window.
+    let idle: number | undefined;
+    const timer = window.setTimeout(() => {
+      idle = window.requestIdleCallback?.(start, { timeout: 2500 });
+      if (idle === undefined) start();
+    }, 4000);
     const io = new IntersectionObserver(
       ([e]) => {
         setNear(e.isIntersecting);

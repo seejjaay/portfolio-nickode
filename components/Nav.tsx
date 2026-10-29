@@ -8,6 +8,7 @@ import { gsap, scrollToSection, scrollToY } from "@/lib/scroll";
 
 const links = [
   { id: "about", label: "ABOUT" },
+  { id: "services", label: "WHAT I OFFER" },
   { id: "work", label: "WHAT I'VE DONE" },
   { id: "stack", label: "WHAT I USE" },
   { id: "achievements", label: "WHAT I HAVE ACHIEVED" },
@@ -160,23 +161,29 @@ export function Nav() {
             scrollToY(0);
             history.replaceState(null, "", "/");
           }}
-          className="nav-chip pointer-events-auto rounded-full px-5 py-2 font-display text-[18px] font-medium uppercase leading-[1.4] tracking-[0.08em] text-text"
+          className="nav-chip pointer-events-auto flex min-h-11 items-center rounded-full px-5 py-2 font-display text-[18px] font-medium uppercase leading-[1.4] tracking-[0.08em] text-text"
         >
           NICK.ODE
         </Link>
-        <button
-          ref={burgerRef}
-          type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          aria-controls="nav-drawer"
-          onClick={() => setOpen((v) => !v)}
-          className="nav-chip pointer-events-auto flex size-11 cursor-pointer flex-col items-center justify-center gap-[5px] rounded-full text-text"
-        >
-          <span aria-hidden className="h-px w-5 bg-current" />
-          <span aria-hidden className="h-px w-5 bg-current" />
-          <span aria-hidden className="h-px w-5 bg-current" />
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Under 768px the theme toggle also sits here so it stays visible (DESIGN.md 12). */}
+          <div className="pointer-events-auto md:hidden">
+            <ThemeToggle look="nav-chip size-11" />
+          </div>
+          <button
+            ref={burgerRef}
+            type="button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="nav-drawer"
+            onClick={() => setOpen((v) => !v)}
+            className="nav-chip pointer-events-auto flex size-11 cursor-pointer flex-col items-center justify-center gap-[5px] rounded-full text-text"
+          >
+            <span aria-hidden className="h-px w-5 bg-current" />
+            <span aria-hidden className="h-px w-5 bg-current" />
+            <span aria-hidden className="h-px w-5 bg-current" />
+          </button>
+        </div>
       </header>
 
       {/* Hidden until the timeline plays (visibility keeps it out of the tab order). */}

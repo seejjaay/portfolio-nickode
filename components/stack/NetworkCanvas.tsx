@@ -328,10 +328,13 @@ export function NetworkCanvas({ progress, label, className = "" }: Props) {
       const r = canvas.getBoundingClientRect();
       return [e.clientX - r.left, e.clientY - r.top] as const;
     };
+    let downX = 0;
+    let downY = 0;
     const down = (e: PointerEvent) => {
       if (!interactive) return;
       dragging = true;
       [lastX, lastY] = local(e);
+      [downX, downY] = [lastX, lastY];
       vYaw = 0;
       vPitch = 0;
       canvas.setPointerCapture(e.pointerId);
@@ -359,9 +362,14 @@ export function NetworkCanvas({ progress, label, className = "" }: Props) {
       dragging = false;
       canvas.releasePointerCapture(e.pointerId);
       canvas.style.cursor = "grab";
+      // Touch has no hover: a tap (not a drag) on a logo shows its label until the next tap.
+      if (e.pointerType !== "mouse") {
+        const [x, y] = local(e);
+        if (Math.hypot(x - downX, y - downY) < 10) hover = logoAt(x, y);
+      }
     };
-    const leave = () => {
-      if (!dragging) hover = -1;
+    const leave = (e: PointerEvent) => {
+      if (!dragging && e.pointerType === "mouse") hover = -1; // a finger lifting also "leaves"
     };
     canvas.addEventListener("pointerdown", down);
     canvas.addEventListener("pointermove", move);

@@ -59,7 +59,7 @@ export function AchievementListModal({ open, triggerRef, onClose, onSelect }: Pr
       <div className="achv-panel relative flex h-[680px] max-h-[calc(100dvh-48px)] w-[880px] max-w-[calc(100vw-48px)] flex-col overflow-hidden rounded-marquee border border-border-strong bg-surface shadow-[0_24px_60px_0_var(--shadow-modal)]">
         <div className="flex shrink-0 flex-col gap-4 px-12 pb-5 pt-11">
           <p className="font-display text-[13px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">
-            04 — Achievements
+            05 — Achievements
           </p>
           <h2
             id={titleId}

@@ -10,9 +10,9 @@ export function ExperienceSection() {
   return (
     <section id="experience">
       <ExperienceScene>
-        <div className="flex flex-col gap-16 py-[120px]">
+        <div className="flex flex-col gap-16 pb-[72px] pt-[120px]">
           <div data-exp-reveal className="exp-reveal">
-            <SectionHeader eyebrow="05 — EXPERIENCE" title="WHERE I'VE BEEN SO FAR" />
+            <SectionHeader eyebrow="06 — EXPERIENCE" title="WHERE I'VE BEEN SO FAR" />
           </div>
           <div className="px-[var(--gutter)]">
             <ExperienceList roles={roles} />

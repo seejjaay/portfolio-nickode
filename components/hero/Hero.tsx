@@ -10,11 +10,8 @@ const label =
 
 export function Hero() {
   return (
-    <section
-      id="hero"
-      className="flex min-h-[calc(100svh-var(--nav-h))] items-center justify-center"
-    >
-      <div className="hero-stage @container relative aspect-[16/10] w-full overflow-hidden max-sm:aspect-auto max-sm:h-[calc(100svh-var(--nav-h))] max-sm:min-h-[560px]">
+    <section id="hero" className="@container relative z-[1] -mt-[var(--nav-h)] h-svh overflow-hidden">
+      <div className="hero-stage @container">
         <h1
           className="absolute whitespace-nowrap font-display font-semibold uppercase leading-[0.95] text-text"
           style={wordmarkBoxStyle}
@@ -34,31 +31,10 @@ export function Hero() {
             {site.name}
           </span>
         </div>
-
-        <p className={`${label} left-6 top-10 sm:left-12`}>{site.role}</p>
-        <a
-          href="#about"
-          aria-label="Scroll to About"
-          className="intro-fade group absolute right-6 top-10 -my-3 py-3 text-text sm:right-12"
-        >
-          <span
-            aria-hidden
-            className="icon-next-arrow transition-transform duration-300 ease-brand group-hover:translate-x-1 motion-reduce:transition-none"
-          />
-        </a>
-        <p className={`${label} bottom-[60.4px] left-6 sm:left-12`}>{site.fullName}</p>
-        <p className={`${label} bottom-[60.4px] right-6 sm:right-12`}>{site.website}</p>
-
-        <div
-          aria-hidden
-          className="intro-fade pointer-events-none absolute bottom-[10px] left-1/2 flex -translate-x-1/2 flex-col items-center gap-[13.8px]"
-        >
-          <span className="font-display text-[13px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text">
-            SCROLL
-          </span>
-          <span className="h-7 w-px bg-border-strong" />
-        </div>
       </div>
+
+      {/* The role label belongs to the viewport, not the stage. */}
+      <p className={`${label} left-6 top-[calc(var(--nav-h)+40px)] sm:left-12`}>{site.role}</p>
     </section>
   );
 }

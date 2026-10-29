@@ -9,8 +9,8 @@ import { WorkScene } from "./WorkScene";
 export function WorkSection() {
   return (
     <section id="work">
-      <div className="pb-14 pt-[120px]">
-        <SectionHeader eyebrow="02 — SELECTED WORK" title="WHAT I'VE DONE" />
+      <div className="pb-14 pt-[72px]">
+        <SectionHeader eyebrow="03 — SELECTED WORK" title="WHAT I'VE DONE" />
       </div>
       {/* The pinned laptop needs room for the carousel text to read; narrower screens get a plain list. */}
       <div className="max-[899px]:hidden">
