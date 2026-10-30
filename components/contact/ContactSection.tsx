@@ -24,7 +24,7 @@ export function ContactSection() {
             <div>
               <dt className={label}>EMAIL</dt>
               <dd className="mt-[6px]">
-                <a href={`mailto:${contact.email}`} className="font-body text-[19px] leading-[34px] text-text transition-opacity duration-300 hover:opacity-70 max-md:inline-flex max-md:min-h-11 max-md:items-center">
+                <a href={`mailto:${contact.email}`} className="font-body text-[19px] leading-[34px] text-text transition-opacity duration-300 hover:opacity-70 max-lg:inline-flex max-lg:min-h-11 max-lg:items-center">
                   {contact.email}
                 </a>
               </dd>
@@ -36,14 +36,14 @@ export function ContactSection() {
             <div>
               <dt className={label}>SOCIALS</dt>
               <dd className="mt-[14px]">
-                <ul className="flex flex-col gap-[14px] max-md:gap-0">
+                <ul className="flex flex-col gap-[14px] max-lg:gap-0">
                   {contact.socials.map((s) => (
                     <li key={s.label}>
                       <a
                         href={s.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex w-fit items-center gap-[10px] font-display text-[14px] font-medium uppercase leading-5 tracking-[0.12em] text-text max-md:min-h-11"
+                        className="group flex w-fit items-center gap-[10px] font-display text-[14px] font-medium uppercase leading-5 tracking-[0.12em] text-text max-lg:min-h-11"
                       >
                         {s.label}
                         <MaskIcon name="arrow-right" width={16} className="transition-transform duration-300 ease-brand group-hover:translate-x-1 motion-reduce:transition-none" />

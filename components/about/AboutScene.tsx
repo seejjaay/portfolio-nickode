@@ -62,7 +62,7 @@ export function AboutScene({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stage = stageRef.current!;
-    if (window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 767px)").matches) return; // static stack, see globals.css
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // static stack, see globals.css
 
     const ctx = gsap.context(() => {
       const waves = [...stage.querySelectorAll<HTMLElement>("[data-wave]")];
@@ -70,11 +70,12 @@ export function AboutScene({ children }: { children: ReactNode }) {
       const seams = [...stage.querySelectorAll<HTMLElement>("[data-seam]")];
       const left = stage.querySelector<HTMLElement>("[data-half='left']")!;
       const right = stage.querySelector<HTMLElement>("[data-half='right']")!;
+      const halves = stage.querySelector<HTMLElement>(".about-halves")!;
       let titleHeight = titles[0].offsetHeight;
 
       const render = (p: number) => {
         const W = stage.clientWidth;
-        const H = stage.clientHeight;
+        const H = halves.clientHeight; // the viewport; on a phone the stage itself is taller
 
         const rise = clamp(p / RISE_END, 0, 1);
         const y = lerp(WAVE_START * H, WAVE_END * H, rise);
@@ -140,7 +141,7 @@ export function AboutScene({ children }: { children: ReactNode }) {
         <div className={skyFade} />
       </div>
 
-      <div className="about-halves pointer-events-none absolute inset-0 z-10">
+      <div className="about-halves pointer-events-none absolute inset-0 z-10 max-md:bottom-auto max-md:h-svh">
         {(["left", "right"] as const).map((side) => (
           <div
             key={side}

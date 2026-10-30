@@ -224,7 +224,7 @@ Hokusai's *The Great Wave off Kanagawa* (public domain), pure greyscale, never c
 - 0.60–1.00: wave scales 1.0 to 1.1 (origin bottom-left), slow drift; title stays centered with `mix-blend-mode: difference` so it stays black and white over foam and sky.
 - 0.70–1.00: the viewport splits along the vertical center seam and the halves slide apart with ease-out-cubic (the 80% still has them 500px apart). About is already mounted behind and fades up on a timed stagger.
 - The wave art is rebuilt from the public-domain print (Japanese text removed) in a dark version and an ink-on-paper light version, flowed by a WebGL shader. Lenis drives scroll and is wired to ScrollTrigger.
-- Under 768px the pin is dropped (see section 17).
+- **Phones get the same scene (as built):** About content is taller than a phone screen, so the stage grows to fit it and ScrollTrigger pins its top 100svh (the wave halves cover exactly that); once the pin lets go the rest of the content scrolls normally. The About reveal stagger runs on phones too. Under reduced motion it stays the static stack.
 - **Hero to About seam (as built):** the stage opens with its top 61% empty (the title starts at 0.611 of the stage), so on the pinned desktop version the About section is pulled up 52svh under the hero (the hero is above it in z-order). That leaves about 120px between the hero's bottom edge and the title. The hero photo fades out over the stage's last 14% (on phones, over the cutout's last 16%), and the wave's top is a mask fade, not a `--bg` overlay. In light mode the halves' paper background fades in over the stage's top 20%, so the tucked-under edge never shows as a step against the vignette. The pin uses `anticipatePin: 1`. On phones About is pulled up into the hero's empty bottom, leaving about 150px under the photo.
 - Reduced motion: static wave as a divider, cross-fade into About.
 
@@ -415,13 +415,13 @@ Site-level: name `NICK.ODE`, role, full name, website, email, location, socials,
 
 Figma shows 1440 desktop only. Rules for the rest:
 - Breakpoints: 640, 1024, 1280.
-- **Hero:** `100svh`, stage fits without cropping (7.1). Under 640px switch to the portrait composition (wordmark lower, cutout about 150cqw wide); the role label stays in the viewport corner. Keep the outline-over-silhouette trick.
+- **Hero:** `100svh`, stage fits without cropping (7.1). Under 640px switch to the portrait composition (wordmark lower, photo below it filling to the hero's bottom); the role label stays in the viewport corner. The outline-over-silhouette trick only applies from 640px up (see 17).
 - **About:** portrait above text; dot grid scales, pointer radius 140px on touch.
-- **Laptop:** under 900px it becomes a project card list (as built; see section 17). Above that, the laptop opens and stays still (no dolly); cap its scale so the screen fits.
+- **Laptop:** the laptop opens and stays still (no dolly); cap its scale so the screen fits. **Under 900px (as built)** the screen is too small for the carousel to read, so the same pinned scene runs with the laptop fitted by width and sitting low in the stage; once the lid is up each project card rises out of the screen at full width (about 342×300), one at a time as you scroll, with a counter and prev/next above (see 7.4 and section 17). Under reduced motion on a narrow screen it is the plain card list.
 - **Network:** smaller (about 340px), touch-drag, labels on tap.
 - **Marquees:** same two rows, smaller cards, slower speed.
 - **Experience:** accordion unchanged; the two expanded columns stack; the dust scene runs shorter (150vh).
-- **Modals:** become full-screen sheets on mobile; image on top, details below.
+- **Modals:** full-screen sheets under 1024px (not just phones): image on top, details scroll below; the certificate zooms upright or sideways, whichever fills the screen more.
 - **Nav:** the burger drawer at every width. **Theme toggle:** in the drawer footer on desktop; under 768px a 44px round sun/moon button also sits beside the burger so it stays visible (this settles the earlier contradiction between this section and 5.2).
 - Touch targets at least 44px. Pinned scenes use `100svh`.
 
@@ -429,17 +429,17 @@ Figma shows 1440 desktop only. Rules for the rest:
 These frames are added to Figma beside the desktop ones (dark row and light row). Status: **to be drawn**; the rules below are the source until then. Gutter 24px, content width 342px. Type at 390: H2 36px, wordmark 24.8vw, body 17px.
 - **Intro:** same wordmark scene, scaled by width; Skip bottom-right.
 - **Hero:** portrait composition, `100svh`; role top-left, burger and theme toggle top-right.
-- **About:** portrait frame full width (440:560), then eyebrow, title, paragraph, info panel as one column, full-width `DOWNLOAD CV`. No wave pin (it is a plain divider).
+- **About:** portrait frame full width (440:560), then eyebrow, title, paragraph, info panel as one column, full-width `DOWNLOAD CV`. The wave scene is pinned as on desktop, then the content scrolls on.
 - **Titles divider:** two marquees, slower, smaller type.
 - **What can I offer:** pinned `100svh`; folder about 300px wide; cards 342×400 portrait, same deck behavior.
-- **What I've done:** project card list (cover 16:10, index, category, title, `VIEW PROJECT →`), one column.
+- **What I've done:** the laptop opens and the project cards rise out of its screen at full width (cover 16:10, index, category, title, `VIEW PROJECT →`), one at a time as you scroll; counter and prev/next above. Reduced motion: a one-column card list.
 - **What I use:** network about 340px, drag to spin, tap a logo for its label; the expand button stays.
 - **Achievements:** two marquee rows with smaller cards (about 260px wide), slower than desktop; `SEE MORE` full width.
 - **Experience:** the mountain and dust scene (150vh), then the accordion with stacked columns.
 - **Contact and footer:** one column, full-width inputs and button; footer stacks.
 - **Drawer:** full-width panel, links 28px Oswald stacked with the same stagger, theme toggle and close at the bottom and top.
 - **Project detail:** one column; meta row 2×2; video full width; features one column; gallery one column with a lightbox; repo card stacked; previous/next stacked.
-- **Certificate and event modals:** **full-screen sheets** (`100svh`, slide up from the bottom, sticky 44px close button top-right). Certificate: the sheet image on top (tap to zoom), then chips, title, meta grid (2×2), description, verify link, share row. Event: photo carousel on top (4:3, counter pill, swipe), thumbnail strip scrolling horizontally, then the same details block.
+- **Certificate and event modals:** **full-screen sheets** (under 1024px; `100svh`, slide up from the bottom, sticky 44px close button top-right). Certificate: the sheet image on top (tap to zoom), then chips, title, meta grid (2×2), description, verify link, share row. Event: photo carousel on top (4:3, counter pill, swipe), thumbnail strip scrolling horizontally, then the same details block.
 
 ---
 
@@ -554,6 +554,7 @@ Sections above are already edited in place; this is the one-stop list.
 - **Laptop:** no dolly-in; stays open once opened; keyboard click closes it (7.4).
 - **Wave transition:** timings fitted to Figma's stills, not the earlier prose (7.2.1).
 - **Hero mask:** the cutout's alpha, not an SVG path (7.1).
+- **Phone hero:** photo below the wordmark instead of behind it, so no outline-over-silhouette under 640px (7.1, 14).
 - **Network sphere:** Canvas 2D, not three.js; stays complete once finished (7.5).
 - **Achievements:** added `SEE MORE` filterable list (7.6).
 - **Mountain:** built with 221 baked tiles; **being replaced by the dust effect and a redrawn art set** (7.7, batch step 15–16).
@@ -563,8 +564,8 @@ Sections above are already edited in place; this is the one-stop list.
 - **Breakpoints in use:** Tailwind `sm` 640, `md` 768, `lg` 1024, plus a custom 900 for the laptop. The spec's 1280 is not used.
 
 **Mobile as built**
-- Hero: under 640px a portrait composition (wordmark lower, cutout 150cqw wide, stage `100svh` with a 560px floor); outline-over-silhouette kept.
-- Under 900px the laptop scene becomes a project card list.
+- Hero: under 640px a portrait composition: wordmark lower (top 55cqw), photo **below** it (top 82cqw), filling down to the hero's bottom (height `min(110cqw, max(60cqw, 100svh - 82cqw))`, centred). Nothing overlaps there, so the outline-over-silhouette trick only shows from 640px up (a departure from 7.1, asked for 2026-10-30).
+- Under 900px the laptop scene shows the project cards rising out of the screen instead of the on-screen carousel (reduced motion: a card list).
 - Under 768px the About wave pin is dropped; About content stacks (portrait above text, one-column grid).
 - Experience accordion columns stack on narrow screens.
 - Reduced motion verified static at 1440 and 390.
@@ -574,10 +575,10 @@ Sections above are already edited in place; this is the one-stop list.
 **Figma status (2026-10-29):** the Figma MCP call limit on the Starter plan was reached partway through this batch. Done in Figma: the redrawn mountain art on the template and the intro and light-intro stills, the tile frames deleted from states 02, 03 and 06, dust sprite layers added, and the experience eyebrow changed to `06`. **Still open in Figma:** the image fills on the art layers (`50:74`, `81:232`) and on the three dust layers came back empty and need re-applying; the services section and storyboard; the shorter intro board; the hero arrow and About `01` removals; the burger-drawer nav, the `SEE MORE` list and the laptop storyboard (stale before this batch); and all mobile frames. Until redrawn, this file wins over those frames.
 
 **Spec items from section 12 not yet implemented (found in this audit; all are covered by section 12.1 and batch step 19)**
-- ~~**Modals are not full-screen sheets on mobile.**~~ **Fixed (step 19):** under 640px the certificate and event modals are full-screen sheets (slide up, 44px close top-right, media on top, details scroll; event carousel 4:3 with swipe on the photo only and a scrolling thumbnail strip; tap the certificate to zoom it sideways). Between 640 and about 1000px the desktop 1120×680 layout still squeezes the details column. The list and network modals are unchanged.
-- ~~**Marquee speed is the same on mobile**~~ **Fixed:** every marquee runs at 60% speed under 768px (`useMarquee`). Card and type sizes are not reduced yet.
+- ~~**Modals are not full-screen sheets on mobile.**~~ **Fixed (step 19):** under 1024px the certificate and event modals are full-screen sheets (slide up, 44px close top-right, media on top, details scroll; event carousel 4:3 with swipe on the photo only and a scrolling thumbnail strip; tap the certificate to zoom it sideways). The list and network modals are unchanged.
+- ~~**Marquee speed is the same on mobile**~~ **Fixed:** every marquee runs at 60% speed under 768px (`useMarquee`). Achievement cards are about 260px wide and the divider type is 28px under 768px.
 - ~~**Mountain scene stays 200vh on mobile**~~ **Fixed in step 16:** 150vh under 768px.
 - ~~**Theme toggle is not visible on mobile**~~ **Fixed:** a 44px sun/moon chip sits beside the burger under 768px; the drawer keeps its own.
 - ~~**Network size on phones, tap-for-label, touch-drag**~~ **Verified/fixed:** about 340px at 390 wide (the radius follows the canvas width), horizontal drag spins and vertical scrolls the page, a tap on a logo shows its label until the next tap; the hint adds `TAP A LOGO` on touch screens.
-- **Laptop on phones:** the spec's "one centered card with peeks, swipe to browse" was replaced by the card list.
+- ~~**Laptop on phones:** replaced by the card list.~~ **Fixed:** phones run the laptop scene and the cards pop out of the screen (7.4, 12).
 - **Audited at 390×844 (dark and light):** no horizontal scroll anywhere; every visible link and button is at least 44px (logo, footer back-to-top, contact email and socials were raised on mobile; the footer stacks under 640px).

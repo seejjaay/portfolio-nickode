@@ -24,7 +24,9 @@ const BASE_T = 18;
 const LID_T = 9;
 const KEY_H = 6;
 const PIVOT_Y = 4.6; // the closed lid rests on the keys
+const COMPACT_DROP = 0.2; // phones: the laptop sits this share of the stage height lower
 const FOCAL = 4500; // camera focal length in px: a gentle perspective, like a long lens
+const DEPTH_SPAN = 1500; // clip planes sit this far either side of the target: the laptop and its glow fit inside
 const DISPLAY = { w: 972, h: 597 };
 
 type Tokens = Record<"alu" | "hinge" | "notch" | "camera" | "key" | "body" | "screen" | "glow", THREE.Color>;
@@ -262,13 +264,23 @@ function Laptop3D({ progress, place, onReady, reduced }: Props) {
     // Camera: a long lens looking down TILT degrees at the hinge. The laptop sits
     // at Figma's size at a 1440 wide stage and scales with the width; the slide
     // into frame is the camera shifting up along its own vertical.
-    const k = clamp(Math.min(size.width / 1440, size.height / 900), 0.5, 1.35); // fit both ways
+    // Under 900px (a phone) it fits by width, so the whole laptop is on screen, and sits
+    // low in the stage: the project cards rise out of its screen into the space above.
+    const compact = size.width < 900;
+    const k = compact
+      ? clamp(size.width / 1250, 0.2, 0.7)
+      : clamp(Math.min(size.width / 1440, size.height / 900), 0.5, 1.35); // fit both ways
     const dist = FOCAL / k;
     const dy = lerp(CLOSED_DROP, 0, lidT) + Math.sin(t * 0.5) * 4 * idle;
-    const up = 23 / k + 225 + dy;
+    const up = 23 / k + 225 + dy + (compact ? (COMPACT_DROP * size.height) / k : 0);
     const el = THREE.MathUtils.degToRad(TILT);
     const perspective = camera as THREE.PerspectiveCamera;
     perspective.fov = THREE.MathUtils.radToDeg(2 * Math.atan(size.height / 2 / FOCAL));
+    // Clip planes hug the laptop: the screen sits 0.1 in front of the glass, and with
+    // a fixed near of 50 a phone's camera distance (~14000) leaves too little depth
+    // precision to keep them apart, so the screen flickers.
+    perspective.near = dist - DEPTH_SPAN;
+    perspective.far = dist + DEPTH_SPAN;
     const target = new THREE.Vector3(0, Math.cos(el) * up, -Math.sin(el) * up);
     perspective.position.set(target.x, target.y + Math.sin(el) * dist, target.z + Math.cos(el) * dist);
     perspective.lookAt(target);

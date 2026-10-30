@@ -196,12 +196,21 @@
     }
   }
 
-  /* Phones: the hero's portrait composition ends well above its bottom edge, which
-     is empty now that the bottom labels are gone. Tuck the About content up into
-     that space, leaving about 150px under the photo. */
-  @media (max-width: 767px) {
+  /* Phones: the hero's photo ends at 82vw + its height (see the phone .hero-stage
+     variables), which is at or just above the hero's bottom edge. Pull About up so the
+     title (0.611 of the stage down) starts about 120px under the photo, with the same
+     overlap trick as desktop. */
+  @media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
     .about-section {
-      margin-top: calc(-1 * max(0px, 100svh - 153.6vw - 88px));
+      margin-top: min(0px, calc(82vw + min(110vw, max(60vw, 100svh - 82vw)) + 120px - 161.1svh));
+    }
+  }
+
+  /* Reduced-motion phones get the static layout; tuck its content up into any empty
+     bottom of the hero, leaving about 150px under the photo. */
+  @media (prefers-reduced-motion: reduce) and (max-width: 767px) {
+    .about-section {
+      margin-top: calc(-1 * max(0px, 100svh - 82vw - min(110vw, max(60vw, 100svh - 82vw)) - 88px));
     }
   }
 
@@ -241,9 +250,9 @@
 
   /* About content waits for the scene: it fades up 24px over 700ms with an
      80ms stagger (--i) once the stage gets .is-open, and fades back out
-     without the stagger when scrolling back. Only from 768px up: on a phone the
-     content is taller than the screen, so it gets the stacked layout below. */
-  @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+     without the stagger when scrolling back. On a phone the content is taller
+     than the screen, so the stage is taller than the pinned 100svh (see below). */
+  @media (prefers-reduced-motion: no-preference) {
     .about-reveal {
       opacity: 0;
       transform: translate3d(0, 24px, 0);
@@ -259,9 +268,24 @@
     }
   }
 
-  /* Reduced motion, or a phone: no pin, no split. The wave is a static divider
+  /* Phones: the same pinned wave scene. The content (portrait, text, info panel) is
+     taller than the screen, so the stage grows to fit it: ScrollTrigger pins its top
+     100svh (the halves cover exactly that), and once the pin lets go the rest of the
+     content scrolls up normally. */
+  @media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
+    .about-stage {
+      height: auto; /* overflow stays hidden: the split halves slide sideways off the stage */
+    }
+
+    .about-content-layer {
+      position: relative !important;
+      min-height: 100svh;
+    }
+  }
+
+  /* Reduced motion: no pin, no split. The wave is a static divider
      above the About content, which is simply shown. */
-  @media (prefers-reduced-motion: reduce), (max-width: 767px) {
+  @media (prefers-reduced-motion: reduce) {
     .about-stage {
       height: auto;
       overflow: visible;
@@ -316,21 +340,29 @@
     }
   }
 
+  /* Phones: the photo sits under the wordmark (its line box ends at 78.6cqw) and
+     fills down to the hero's bottom, shrinking on short screens so the whole figure
+     stays in view. Nothing overlaps, so the outline wordmark only shows from 640px. */
   @media (max-width: 639px) {
     .hero-stage {
       --wm-left: 3.4722cqw;
       --wm-top: 55cqw;
       --wm-size: 24.8cqw;
-      --pt-left: -22cqw;
-      --pt-top: 43.6cqw;
-      --pt-w: 150cqw;
-      --pt-h: 110cqw;
+      --pt-top: 82cqw;
+      --pt-h: min(110cqw, max(60cqw, 100svh - 82cqw));
+      --pt-w: calc(var(--pt-h) * 2088 / 1530); /* the cutout's aspect */
+      --pt-left: calc(50cqw - var(--pt-w) * 0.48);
     }
   }
 
-  /* On phones the photo ends partway down the hero, above the stage's own fade, so
-     it gets its own: the last 16% of the cutout dissolves instead of ending on a line. */
+  /* On phones the photo reaches the stage's bottom, so it carries the fade instead
+     of the stage: the last 16% of the cutout dissolves instead of ending on a line. */
   @media (max-width: 639px) {
+    .hero-stage {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
     .hero-photo {
       -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent);
       mask-image: linear-gradient(to bottom, #000 84%, transparent);
@@ -877,6 +909,87 @@
     }
   }
 
+  /* Phones (under 900px): the project cards rise out of the laptop screen. The stack
+     sits above the laptop; WorkScene sets each card's transform and opacity per frame.
+     The plain list is only for reduced motion there. */
+  .lp-pop,
+  .work-list-wrap {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (max-width: 899px) {
+    .lp-pop {
+      position: absolute;
+      inset: calc(var(--nav-h) + 8px) var(--gutter) auto;
+      z-index: 6;
+      display: block;
+      pointer-events: none;
+    }
+
+    .lp-pop-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 44px;
+      margin-bottom: 12px;
+    }
+
+    .lp-pop-bar p {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      color: var(--text-muted);
+    }
+
+    .lp-pop-bar button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border-strong);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      pointer-events: auto;
+      transition: border-color 300ms var(--ease), opacity 300ms var(--ease);
+    }
+
+    .lp-pop-bar button:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .lp-pop-stack {
+      position: relative;
+      height: min(300px, 36svh);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .lp-pop-stack li {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+    }
+  }
+
+  /* Reduced motion on a narrow screen: no pinned scene, just the list of cards. */
+  @media (prefers-reduced-motion: reduce) and (max-width: 899px) {
+    .work-scene-wrap {
+      display: none;
+    }
+
+    .work-list-wrap {
+      display: block;
+    }
+  }
+
   /* Reduced motion: the laptop is already open with the carousel visible, no pin. */
   @media (prefers-reduced-motion: reduce) {
     .lp-track::after {
@@ -1256,7 +1369,7 @@
     }
 
     /* Under 640px the modals are full-screen sheets that slide up from the bottom. */
-    @media (max-width: 639px) {
+    @media (max-width: 1023px) {
       .achv-dialog[open] .achv-panel {
         animation: achv-sheet-in 420ms var(--ease) both;
       }

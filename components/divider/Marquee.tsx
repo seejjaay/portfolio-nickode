@@ -28,13 +28,13 @@ export function Marquee({ items, speed, phase, reverse = false, outlined = false
       key={copy}
       ref={copy === 0 ? groupRef : undefined}
       aria-hidden={copy === 1 ? true : undefined}
-      className="marquee-group flex shrink-0 items-center gap-10 pr-10"
+      className="marquee-group flex shrink-0 items-center gap-10 pr-10 max-md:gap-6 max-md:pr-6"
     >
       {Array.from({ length: repeats }).flatMap((_, r) =>
         items.map((item) => (
-          <li key={`${r}-${item}`} className="flex shrink-0 items-center gap-10">
+          <li key={`${r}-${item}`} className="flex shrink-0 items-center gap-10 max-md:gap-6">
             <span
-              className={`whitespace-nowrap font-display text-[44px] font-medium uppercase leading-[1.2] tracking-[0.03em] ${text}`}
+              className={`whitespace-nowrap font-display text-[44px] font-medium uppercase leading-[1.2] tracking-[0.03em] max-md:text-[28px] ${text}`}
             >
               {item}
             </span>

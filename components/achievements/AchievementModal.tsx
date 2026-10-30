@@ -79,8 +79,8 @@ function ModalPanel({
   return (
     // Under 640px it is a full-screen sheet: media on top, the details scroll below,
     // and the panel itself never scrolls, so the close button stays put.
-    <div className="achv-panel relative flex h-[680px] w-[1120px] max-w-[calc(100vw-48px)] overflow-hidden rounded-marquee border border-border-strong bg-surface shadow-[0_24px_60px_0_var(--shadow-modal)] max-sm:h-svh max-sm:w-full max-sm:max-w-none max-sm:flex-col max-sm:rounded-none max-sm:border-0">
-      <div className="relative h-full w-[600px] shrink-0 overflow-hidden [background:linear-gradient(123.57deg,var(--media-from)_0%,var(--media-to)_71.429%)] max-sm:h-auto max-sm:w-full">
+    <div className="achv-panel relative flex h-[680px] w-[1120px] max-w-[calc(100vw-48px)] overflow-hidden rounded-marquee border border-border-strong bg-surface shadow-[0_24px_60px_0_var(--shadow-modal)] max-lg:h-svh max-lg:w-full max-lg:max-w-none max-lg:flex-col max-lg:rounded-none max-lg:border-0">
+      <div className="relative h-full w-[600px] shrink-0 overflow-hidden [background:linear-gradient(123.57deg,var(--media-from)_0%,var(--media-to)_71.429%)] max-lg:h-auto max-lg:w-full">
         {isEvent ? (
           <EventMedia a={a} />
         ) : (
@@ -88,7 +88,7 @@ function ModalPanel({
         )}
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-[22px] px-10 pb-10 pt-12 max-sm:min-h-0 max-sm:gap-5 max-sm:overflow-y-auto max-sm:overscroll-contain max-sm:px-6 max-sm:pb-10 max-sm:pt-6">
+      <div className="flex min-w-0 flex-1 flex-col gap-[22px] px-10 pb-10 pt-12 max-lg:min-h-0 max-lg:gap-5 max-lg:overflow-y-auto max-lg:overscroll-contain max-lg:px-6 max-lg:pb-10 max-lg:pt-6">
         <div className="flex flex-wrap gap-2">
           {a.tags.map((tag) => (
             <span
@@ -101,7 +101,7 @@ function ModalPanel({
         </div>
         <h2
           id={titleId}
-          className="font-display text-[34px] font-medium uppercase leading-[1.1] tracking-[0.04em] text-text max-sm:text-[28px]"
+          className="font-display text-[34px] font-medium uppercase leading-[1.1] tracking-[0.04em] text-text max-lg:text-[28px]"
         >
           {a.title}
         </h2>
@@ -142,7 +142,7 @@ function ModalPanel({
         autoFocus
         onClick={onClose}
         aria-label="Close"
-        className="absolute right-[25px] top-[23px] z-10 flex size-10 cursor-pointer items-center justify-center rounded-full border border-border-strong bg-(--overlay-btn) text-text transition-colors duration-300 hover:border-text max-sm:right-4 max-sm:top-4 max-sm:size-11"
+        className="absolute right-[25px] top-[23px] z-10 flex size-10 cursor-pointer items-center justify-center rounded-full border border-border-strong bg-(--overlay-btn) text-text transition-colors duration-300 hover:border-text max-lg:right-4 max-lg:top-4 max-lg:size-11"
       >
         <MaskIcon name="close" />
       </button>
@@ -172,12 +172,15 @@ function splitTitle(title: string): [string, string?] {
 const SHEET_W = 480;
 const SHEET_H = 340;
 
-/* Zoomed certificate: 1.9x on desktop. On a phone that would overflow, so the sheet
-   turns sideways and fills as much of the tall screen as it can. */
+/* Zoomed certificate: 1.9x on desktop. In a sheet (under 1024px) that could overflow, so it
+   takes whichever of upright or turned sideways fills more of the screen. */
 function zoomFit(): { scale: number; rotate?: number } {
-  if (!window.matchMedia("(max-width: 639px)").matches) return { scale: 1.9 };
-  const scale = Math.min((window.innerHeight - 48) / SHEET_W, (window.innerWidth - 32) / SHEET_H);
-  return { scale, rotate: 90 };
+  if (!window.matchMedia("(max-width: 1023px)").matches) return { scale: 1.9 };
+  const w = window.innerWidth - 32;
+  const h = window.innerHeight - 48;
+  const upright = Math.min(w / SHEET_W, h / SHEET_H);
+  const sideways = Math.min(h / SHEET_W, w / SHEET_H);
+  return sideways > upright ? { scale: sideways, rotate: 90 } : { scale: upright };
 }
 
 /* The sheet is always a light sheet with dark ink (section 3's one exception),
@@ -244,33 +247,33 @@ function useFitScale(width: number) {
 function CertificateMedia({ a, onZoom }: { a: Achievement; onZoom: () => void }) {
   const [fitRef, fitScale] = useFitScale(SHEET_W);
   return (
-    <div className="absolute inset-0 max-sm:relative max-sm:flex max-sm:flex-col max-sm:items-center max-sm:gap-3 max-sm:px-6 max-sm:pb-5 max-sm:pt-[76px]">
+    <div className="absolute inset-0 max-lg:relative max-lg:flex max-lg:flex-col max-lg:items-center max-lg:gap-3 max-lg:px-6 max-lg:pb-5 max-lg:pt-[76px]">
       {/* Desktop: the sheet at its own size in the media column. */}
       <button
         type="button"
         onClick={onZoom}
         aria-label="Zoom certificate"
-        className="absolute left-[60px] top-[150px] cursor-zoom-in max-sm:hidden"
+        className="absolute left-[60px] top-[150px] cursor-zoom-in max-lg:hidden"
       >
         <CertificateSheet a={a} />
       </button>
       {/* Phone: the same sheet scaled to the full width; tap it to zoom. */}
-      <button type="button" onClick={onZoom} aria-label="Zoom certificate" className="w-full cursor-zoom-in sm:hidden">
+      <button type="button" onClick={onZoom} aria-label="Zoom certificate" className="w-full cursor-zoom-in lg:hidden">
         <div ref={fitRef} className="relative w-full" style={{ aspectRatio: `${SHEET_W} / ${SHEET_H}` }}>
           <div className="absolute left-0 top-0">
             <CertificateSheet a={a} scale={fitScale} origin="0 0" />
           </div>
         </div>
       </button>
-      <p className="absolute inset-x-0 top-[518px] whitespace-pre text-center font-display text-[10px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted max-sm:static">
-        <span className="max-sm:hidden">{"CERTIFICATE IMAGE  ·  CLICK TO ZOOM"}</span>
-        <span className="sm:hidden">{"CERTIFICATE IMAGE  ·  TAP TO ZOOM"}</span>
+      <p className="absolute inset-x-0 top-[518px] whitespace-pre text-center font-display text-[10px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted max-lg:static">
+        <span className="max-lg:hidden">{"CERTIFICATE IMAGE  ·  CLICK TO ZOOM"}</span>
+        <span className="lg:hidden">{"CERTIFICATE IMAGE  ·  TAP TO ZOOM"}</span>
       </p>
       <button
         type="button"
         onClick={onZoom}
         aria-label="Zoom certificate"
-        className="absolute left-[532px] top-[612px] flex size-11 cursor-pointer items-center justify-center rounded-full border border-border-strong bg-(--overlay-btn) text-text transition-colors duration-300 hover:border-text max-sm:hidden"
+        className="absolute left-[532px] top-[612px] flex size-11 cursor-pointer items-center justify-center rounded-full border border-border-strong bg-(--overlay-btn) text-text transition-colors duration-300 hover:border-text max-lg:hidden"
       >
         <MaskIcon name="expand" />
       </button>
@@ -314,9 +317,9 @@ function EventMedia({ a }: { a: Achievement }) {
   return (
     // Desktop: everything is laid out on the 600x680 media column. Phone: a 4:3 photo
     // stage (the only part that swipes) with the thumbnail strip scrolling below it.
-    <div className="absolute inset-0 select-none max-sm:relative max-sm:flex max-sm:flex-col">
+    <div className="absolute inset-0 select-none max-lg:relative max-lg:flex max-lg:flex-col">
     <div
-      className="absolute inset-0 touch-pan-y max-sm:relative max-sm:aspect-[4/3] max-sm:w-full"
+      className="absolute inset-0 touch-pan-y max-lg:relative max-lg:aspect-[4/3] max-lg:w-full"
       onPointerDown={down}
       onPointerUp={up}
       onPointerCancel={() => (startX.current = null)}
@@ -327,7 +330,7 @@ function EventMedia({ a }: { a: Achievement }) {
         <div
           role="img"
           aria-label={`Photo ${index + 1} of ${count} (placeholder)`}
-          className="absolute inset-x-0 top-[290px] flex flex-col items-center gap-[10px] text-text-muted max-sm:top-1/2 max-sm:-translate-y-1/2"
+          className="absolute inset-x-0 top-[290px] flex flex-col items-center gap-[10px] text-text-muted max-lg:top-1/2 max-lg:-translate-y-1/2"
         >
           <MaskIcon name="image" width={48} height={38} />
           <p className="whitespace-pre font-display text-[10px] font-normal uppercase leading-[1.4] tracking-[0.18em]">
@@ -338,15 +341,15 @@ function EventMedia({ a }: { a: Achievement }) {
 
       <p
         aria-live="polite"
-        className="absolute left-6 top-6 rounded-[20px] bg-(--overlay-btn) px-[14px] py-2 font-display text-[12px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text max-sm:left-4 max-sm:top-[22px]"
+        className="absolute left-6 top-6 rounded-[20px] bg-(--overlay-btn) px-[14px] py-2 font-display text-[12px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text max-lg:left-4 max-lg:top-[22px]"
       >
         {pad(index + 1)} / {pad(count)}
       </p>
 
       {(
         [
-          ["Previous photo", -1, "arrow-left", "left-6 max-sm:left-3"],
-          ["Next photo", 1, "arrow-right", "right-6 max-sm:right-3"],
+          ["Previous photo", -1, "arrow-left", "left-6 max-lg:left-3"],
+          ["Next photo", 1, "arrow-right", "right-6 max-lg:right-3"],
         ] as const
       ).map(([label, delta, icon, side]) => (
         <button
@@ -354,14 +357,14 @@ function EventMedia({ a }: { a: Achievement }) {
           type="button"
           aria-label={label}
           onClick={() => go(delta)}
-          className={`absolute ${side} top-[296px] flex size-12 cursor-pointer items-center justify-center rounded-full border border-border-strong bg-(--overlay-btn) text-text transition-colors duration-300 hover:border-text max-sm:top-1/2 max-sm:size-11 max-sm:-translate-y-1/2`}
+          className={`absolute ${side} top-[296px] flex size-12 cursor-pointer items-center justify-center rounded-full border border-border-strong bg-(--overlay-btn) text-text transition-colors duration-300 hover:border-text max-lg:top-1/2 max-lg:size-11 max-lg:-translate-y-1/2`}
         >
           <MaskIcon name={icon} />
         </button>
       ))}
     </div>
 
-      <div className="absolute inset-x-0 top-[594px] flex justify-center gap-3 max-sm:static max-sm:justify-start max-sm:overflow-x-auto max-sm:overscroll-x-contain max-sm:px-6 max-sm:py-3">
+      <div className="absolute inset-x-0 top-[594px] flex justify-center gap-3 max-lg:static max-lg:justify-start max-lg:overflow-x-auto max-lg:overscroll-x-contain max-lg:px-6 max-lg:py-3">
         {Array.from({ length: count }).map((_, i) => (
           <button
             key={i}
@@ -412,7 +415,7 @@ function SocialRow({ a }: { a: Achievement }) {
         href={link(a.posts.linkedin)}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-[10px] rounded-control bg-text px-6 py-[14px] font-display text-[13px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text-inverse max-sm:basis-full max-sm:justify-center"
+        className="inline-flex items-center gap-[10px] rounded-control bg-text px-6 py-[14px] font-display text-[13px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text-inverse max-lg:basis-full max-lg:justify-center"
       >
         <MaskIcon name="linkedin" />
         LinkedIn post
