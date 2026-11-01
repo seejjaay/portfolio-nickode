@@ -6,10 +6,11 @@ import { clamp, ease, smoothstep } from "@/lib/motion";
 import { gsap, ScrollTrigger } from "@/lib/scroll";
 import { ServiceCard } from "./ServiceCard";
 
-/* Services folder and deck (DESIGN.md 7.3.1). The stage is pinned for 400vh by
-   one ScrollTrigger and progress p = 0 to 1 drives everything (nothing is timed):
-     0 - 0.15   the front flap opens (rotateX 0 to -100deg) and the folder drops 12%
-     0.15 - 1   one beat of 0.17 per card: it starts in the folder mouth (down 60%
+/* Services folder and deck (DESIGN.md 7.3.1). The stage is pinned for
+   OPEN_VH + CARD_VH per card by one ScrollTrigger and progress p = 0 to 1 drives
+   everything (nothing is timed):
+     0 - openEnd   the front flap opens (rotateX 0 to -100deg) and the folder drops 12%
+     openEnd - 1   one equal beat per card: it starts in the folder mouth (down 60%
                 of its height, scale .9, tilted 6deg, invisible), springs out with
                 one small overshoot and settles into the deck. Each earlier card
                 steps 28px up, x0.96 smaller, and dims to .6 (a veil over the card, so it still hides the cards behind it);
@@ -17,9 +18,9 @@ import { ServiceCard } from "./ServiceCard";
    Only transform and opacity change. The scene is laid out at a fixed design size
    (see .svc-scene in globals.css) and scaled to fit the stage. Reduced motion
    skips all of this and CSS shows the folder open with the cards as a list. */
-const PIN_VH = 4;
+const OPEN_VH = 0.6; // scroll the flap takes to open
+const CARD_VH = 0.68; // scroll each card takes, so the pace holds whatever the count
 const OPEN_END = 0.15;
-const BEAT = 0.17;
 const SHIFT = 0.12; // folder drop, as a share of the scene's height
 const FLAP_DEG = -100;
 const ARRIVE = 0.75; // share of a beat a card takes to settle; the rest is a hold
@@ -45,6 +46,9 @@ export function ServicesScene({ services }: { services: Service[] }) {
       const flap = stage.querySelector<HTMLElement>(".svc-flap")!;
       const cards = [...stage.querySelectorAll<HTMLElement>("[data-svc-card]")];
       const veils = cards.map((el) => el.querySelector<HTMLElement>(".svc-veil")!);
+      const pinVh = OPEN_VH + CARD_VH * cards.length;
+      const openEnd = OPEN_VH / pinVh;
+      const beat = CARD_VH / pinVh;
       let sceneH = scene.offsetHeight;
       let cardH = cards[0].offsetHeight;
 
@@ -57,12 +61,12 @@ export function ServicesScene({ services }: { services: Service[] }) {
       };
 
       const render = (p: number) => {
-        const open = ease(clamp(p / OPEN_END, 0, 1));
+        const open = ease(clamp(p / openEnd, 0, 1));
         flap.style.transform = `rotateX(${FLAP_DEG * open}deg)`;
         shift.style.transform = `translate3d(0, ${open * SHIFT * sceneH}px, 0)`;
         stage.classList.toggle("is-open", p > 0.002); // the idle float stops once it starts opening
 
-        const q = clamp((p - OPEN_END) / BEAT, 0, cards.length);
+        const q = clamp((p - openEnd) / beat, 0, cards.length);
         cards.forEach((el, i) => {
           const local = q - i;
           const a = easeOutBack(clamp(local / ARRIVE, 0, 1));
@@ -81,7 +85,7 @@ export function ServicesScene({ services }: { services: Service[] }) {
       ScrollTrigger.create({
         trigger: stage,
         start: "top top",
-        end: () => `+=${window.innerHeight * PIN_VH}`,
+        end: () => `+=${window.innerHeight * pinVh}`,
         pin: true,
         pinSpacing: true,
         invalidateOnRefresh: true,

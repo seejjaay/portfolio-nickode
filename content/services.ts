@@ -11,43 +11,59 @@ export type Service = {
 
 export const services: Service[] = [
   {
-    id: "data-engineering",
-    index: 1,
-    title: "Data Engineering & Pipelines",
-    summary:
-      "Reliable pipelines that move messy data from many sources into clean, queryable tables. Built to be monitored, documented and easy to hand over.",
-    tags: ["ETL", "Python", "Airflow", "AWS"],
-  },
-  {
-    id: "sql-databases",
-    index: 2,
-    title: "SQL & Database Development",
-    summary:
-      "Schema design, tuned queries and stored procedures that stay fast as the data grows. Reports and views your team can trust and reuse.",
-    tags: ["SQL", "Postgres", "T-SQL"],
-  },
-  {
-    id: "cloud-setup",
-    index: 3,
-    title: "Cloud Setup (AWS / Azure)",
-    summary:
-      "Practical cloud foundations: storage, compute, access and cost controls set up once and set up properly. Clear notes so nobody is guessing later.",
-    tags: ["AWS", "Azure", "IAM", "Cost"],
-  },
-  {
     id: "web-development",
-    index: 4,
+    index: 1,
     title: "Web Development",
     summary:
-      "Fast, accessible sites and web apps built from design to deploy. Clean code, sensible structure and pages that load quickly on any device.",
-    tags: ["Next.js", "React", "TypeScript"],
+      "Modern, responsive websites built to fit your needs, from landing pages and portfolios to full-stack web applications and business platforms.",
+    tags: ["Frontend", "Backend", "Full-Stack", "Responsive Design"],
   },
   {
-    id: "ui-ux",
-    index: 5,
-    title: "UI/UX & Prototyping",
+    id: "software-development",
+    index: 2,
+    title: "Software & Application Development",
     summary:
-      "From rough idea to clickable prototype: flows, wireframes and polished screens. Tested with real people before a line of production code is written.",
-    tags: ["Figma", "Prototyping", "Research"],
+      "Functional software and applications designed to solve real-world problems, streamline processes, and turn ideas into working solutions.",
+    tags: ["Software", "Applications", "Problem Solving"],
+  },
+  {
+    id: "saas-development",
+    index: 3,
+    title: "SaaS & System Development",
+    summary:
+      "Web-based systems and platforms tailored to specific needs, from event management systems to custom business solutions.",
+    tags: ["SaaS", "System Development", "Full-Stack"],
+  },
+  {
+    id: "ui-ux-design",
+    index: 4,
+    title: "Web Design & UI/UX",
+    summary:
+      "Clean, intuitive, and user-friendly interfaces that balance visual appeal with functionality, creating better digital experiences.",
+    tags: ["UI/UX", "Web Design", "Prototyping"],
+  },
+  {
+    id: "automation",
+    index: 5,
+    title: "Workflow Automation",
+    summary:
+      "Automating repetitive tasks and everyday workflows to save time, reduce manual work, and improve efficiency using tools like UiPath.",
+    tags: ["UiPath", "RPA", "Workflow Automation"],
+  },
+  {
+    id: "data-modeling",
+    index: 6,
+    title: "Database Design & Data Modeling",
+    summary:
+      "Structuring and organizing data through database schemas, entity relationships, and logical models to support reliable and scalable applications.",
+    tags: ["Data Modeling", "SQL", "Database Design"],
+  },
+  {
+    id: "game-development",
+    index: 7,
+    title: "Game Development",
+    summary:
+      "Developing interactive games and digital experiences, combining programming, mechanics, and creativity to bring ideas to life.",
+    tags: ["Game Development", "Programming", "Interactive Design"],
   },
 ];
