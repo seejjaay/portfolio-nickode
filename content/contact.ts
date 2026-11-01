@@ -3,8 +3,8 @@
    here is only for display: where form messages are delivered is set by the
    CONTACT_TO environment variable (see .env.example). */
 export const contact = {
-  email: "you@email.com",
-  location: "City, Country",
+  email: "cjnickorosales@gmail.com",
+  location: "Rosario, Batangas, Philippines",
   socials: [
     { label: "GITHUB", href: "https://github.com/username" },
     { label: "LINKEDIN", href: "https://www.linkedin.com/in/username" },

@@ -29,7 +29,9 @@ function RelatedCard({
       <span className="flex w-full items-center gap-3">
         <span
           className={`flex items-center rounded-control px-[10px] py-[5px] font-display text-[10px] font-medium uppercase leading-[1.4] tracking-[0.12em] ${
-            isProject ? "bg-text text-text-inverse" : "border border-text text-text"
+            isProject
+              ? "bg-text text-text-inverse"
+              : "border border-text text-text"
           }`}
         >
           {isProject ? "Project" : "Event"}
@@ -43,7 +45,9 @@ function RelatedCard({
       <span className="block w-full font-display text-[20px] font-medium leading-[1.2] tracking-[0.03em] text-text">
         {item.title}
       </span>
-      <span className="block w-full text-[14px] leading-[1.7] text-text-2">{item.text}</span>
+      <span className="block w-full text-[14px] leading-[1.7] text-text-2">
+        {item.text}
+      </span>
     </>
   );
 
@@ -138,7 +142,10 @@ function RoleItem({
               </p>
               <ul className="flex flex-col gap-4">
                 {role.bullets.map((b) => (
-                  <li key={b} className="flex gap-[0.7em] text-[17px] leading-[1.7] text-text-2">
+                  <li
+                    key={b}
+                    className="flex gap-[0.7em] text-[17px] leading-[1.7] text-text-2"
+                  >
                     <span aria-hidden>—</span>
                     <span>{b}</span>
                   </li>
@@ -148,10 +155,14 @@ function RoleItem({
             {role.related.length > 0 && (
               <div className="flex w-full shrink-0 flex-col gap-[14px] lg:w-[480px]">
                 <p className="font-display text-[11px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">
-                  Projects & events in this role
+                  Some Projects & events in this role
                 </p>
                 {role.related.map((item) => (
-                  <RelatedCard key={item.title} item={item} onOpenEvent={onOpenEvent} />
+                  <RelatedCard
+                    key={item.title}
+                    item={item}
+                    onOpenEvent={onOpenEvent}
+                  />
                 ))}
               </div>
             )}
@@ -185,7 +196,11 @@ export function ExperienceList({ roles }: { roles: Role[] }) {
           />
         ))}
       </div>
-      <AchievementModal achievement={event} triggerRef={trigger} onClose={() => setEvent(null)} />
+      <AchievementModal
+        achievement={event}
+        triggerRef={trigger}
+        onClose={() => setEvent(null)}
+      />
     </>
   );
 }

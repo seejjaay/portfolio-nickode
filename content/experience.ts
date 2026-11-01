@@ -6,7 +6,13 @@ import type { Achievement } from "./achievements";
    carries the same shape as an achievement. */
 export type RelatedItem =
   | { type: "project"; slug: string; date: string; title: string; text: string }
-  | { type: "event"; date: string; title: string; text: string; event: Achievement };
+  | {
+      type: "event";
+      date: string;
+      title: string;
+      text: string;
+      event: Achievement;
+    };
 
 export type Role = {
   id: string;
@@ -42,11 +48,11 @@ export const roles: Role[] = [
     period: "2025 — PRESENT",
     title: "ITEQs Manager",
     company: "Company Name",
-    location: "City, Country",
+    location: "Lipa City, Batangas, Philippines",
     bullets: [
-      "Led the ITEQs team and set the roadmap for the year.",
-      "Coordinated members, schedules and partner organizations.",
-      "Introduced a mentoring program that grew participation.",
+      "Developed software and hardware solutions to support the organization's operations and event requirements.",
+      "Streamlined the Creatives Team's workflow by automating task reminders and notifications.",
+      "Served as one of the organization's main developers, leading the development of internal systems and digital solutions.",
     ],
     related: [
       {
@@ -66,28 +72,28 @@ export const roles: Role[] = [
     ],
   },
   {
-    id: "previous-role",
-    period: "2021 — 2024",
-    title: "Previous Role",
-    company: "Company Name",
-    location: "City, Country",
+    id: "devcon-volunteer",
+    period: "2026 - PRESENT",
+    title: "Volunteer / Backend Engineer Volunteer",
+    company: "Devcon",
+    location: "Manila, Philippines",
     bullets: [
-      "Describe what you owned and the outcome it had.",
-      "Describe a second responsibility or a result you can measure.",
-      "Describe how you worked with the team around you.",
+      "Supported event management activities, including the preparation and creation of participant certificates.",
+      "Contributed as a volunteer developer, helping build and maintain software solutions for organizational projects.",
+      "Collaborated with fellow volunteers and organizers to support event operations and development initiatives.",
     ],
     related: [],
   },
   {
-    id: "earlier-role",
-    period: "2019 — 2021",
-    title: "Earlier Role",
-    company: "Company Name",
-    location: "City, Country",
+    id: "computer-science-program-coordinator",
+    period: "2025 - 2026",
+    title: "Computer Science Program Coordinator",
+    company: "DLSL Student Government - CITE Council",
+    location: "Lipa City, Batangas, Philippines",
     bullets: [
-      "Describe what you owned and the outcome it had.",
-      "Describe a second responsibility or a result you can measure.",
-      "Describe how you worked with the team around you.",
+      "Represented the Computer Science program in the De La Salle Lipa Student Government, serving as a liaison between students and the council.",
+      "Assisted Computer Science students with academic concerns, inquiries, and program-related matters.",
+      "Helped organize and facilitate events, seminars, and activities under the College of Information, Technology, and Engineering (CITE) and De La Salle Lipa.",
     ],
     related: [],
   },
