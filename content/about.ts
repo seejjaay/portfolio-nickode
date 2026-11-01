@@ -5,16 +5,32 @@ export const about = {
   eyebrow: "DISCOVER",
   title: "ABOUT ME",
   intro:
-    "Write a short, confident introduction here. Two or three sentences about who you are, what you build, and what you care about. Keep it warm, specific and easy to read, in your own voice, so a visitor understands who they are about to work with.",
+    "I'm a Computer Science undergraduate and developer who enjoys turning ideas into practical digital solutions. I build websites, applications, and software, with experience in data handling, automation, and AI-assisted development. I'm passionate about problem-solving, exploring new technologies, and continuously growing as a developer.",
   info: [
-    { key: "Name", value: "Your Name" },
-    { key: "Age", value: "00" },
-    { key: "Phone", value: "+00 000 000 0000" },
-    { key: "Address", value: "City, Country" },
-    { key: "Experience", value: "0 Years" },
-    { key: "Email", value: "you@email.com" },
+    { key: "Name", value: "CJ Nicko Rosales" },
+    { key: "Age", value: "20" },
+    { key: "Phone", value: "+63 992 882 0559" },
+    { key: "Address", value: "Rosario, Batangas" },
+    { key: "Experience", value: "2 years" },
+    { key: "Email", value: "cjnickorosales@gmail.com" },
     { key: "Freelance", value: "Available" },
-    { key: "Socials", value: "@yourhandle" },
+  ],
+  socials: [
+    {
+      label: "Facebook",
+      icon: "facebook",
+      href: "https://www.facebook.com/nicko.rosales.39/",
+    },
+    {
+      label: "Instagram",
+      icon: "instagram",
+      href: "https://www.instagram.com/sj.neeko/",
+    },
+    {
+      label: "LinkedIn",
+      icon: "linkedin",
+      href: "https://www.linkedin.com/in/cj-nicko-rosales-a29527353/",
+    },
   ],
   cv: { label: "DOWNLOAD CV", href: "#" },
 } as const;

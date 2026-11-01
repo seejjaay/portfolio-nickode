@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { about } from "@/content/about";
+import { MaskIcon } from "@/components/ui/MaskIcon";
 import { DotPortrait } from "./DotPortrait";
 
 /* About content (DESIGN.md 7.2, Figma node 3:25): dot-matrix portrait left,
@@ -51,6 +52,25 @@ export function AboutContent() {
                 <dd className="text-[17px] leading-[1.7] text-text-2">{value}</dd>
               </div>
             ))}
+            <div className="flex items-center gap-3">
+              <dt className="font-display text-[12px] font-medium uppercase leading-[1.4] tracking-[0.08em] text-text">
+                Socials:
+              </dt>
+              <dd className="flex items-center gap-2">
+                {about.socials.map(({ label, icon, href }) => (
+                  <a
+                    key={icon}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="flex size-11 items-center justify-center rounded-full border border-border-strong text-text transition-colors duration-300 hover:border-text motion-reduce:transition-none"
+                  >
+                    <MaskIcon name={icon} />
+                  </a>
+                ))}
+              </dd>
+            </div>
           </dl>
           {/* The wrapper takes the reveal so the button keeps its own hover transform. */}
           <div {...reveal(5)}>
