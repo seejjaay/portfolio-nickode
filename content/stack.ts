@@ -30,4 +30,7 @@ export const stack: readonly Tech[] = [
   { name: "MongoDB", label: "MONGO", icon: "mongodb", size: 54 },
   { name: "GraphQL", label: "GQL", icon: "graphql", size: 52 },
   { name: "Linux", label: "LINUX", icon: "linux", size: 50 },
+  { name: "Flutter", label: "FLUT", icon: "flutter", size: 56 },
+  { name: "Render", label: "RENDER", icon: "render", size: 52 },
+  { name: "UiPath", label: "UIPATH", icon: "uipath", size: 56 },
 ];

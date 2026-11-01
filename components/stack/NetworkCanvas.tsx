@@ -276,10 +276,17 @@ export function NetworkCanvas({ progress, label, className = "" }: Props) {
           ctx.globalAlpha = 1;
         } else {
           ctx.fillStyle = rgba(fg, alpha);
-          ctx.font = `500 ${Math.max(7, r * 0.5)}px ${family}`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.letterSpacing = `${r * 0.04}px`;
+          // Start at 0.5r and shrink until the text sits inside the circle (1.5r wide at most).
+          let fs = Math.max(7, r * 0.5);
+          ctx.font = `500 ${fs}px ${family}`;
+          const lw = ctx.measureText(l.label).width;
+          if (lw > r * 1.5) {
+            fs = Math.max(5, (fs * r * 1.5) / lw);
+            ctx.font = `500 ${fs}px ${family}`;
+          }
           ctx.fillText(l.label, px[i] + r * 0.02, py[i] + r * 0.04);
         }
         if (hover === li) tip = { x: px[i], y: py[i], r, name: l.name };
@@ -291,6 +298,8 @@ export function NetworkCanvas({ progress, label, className = "" }: Props) {
         const text = tip.name.toUpperCase();
         ctx.font = `500 12px ${family}`;
         ctx.letterSpacing = "2px";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
         const tw = ctx.measureText(text).width;
         const bx = Math.min(W - tw / 2 - 18, Math.max(tw / 2 + 18, tip.x));
         const by = Math.max(18, tip.y - tip.r - 22);
