@@ -1,6 +1,6 @@
-/* Achievements (DESIGN.md 7.6, 11). Titles, issuers and years are Figma's
-   placeholder structure; ids, tags, descriptions, links and event details are
-   placeholders until real content is supplied. Every item opens the
+/* Achievements (DESIGN.md 7.6, 11). Every entry is a placeholder (titles,
+   issuers, years, tags, descriptions, links, event details) until real content
+   is supplied. Every item opens the
    certificate modal (certificate, award) or the event modal (event). */
 export type Achievement = {
   id: string;
@@ -52,7 +52,13 @@ const cert = (
   ...extra,
 });
 
-const award = (id: string, title: string, issuer: string, year: string, tags: string[]): Achievement => ({
+const award = (
+  id: string,
+  title: string,
+  issuer: string,
+  year: string,
+  tags: string[],
+): Achievement => ({
   id,
   kind: "award",
   title,
@@ -83,41 +89,101 @@ const event = (
 });
 
 export const achievements: Achievement[] = [
-  cert("sql-developer", "Associate SQL Developer for Data Engineer", "DataCamp", "2026", ["DATA ENGINEERING", "SQL"], {
-    issued: "March 2026",
-    credentialId: "DC-0000000",
-  }),
-  cert("aws-ccp", "AWS Certified Cloud Practitioner", "AWS", "2025", ["CLOUD", "AWS"]),
-  event("hackathon-first", "First Place, National Hackathon", "Hackathon", "2025", ["HACKATHON", "FIRST PLACE"], {
-    name: "National Hackathon",
-    date: "Month 00, 2025",
-    location: "City, Country",
-    role: "Team lead",
-  }),
-  cert("google-data-analytics", "Google Data Analytics Professional Certificate", "Coursera", "2025", ["ANALYTICS"]),
-  award("deans-lister", "Dean's Lister, College of Engineering", "University", "2024", ["ACADEMIC"]),
+  cert(
+    "cert-01",
+    "Certificate Title, Data Track",
+    "Issuer",
+    "2026",
+    ["TOPIC ONE", "TOPIC TWO"],
+    {
+      issued: "Month 2026",
+      credentialId: "ID-0000001",
+    },
+  ),
+  cert("cert-02", "Certificate Title, Cloud Track", "Issuer", "2025", [
+    "TOPIC ONE",
+    "TOPIC TWO",
+  ]),
+  event(
+    "event-01",
+    "Event Title, Competition Result",
+    "Event",
+    "2025",
+    ["TOPIC ONE", "RESULT"],
+    {
+      name: "Event Name",
+      date: "Month 00, 2025",
+      location: "City, Country",
+      role: "Your role",
+    },
+  ),
+  cert("cert-03", "Professional Certificate Title", "Issuer", "2025", [
+    "TOPIC ONE",
+  ]),
+  award(
+    "award-01",
+    "Award Title, Department or School",
+    "Organization",
+    "2024",
+    ["TOPIC ONE"],
+  ),
 
-  cert("meta-frontend", "Meta Front-End Developer Professional Certificate", "Meta", "2025", ["FRONT-END"]),
-  event("speaker-conference", "Speaker, Regional Tech Conference", "Conference", "2025", ["SPEAKER", "TECH CONFERENCE"], {
-    name: "Regional Tech Conference",
-    date: "August 14, 2025",
-    location: "Manila, Philippines",
-    role: "Speaker",
-  }),
-  cert("data-engineer-associate", "Data Engineer Associate Certification", "DataCamp", "2025", ["DATA ENGINEERING"]),
-  award("best-capstone", "Best Capstone Project", "Capstone", "2024", ["CAPSTONE"]),
-  cert("responsive-web-design", "Responsive Web Design Certification", "freeCodeCamp", "2023", ["WEB"]),
+  cert("cert-04", "Professional Certificate Title, Web", "Issuer", "2025", [
+    "TOPIC ONE",
+  ]),
+  event(
+    "event-02",
+    "Event Title, Speaking Role",
+    "Event",
+    "2025",
+    ["SPEAKER", "TOPIC ONE"],
+    {
+      name: "Event Name",
+      date: "Month 00, 2025",
+      location: "City, Country",
+      role: "Speaker",
+    },
+  ),
+  cert("cert-05", "Associate Certification Title", "Issuer", "2025", [
+    "TOPIC ONE",
+  ]),
+  award("award-02", "Award Title, Project", "Organization", "2024", [
+    "TOPIC ONE",
+  ]),
+  cert("cert-06", "Certification Title, Fundamentals", "Issuer", "2023", [
+    "TOPIC ONE",
+  ]),
 
-  cert("google-it-support", "Google IT Support Professional Certificate", "Google", "2024", ["IT SUPPORT"]),
-  event("data-literacy-workshop", "Facilitator, Data Literacy Workshop", "Workshop", "2024", ["WORKSHOP", "FACILITATOR"], {
-    name: "Data Literacy Workshop",
-    date: "Month 00, 2024",
-    location: "City, Country",
-    role: "Facilitator",
-  }),
-  cert("ibm-data-science", "IBM Data Science Foundations", "IBM", "2023", ["DATA SCIENCE"]),
-  award("coding-competition", "Finalist, Collegiate Coding Competition", "Competition", "2023", ["COMPETITION"]),
-  cert("azure-fundamentals", "Azure Fundamentals", "Microsoft", "2023", ["CLOUD", "AZURE"]),
+  cert("cert-07", "Professional Certificate Title, Support", "Issuer", "2024", [
+    "TOPIC ONE",
+  ]),
+  event(
+    "event-03",
+    "Event Title, Workshop Role",
+    "Event",
+    "2024",
+    ["WORKSHOP", "TOPIC ONE"],
+    {
+      name: "Event Name",
+      date: "Month 00, 2024",
+      location: "City, Country",
+      role: "Facilitator",
+    },
+  ),
+  cert("cert-08", "Certificate Title, Foundations", "Issuer", "2023", [
+    "TOPIC ONE",
+  ]),
+  award(
+    "award-03",
+    "Award Title, Competition Finalist",
+    "Organization",
+    "2023",
+    ["TOPIC ONE"],
+  ),
+  cert("cert-09", "Certification Title, Fundamentals", "Issuer", "2023", [
+    "TOPIC ONE",
+    "TOPIC TWO",
+  ]),
 ];
 
 const byId = new Map(achievements.map((a) => [a.id, a]));
@@ -125,9 +191,9 @@ const pick = (ids: string[]) => ids.map((id) => byId.get(id)!);
 
 /* The three marquee rows. Row 3 is the faint depth row, so it is decorative. */
 export const achievementRows = [
-  pick(["sql-developer", "aws-ccp", "hackathon-first", "google-data-analytics", "deans-lister"]),
-  pick(["meta-frontend", "speaker-conference", "data-engineer-associate", "best-capstone", "responsive-web-design"]),
-  pick(["google-it-support", "data-literacy-workshop", "ibm-data-science", "coding-competition", "azure-fundamentals"]),
+  pick(["cert-01", "cert-02", "event-01", "cert-03", "award-01"]),
+  pick(["cert-04", "event-02", "cert-05", "award-02", "cert-06"]),
+  pick(["cert-07", "event-03", "cert-08", "award-03", "cert-09"]),
 ] as const;
 
 /* The four detail cells in the modal, by kind. */
