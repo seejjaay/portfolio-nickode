@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useImperativeHandle, useRef, type PointerEvent, type Ref } from "react";
-import type { Project } from "@/content/projects";
+import { coverOf, type Project } from "@/content/projects";
 import { applyPosition, CARD } from "@/lib/carousel";
 
 /* Project carousel on the laptop screen (DESIGN.md 7.4, Figma 33:71). Sized in
@@ -80,15 +81,18 @@ export function ProjectCarousel({ projects, active, onGo, ref }: Props) {
           className="lp-card"
           style={{ width: CARD.w, height: CARD.h }}
         >
-          <div className="lp-card-art" />
-          {RINGS.map((d) => (
-            <span
-              key={d}
-              aria-hidden
-              className="lp-ring"
-              style={{ width: d, height: d, left: 420 - d / 2, top: 148 - d / 2 }}
-            />
-          ))}
+          <div className="lp-card-art">
+            {coverOf(p) && <Image src={coverOf(p)} alt="" fill sizes={`${CARD.w}px`} draggable={false} className="object-cover object-top" />}
+          </div>
+          {!coverOf(p) &&
+            RINGS.map((d) => (
+              <span
+                key={d}
+                aria-hidden
+                className="lp-ring"
+                style={{ width: d, height: d, left: 420 - d / 2, top: 148 - d / 2 }}
+              />
+            ))}
           <div className="lp-card-shade" />
           <span className="lp-card-index">{pad(p.index)}</span>
           <span className="lp-card-label">{p.featured ? "FEATURED" : p.category}</span>
