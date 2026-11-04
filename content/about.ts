@@ -1,7 +1,7 @@
 import { socials } from "./socials";
 /* About section copy (DESIGN.md 7.2). Placeholders until real content is
    supplied. `info` is listed row by row: the two columns read
-   Name/Address/Experience and Age/Email/Freelance, then Socials on its own row. */
+   Name/Phone/Experience/Freelance and Age/Address/Email/Socials. */
 export const about = {
   eyebrow: "DISCOVER",
   title: "ABOUT ME",
@@ -10,9 +10,10 @@ export const about = {
   info: [
     { key: "Name", value: "CJ Nicko Rosales" },
     { key: "Age", value: "20" },
+    { key: "Phone", value: "+63 992 882 0559" },
     { key: "Address", value: "Rosario, Batangas" },
-    { key: "Email", value: "cjnickorosales@gmail.com" },
     { key: "Experience", value: "2 years" },
+    { key: "Email", value: "cjnickorosales@gmail.com" },
     { key: "Freelance", value: "Available" },
   ],
 

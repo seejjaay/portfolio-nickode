@@ -52,7 +52,7 @@ export function AboutContent() {
                 <dd className="text-[17px] leading-[1.7] text-text-2">{value}</dd>
               </div>
             ))}
-            <div className="flex items-center gap-3 sm:col-span-2">
+            <div className="flex items-center gap-3">
               <dt className="font-display text-[12px] font-medium uppercase leading-[1.4] tracking-[0.08em] text-text">
                 Socials:
               </dt>
