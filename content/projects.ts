@@ -214,18 +214,18 @@ export const projects: Project[] = [
     title: "Santa for Hire",
     category: "WEB APP",
     summary: "A festive booking site for a Santa Claus performer in the Philippines, with services, video greetings and a booking form.",
-    meta: { role: "Full-stack Developer", year: "2026", timeline: "5 days", team: "Solo project", client: "Client project", status: "In development" },
-    video: { src: "", poster: "", duration: "0:00" }, // /projects/santa-for-hire/demo.mp4, poster.webp
+    meta: { role: "Full-stack Developer", year: "2026", timeline: "5 days", team: "Solo project", client: "Client project", status: "Live" },
+    video: { src: "/projects/santa-for-hire/demo.mp4", poster: "/projects/santa-for-hire/poster.webp", duration: "0:24" },
     overview: [
-      "A client who performs as Santa Claus needed one page that explains what he offers and makes booking easy, for family gatherings, office parties, mall meet-and-greets and personal video greetings. The site is laid out as chapters: meet Santa, his services, how a visit unfolds, memories from past Christmases, and a booking form.",
-      "I built it for them in five days with Next.js and Tailwind, keeping the dependencies to a minimum and putting the effort into the festive look: ornaments, falling snow and an arched, keepsake-style photo frame. Booking copies the visitor's details and hands them to Santa's Facebook page, so no data is stored on the site. Photos are still being added.",
+      "A client who performs as Santa Claus needed one page that explains what he offers and makes booking easy, for family gatherings, office parties, mall meet-and-greets and personal video greetings. The site is laid out as chapters: meet Santa, his services, how a visit unfolds, memories from past Christmases, and how to book.",
+      "I built it for them in five days with Next.js and Tailwind, keeping the dependencies to a minimum and putting the effort into the festive look: ornaments, falling snow and an arched, keepsake-style photo frame. Booking is a message to Santa's Facebook page, so no data is stored on the site. It now carries real photos from past events, and basic SEO is in place.",
     ],
     features: [
-      { title: "Booking form", text: "Visitors pick a service, date, venue and number of kids, then copy their details and open Santa's Facebook page to send them." },
+      { title: "Easy booking", text: "A checklist of what to include (kind of visit, date, place, number of kids), then one button that opens Santa's Facebook page to send the message." },
       { title: "Services", text: "Cards for home visits, corporate and brand events, and more, each linking to matching memories." },
       { title: "Video greetings", text: "A section for personal video messages from Santa, with a three-step explanation and a request button." },
       { title: "The Magic Hour", text: "A five-step walkthrough of a visit, from the first message to the memory the family keeps." },
-      { title: "Memories and photos", text: "A photo carousel and a memories page for past events, with frames ready for photos as they arrive." },
+      { title: "Memories and photos", text: "A photo carousel and a memories page with real photos from past events, set in keepsake-style frames." },
       { title: "Festive design", text: "Ornaments, falling snow, a script heading font and a warm cream and red palette across the whole page." },
     ],
     screenshots: [
@@ -233,11 +233,11 @@ export const projects: Project[] = [
       { src: "/projects/santa-for-hire/02-meet.webp", caption: "SCREENSHOT 02 · MEET SANTA" },
       { src: "/projects/santa-for-hire/03-services.webp", caption: "SCREENSHOT 03 · SERVICES" },
       { src: "/projects/santa-for-hire/04-magic-hour.webp", caption: "SCREENSHOT 04 · THE MAGIC HOUR" },
-      { src: "/projects/santa-for-hire/05-booking.webp", caption: "SCREENSHOT 05 · BOOKING FORM" },
+      { src: "/projects/santa-for-hire/05-booking.webp", caption: "SCREENSHOT 05 · BOOK SANTA" },
     ],
     tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
     repo: { url: "github.com/seejjaay/santa-claus-website", description: "Next.js app with a home page and a memories page. npm install, then npm run dev.", language: "TypeScript" },
-    liveUrl: "",
+    liveUrl: "https://santa-claus-ph.vercel.app",
   },
 ];
 
