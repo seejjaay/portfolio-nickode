@@ -1,6 +1,7 @@
+import { socials } from "./socials";
 /* About section copy (DESIGN.md 7.2). Placeholders until real content is
    supplied. `info` is listed row by row: the two columns read
-   Name/Phone/Experience/Freelance and Age/Address/Email/Socials. */
+   Name/Address/Experience and Age/Email/Freelance, then Socials on its own row. */
 export const about = {
   eyebrow: "DISCOVER",
   title: "ABOUT ME",
@@ -9,28 +10,12 @@ export const about = {
   info: [
     { key: "Name", value: "CJ Nicko Rosales" },
     { key: "Age", value: "20" },
-    { key: "Phone", value: "+63 992 882 0559" },
     { key: "Address", value: "Rosario, Batangas" },
-    { key: "Experience", value: "2 years" },
     { key: "Email", value: "cjnickorosales@gmail.com" },
+    { key: "Experience", value: "2 years" },
     { key: "Freelance", value: "Available" },
   ],
-  socials: [
-    {
-      label: "Facebook",
-      icon: "facebook",
-      href: "https://www.facebook.com/nicko.rosales.39/",
-    },
-    {
-      label: "Instagram",
-      icon: "instagram",
-      href: "https://www.instagram.com/sj.neeko/",
-    },
-    {
-      label: "LinkedIn",
-      icon: "linkedin",
-      href: "https://www.linkedin.com/in/cj-nicko-rosales-a29527353/",
-    },
-  ],
-  cv: { label: "DOWNLOAD CV", href: "#" },
+
+  socials,
+  cv: { label: "DOWNLOAD CV", href: "/cv/CJ-Nicko-Rosales-CV.pdf", file: "CJ-Nicko-Rosales-CV.pdf" },
 } as const;

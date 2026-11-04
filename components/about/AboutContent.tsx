@@ -52,7 +52,7 @@ export function AboutContent() {
                 <dd className="text-[17px] leading-[1.7] text-text-2">{value}</dd>
               </div>
             ))}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 sm:col-span-2">
               <dt className="font-display text-[12px] font-medium uppercase leading-[1.4] tracking-[0.08em] text-text">
                 Socials:
               </dt>
@@ -76,6 +76,7 @@ export function AboutContent() {
           <div {...reveal(5)}>
             <a
               href={about.cv.href}
+              download={about.cv.file}
               className="inline-flex items-center gap-[10px] rounded-control bg-text px-8 py-4 font-display text-[14px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text-inverse transition-[transform,box-shadow] duration-300 ease-brand hover:-translate-y-0.5 hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--text)_20%,transparent)] motion-reduce:transition-none"
             >
               {about.cv.label}

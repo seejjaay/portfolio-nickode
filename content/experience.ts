@@ -42,7 +42,7 @@ export const roles: Role[] = [
   },
   {
     id: "iteqs-manager",
-    period: "2025 — PRESENT",
+    period: "2026 — PRESENT",
     title: "ITEQs Manager",
     company: "DLSL Junior Philippine Computer Society (JPCS)",
     location: "Lipa City, Batangas, Philippines",
@@ -56,7 +56,7 @@ export const roles: Role[] = [
       {
         type: "project",
         slug: "iteqs-website-redesign",
-        date: "2025",
+        date: "2026",
         title: "ITEQs Website Redesign",
         text: "Rebuilt the organization site with a clearer structure and faster pages.",
       },
