@@ -44,6 +44,34 @@ export function scrollToY(y: number) {
   else window.scrollTo({ top: y, behavior: "smooth" });
 }
 
+/* Runs in <head> before first paint. The browser never restores an old scroll
+   position, and a reload (F5, pull-to-refresh) always starts at the very top:
+   a #hash left in the URL is dropped so it cannot jump the page either. A fresh
+   visit to a #section link still lands on that section. */
+export const scrollInitScript = `(function(){try{if("scrollRestoration" in history)history.scrollRestoration="manual";var n=performance.getEntriesByType("navigation")[0];if(n&&n.type==="reload"){if(location.hash)history.replaceState(history.state,"",location.pathname+location.search);window.scrollTo(0,0);}}catch(e){}})();`;
+
+/** Jumps to the top at once (no glide), for a new page. */
+export function scrollToTopNow() {
+  lenisInstance?.resize();
+  if (lenisInstance) lenisInstance.scrollTo(0, { immediate: true, force: true });
+  window.scrollTo(0, 0);
+}
+
+/** Moves the scroll position by dy at once. Used when content above the
+ *  viewport changes height, to keep what is on screen exactly where it is. */
+export function jumpScrollBy(dy: number) {
+  lenisInstance?.resize();
+  const y = Math.max(0, window.scrollY + dy);
+  if (lenisInstance) lenisInstance.scrollTo(y, { immediate: true, force: true });
+  else window.scrollTo(0, y);
+}
+
+/** True while the page is still moving (a wheel glide, a smooth scroll to a
+ *  section, or a native touch fling). */
+export function isScrolling() {
+  return Boolean(lenisInstance?.isScrolling);
+}
+
 /** Re-measures the page for the smooth scroller and the pinned scenes: call after
  *  the page's size changed under them (a restored route, for example). */
 export function refreshScroll() {

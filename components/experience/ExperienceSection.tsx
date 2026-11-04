@@ -1,24 +1,21 @@
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { SwarmBuild } from "@/components/swarm/SwarmBuild";
 import { roles } from "@/content/experience";
 import { ExperienceList } from "./ExperienceList";
-import { ExperienceScene } from "./ExperienceScene";
 
-/* Where I've been so far (DESIGN.md 7.7, Figma nodes 3:29 and 50:59). The
-   section opens as a mountain under the title; scrolling breaks the mountain
-   apart and the header and accordion settle into place. */
+/* Where I've been so far (DESIGN.md 7.7). A swarm of colored cursors builds the
+   header and each role row as they scroll into view (lib/swarm.ts). */
 export function ExperienceSection() {
   return (
-    <section id="experience">
-      <ExperienceScene>
-        <div className="flex flex-col gap-16 pb-[72px] pt-[120px]">
-          <div data-exp-reveal className="exp-reveal">
-            <SectionHeader eyebrow="06 — EXPERIENCE" title="WHERE I'VE BEEN SO FAR" />
-          </div>
-          <div className="px-[var(--gutter)]">
-            <ExperienceList roles={roles} />
-          </div>
+    <SwarmBuild id="experience">
+      <div className="flex flex-col gap-16 pb-[72px] pt-[120px]">
+        <div data-swarm-target>
+          <SectionHeader eyebrow="06 — EXPERIENCE" title="WHERE I'VE BEEN SO FAR" />
         </div>
-      </ExperienceScene>
-    </section>
+        <div className="px-[var(--gutter)]">
+          <ExperienceList roles={roles} />
+        </div>
+      </div>
+    </SwarmBuild>
   );
 }

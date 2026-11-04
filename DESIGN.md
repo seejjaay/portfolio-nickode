@@ -218,6 +218,8 @@ Entered through the **wave transition** (7.2.1). Layout (1440): portrait left, c
 - Mobile: portrait stacks above text, grid becomes one column.
 
 #### 7.2.1 Wave transition (scroll, pinned 300vh)
+**Plays once (2026-11-04):** once the visitor scrolls past the end and the page comes to rest, the pin and its spacer are removed, About drops its tuck under the hero (`.about-section.is-played`), and the scroll position is corrected by the exact height change, so nothing on screen moves. Scrolling back up goes straight from About to the hero with no rewind. A reload starts at the top, so it plays again on every page load.
+
 Hokusai's *The Great Wave off Kanagawa* (public domain), pure greyscale, never colorized.
 **As built** (numbers fitted to the Figma storyboard stills at 0, 25, 60 and 80%, node `31:59`; the stills won over the prose that was here before):
 - 0–0.60: wave `translateY` from +67vh to −4vh; the title `ABOUT ME` rides on the crest at about half the wave's speed until it reaches viewport center, then pins.
@@ -304,28 +306,22 @@ Centered modal (about 1120×680) over a scrim (`rgba(bg, .72)`), close `✕` top
 #### 7.6.2 Event modal (photo carousel)
 Same shell. **Left:** photo carousel with `02 / 05` counter pill (top-left), prev/next round buttons, image placeholder, and a thumbnail strip of 5 (active thumbnail has a strong border). **Right:** tags (`EVENT`, `SPEAKER`, `TECH CONFERENCE`, `2025`), title, meta grid (Event, Date, Location, Role), description, then `SEE THE POST` with the same `LINKEDIN POST ↗` button and social icons. Arrow keys and swipe change photos.
 
-### 7.7 Where I've been so far (pinned 200vh, then accordion)
-Eyebrow `06 — EXPERIENCE`, title `WHERE I'VE BEEN SO FAR`. The section **opens as a mountain** (an original ink illustration: two peaks, a pine-lined lake and rocky shores) under the title. Scrolling turns the ink to **dust** that blows away, and the experience list then **condenses out of the dust**. The mountain is **not a background**. This replaces the old tile-drift animation.
-- **Pin:** `position: sticky` about 200vh (150vh on mobile); scroll progress 0–1 drives everything.
-- **Art (redrawn):** the illustration was redrawn so the stray streaks are gone (they were in the drawing itself: long fills spilling out of ridge and reflection strokes). Files `mountain-ink-white` / `mountain-ink-dark` (PNG and SVG, 2400×1500, transparent) replace the old ones in `public/assets/mountain/`. Swap by theme, no CSS invert.
-- **Dust (Canvas 2D, one canvas):** sample the ink pixels of the art at a 720×450 working grid (offscreen canvas at load, or baked). The old `mountain-tiles.json` and tile drift are **removed**. Each ink pixel gets a seeded (mulberry32) random delay, wind, lift and wobble:
-  - **Order:** `delay = 0.42·(y/H) + 0.16·rand`, plus 0.28 for solid regions (pine and tree masses), so the peaks go first, then the lower slopes, then the trees. (Solid regions are found with an erosion/dilation mask.)
-  - **Progress per speck:** `e = smoothstep` over 0.55 of the global progress after its delay.
-  - **Motion:** blown **right and up**: `dx = (150 + 330·rand)·e`, `dy = −(30 + 190·rand)·e`, plus a sine wobble of ±14·e px (all in 720-wide units; scale with the container).
-  - **Look:** keep about 55% of the pixels as specks, 18% of those drawn 2px, the rest 1px. Alpha `× (1 − e)^1.1`. White specks in dark mode, ink-black in light mode (same drawing, theme-swapped).
-  - **As built:** specks are written into a grid buffer (720-wide units, spanning the whole canvas so dust can leave the illustration's box) and blitted to the canvas in one scaled `drawImage`, nearest-neighbour (about 7ms frames; per-speck `fillRect` was 30ms+). The speck clock is `progress / 0.85 × (last delay + 0.55)`, so with the delays above the last speck still leaves exactly at 0.85. At rest the canvas shows the crisp PNG; it cross-fades to specks over the first 4.5% of progress.
-- **Condense:** from about 0.40, about 1,300 incoming specks (restricted to the list's footprint, so it never reads as a starfield) drift **in** from the right and settle while the header and list go from `opacity 0 → 1` and `blur 6px → 0`. By 0.85 the dust is gone and the content is crisp; the pin releases at 1.0.
-- **Orb (kept):** a **170px circle** with `mix-blend-mode: difference` (white fill, radial-gradient falloff) follows the pointer (lerp 0.15), inverting the illustration and any text it crosses. Needs a solid-filled container, inside a clipped frame. On touch it follows the finger. Fades out by 50% scroll.
-- The Figma storyboard (`50:59`) shows the stills: 01 intro (art), 02 about 30% (dust blowing off), 03 about 75% (content condensing), 04 done, plus a light-mode row (05, 06). The dust stills are pre-rendered sprites that approximate the effect; the build runs the real particles. Figma images are 720px wide; use the 2400px files.
-- Reduced motion: skip the mountain and the dust, show the final section.
-
-**Experience list (accordion):** each row is a collapsed header: period (`2025 — PRESENT`, Oswald muted), role (`ITEQs Manager`, Oswald), `Company Name · City, Country` (Source Serif italic), and a round chevron button. The first item is expanded by default; only one open at a time (animate height, 400ms `--ease`). Expanded content, two columns:
-- **WHAT I DID:** 3 bullet lines with an em-dash marker (Source Serif 4).
-- **PROJECTS & EVENTS IN THIS ROLE:** stacked mini-cards, each with a tag (`PROJECT` solid chip or `EVENT` outlined chip), date, title (Oswald), one-line description, and a `↗` link. Project cards link to the Project Detail page; event cards open the event modal.
-Rows are separated by 1px `--border`. The expanded row sits on `--surface`.
+### 7.7 Where I've been so far (swarm build, then accordion)
+Eyebrow `06 — EXPERIENCE`, title `WHERE I'VE BEEN SO FAR`. **The mountain, dust and orb are removed.** The section is now built live by a swarm of multicolor cursors (`lib/swarm.ts`, `components/swarm/SwarmBuild.tsx`, shared with Contact, 7.8). It replaces the old mountain scene (user decision, 2026-11-04).
+- **Targets:** every block marked `data-swarm-target` (the header and each role row; on Contact the eyebrow, headline, paragraph, the three detail blocks and the form). Each starts hidden and is built once, then stays built (no replay on scroll back or re-entry).
+- **Agents:** five, named Layout, Type, Motion, Color and Copy, each a Figma-style arrow cursor with a name pill, in the `--agent-1..5` tokens (coral, amber, mint, blue, violet; the only multicolor in the site, by request). Agents join when a block scrolls into view (viewport minus 12% at the bottom), up to five at once, 170ms apart.
+- **One build:** the agent flies in (300–700ms, from the nearest side), parks on the block's top-left corner, then drags a selection box to the bottom-right corner (480–800ms): 1px outline in its color with 8% fill, four corner handles, a live `W × H` pill under the box and two guide lines through the top-left corner. When the drag ends the block fades in from a 6px blur (520ms), the box holds 420ms and fades, and the agent drifts off and waits.
+- **Cursor stays visible:** for tall or full-width blocks the cursor is clamped into the viewport (below the nav, above the HUD, 86px from the right edge so its name pill fits), while the box keeps its true size.
+- **HUD:** a bottom-center pill (blurred surface, one dot per agent, `5 AGENTS · 3 / 7 LAYERS`) shows while the section is on screen and lingers 1.6s after the last layer. No toggles.
+- **Skipping:** a block scrolled past before an agent reaches it is revealed instantly. Blocks that are `display: none` at start never build.
+- **Mobile:** same effect at every width (user decision).
+- **Layer:** `.swarm-layer` is absolute inside the section, `aria-hidden`, `pointer-events: none`, in section coordinates so scrolling never detaches a box from its block.
+- Reduced motion: nothing is hidden and nothing runs; the final section is simply there.
 
 ### 7.8 Contact
 Eyebrow `07 — CONTACT`. Oversized Oswald headline `LET'S WORK TOGETHER`, a short Source Serif 4 invitation. Two columns: left has **EMAIL**, **LOCATION**, **SOCIALS** (GitHub, LinkedIn, Instagram as text links with `↗`); right has a minimal form (Name, Email, Message) with underline inputs (1px bottom border at `--border-strong`, full `--text` on focus) and a primary `SEND MESSAGE →` button. Validate client-side. **Submit target decided:** `POST /api/contact` emails through Resend (honeypot field, fill-time check, rate limit, header-injection safe); `RESEND_API_KEY=dry-run` logs instead of sending; `.env.example` documents the variables. Contact details live in `content/contact.ts`.
+
+**Swarm build (added 2026-11-04):** Contact is built live by the same cursor swarm as Experience (7.7); targets are the eyebrow, headline, invitation, the three detail blocks and the form.
 
 ### 7.9 Footer
 `© 2026 NICK.ODE. ALL RIGHTS RESERVED.` left, `BACK TO TOP ↑` right, 1px top border.

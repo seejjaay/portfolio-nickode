@@ -84,8 +84,8 @@ function RoleItem({
 
   return (
     <div
-      data-exp-reveal
-      className={`exp-reveal overflow-hidden rounded-card border transition-[background-color,border-color] duration-[400ms] ease-brand ${
+      data-swarm-target
+      className={`overflow-hidden rounded-card border transition-[background-color,border-color] duration-[400ms] ease-brand ${
         open
           ? "border-border bg-[color-mix(in_srgb,var(--text)_5%,transparent)]"
           : "border-transparent border-b-border"

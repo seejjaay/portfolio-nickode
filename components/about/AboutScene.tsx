@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, type ReactNode } from "react";
 import { clamp, cubicBezier, lerp } from "@/lib/motion";
 import { WaveCanvas } from "./WaveCanvas";
-import { aboutScroll, gsap, ScrollTrigger } from "@/lib/scroll";
+import { aboutScroll, gsap, isScrolling, jumpScrollBy, refreshScroll, ScrollTrigger } from "@/lib/scroll";
 
 /* About wave transition (DESIGN.md 7.2.1). One pinned stage, 300vh of scroll,
    driven entirely by scroll progress p (0 to 1):
@@ -101,7 +101,34 @@ export function AboutScene({ children }: { children: ReactNode }) {
         stage.classList.toggle("is-open", p >= SPLIT_START);
       };
 
-      ScrollTrigger.create({
+      // Plays once per page load. When the visitor has scrolled past the end and
+      // the page has come to rest, the pin and its 300vh spacer are removed and
+      // the scroll position is moved by exactly the height that went away, so
+      // nothing on screen moves. From then on the scene stays open: scrolling
+      // back up goes straight from About to the hero, with no rewind. Waiting for
+      // rest matters: a glide to a lower section (a menu link) would otherwise
+      // land 300vh off once the page above it got shorter.
+      let settled = false;
+      const settle = () => {
+        if (settled) return;
+        const check = () => {
+          if (isScrolling()) return;
+          gsap.ticker.remove(check);
+          if (settled || window.scrollY < trigger.end) return; // back inside the pin: wait for the next leave
+          settled = true;
+          const before = stage.getBoundingClientRect().top;
+          trigger.kill();
+          // The section is pulled up under the hero so the wave's empty sky tucks
+          // behind it; with the scene finished there is no sky, so it lets go.
+          stage.closest(".about-section")?.classList.add("is-played");
+          render(1);
+          jumpScrollBy(stage.getBoundingClientRect().top - before);
+          refreshScroll();
+        };
+        gsap.ticker.add(check);
+      };
+
+      const trigger = ScrollTrigger.create({
         trigger: stage,
         start: "top top",
         end: () => `+=${window.innerHeight * PIN_LENGTH_VH}`,
@@ -114,6 +141,7 @@ export function AboutScene({ children }: { children: ReactNode }) {
           render(self.progress);
         },
         onUpdate: (self) => render(self.progress),
+        onLeave: settle,
       });
 
       // Dot portrait reads how far past the pin the visitor is.

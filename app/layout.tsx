@@ -6,6 +6,7 @@ import { ScrollProvider } from "@/components/ScrollProvider";
 import { SpaceBackground } from "@/components/SpaceBackground";
 import { Intro } from "@/components/intro/Intro";
 import { introInitScript } from "@/lib/intro";
+import { scrollInitScript } from "@/lib/scroll";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
@@ -39,6 +40,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <head>
+        {/* First, so the intro script below sees the reset scroll position and URL. */}
+        <script dangerouslySetInnerHTML={{ __html: scrollInitScript }} />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <script dangerouslySetInnerHTML={{ __html: introInitScript }} />
       </head>

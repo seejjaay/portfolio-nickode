@@ -1,3 +1,4 @@
+import { SwarmBuild } from "@/components/swarm/SwarmBuild";
 import { MaskIcon } from "@/components/ui/MaskIcon";
 import { contact } from "@/content/contact";
 import { ContactForm } from "./ContactForm";
@@ -8,20 +9,20 @@ const label = "font-display text-[12px] font-normal uppercase leading-[1.5] trac
 
 export function ContactSection() {
   return (
-    <section id="contact" className="px-[var(--gutter)] pb-[96px] pt-[72px]">
-      <p className="font-display text-[13px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">07 — CONTACT</p>
-      <h2 className="mt-10 font-display text-[clamp(44px,7.92vw,114px)] font-semibold uppercase leading-none tracking-[0.025em] text-text">
+    <SwarmBuild id="contact" className="px-[var(--gutter)] pb-[96px] pt-[72px]">
+      <p data-swarm-target className="font-display text-[13px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">07 — CONTACT</p>
+      <h2 data-swarm-target className="mt-10 font-display text-[clamp(44px,7.92vw,114px)] font-semibold uppercase leading-none tracking-[0.025em] text-text">
         LET&apos;S WORK TOGETHER
       </h2>
       <div aria-hidden className="mt-10 h-px w-full bg-border" />
 
       <div className="mt-10 grid gap-16 lg:grid-cols-2 lg:gap-24">
         <div className="max-w-[552px]">
-          <p className="font-body text-[19px] leading-[34px] text-text-2">
+          <p data-swarm-target className="font-body text-[19px] leading-[34px] text-text-2">
             Have a project in mind, or just want to say hello? Send a message and I will get back to you within a couple of days.
           </p>
           <dl className="mt-8 flex flex-col gap-8">
-            <div>
+            <div data-swarm-target>
               <dt className={label}>EMAIL</dt>
               <dd className="mt-[6px]">
                 <a href={`mailto:${contact.email}`} className="font-body text-[19px] leading-[34px] text-text transition-opacity duration-300 hover:opacity-70 max-lg:inline-flex max-lg:min-h-11 max-lg:items-center">
@@ -29,11 +30,11 @@ export function ContactSection() {
                 </a>
               </dd>
             </div>
-            <div>
+            <div data-swarm-target>
               <dt className={label}>LOCATION</dt>
               <dd className="mt-[6px] font-body text-[19px] leading-[34px] text-text">{contact.location}</dd>
             </div>
-            <div>
+            <div data-swarm-target>
               <dt className={label}>SOCIALS</dt>
               <dd className="mt-[14px]">
                 <ul className="flex flex-col gap-[14px] max-lg:gap-0">
@@ -56,8 +57,10 @@ export function ContactSection() {
           </dl>
         </div>
 
-        <ContactForm email={contact.email} />
+        <div data-swarm-target>
+          <ContactForm email={contact.email} />
+        </div>
       </div>
-    </section>
+    </SwarmBuild>
   );
 }

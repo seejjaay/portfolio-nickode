@@ -3,7 +3,7 @@
 import "lenis/dist/lenis.css";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { refreshScroll, scrollToSection, startSmoothScroll } from "@/lib/scroll";
+import { refreshScroll, scrollToSection, scrollToTopNow, startSmoothScroll } from "@/lib/scroll";
 
 export function ScrollProvider() {
   const pathname = usePathname();
@@ -11,16 +11,27 @@ export function ScrollProvider() {
 
   useEffect(() => startSmoothScroll(), []);
 
-  // Coming back to the home page from another one (the project page's back link,
-  // or a menu link) with a #section: glide to it. Next's own hash scroll does not
-  // fire when the home page is restored, and the first load needs nothing.
+  // Changing page. With a #section on the home page (the project page's back
+  // link, or a menu link) glide to it; anything else starts at the top. Next's
+  // own hash scroll does not fire when the home page is restored, and the first
+  // load needs nothing (the head script in lib/scroll.ts handles reloads).
   useEffect(() => {
     if (!arrived.current) {
       arrived.current = true;
       return;
     }
     const id = window.location.hash.slice(1);
-    if (pathname !== "/" || !id) return;
+    // Any other page (a project, or home without a #section) starts at the very
+    // top. Twice: once now, and once the new page has laid out, so the smooth
+    // scroller cannot carry the old page's position over.
+    if (pathname !== "/" || !id) {
+      scrollToTopNow();
+      const raf = requestAnimationFrame(() => {
+        refreshScroll();
+        scrollToTopNow();
+      });
+      return () => cancelAnimationFrame(raf);
+    }
     // The restored page can still be hidden for a moment: wait until it has a layout.
     let timer = 0;
     let tries = 0;

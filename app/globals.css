@@ -52,6 +52,15 @@
   --shadow-modal: rgba(0, 0, 0, 0.6);
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Swarm-build agents (Experience and Contact): the only multicolor in the site. */
+  --agent-1: #ff6b57;
+  --agent-2: #ffb81f;
+  --agent-3: #2fd38a;
+  --agent-4: #3fa9ff;
+  --agent-5: #b07bff;
+  --agent-ink: #0a0a0a;
+  --agent-edge: #ffffff;
   --nav-h: 64px;
   --container: 1200px;
   --gutter: 24px;
@@ -204,6 +213,12 @@
     .about-section {
       margin-top: min(0px, calc(82vw + min(110vw, max(60vw, 100svh - 82vw)) + 120px - 161.1svh));
     }
+  }
+
+  /* Once the wave has played (AboutScene removes the pin), About no longer tucks
+     under the hero: it sits right below it. Higher specificity than the rules above. */
+  .about-section.is-played {
+    margin-top: 0;
   }
 
   /* Reduced-motion phones get the static layout; tuck its content up into any empty
@@ -1241,93 +1256,192 @@
     }
   }
 
-  /* Experience mountain scene (DESIGN.md 7.7). The 200vh spacer after the stage
-     is how long it stays pinned for (padding would not work: a sticky element
-     only travels within its container's content box). ExperienceScene turns
-     scroll progress into the mountain, orb and reveal. */
-  .exp-track::after {
-    content: "";
-    display: block;
-    height: 200vh;
-  }
-
-  @media (max-width: 767px) {
-    .exp-track::after {
-      height: 150vh;
+  /* Swarm build (Experience and Contact, lib/swarm.ts). Blocks marked
+     data-swarm wait hidden, then fade in from a blur as an agent finishes
+     drawing their box. Reduced motion never sets the attribute. */
+  @keyframes swarm-reveal {
+    from {
+      opacity: 0;
+      filter: blur(6px);
     }
   }
 
-  .exp-stage {
-    position: sticky;
-    top: 0;
-    min-height: 100svh;
+  [data-swarm="pending"] {
+    opacity: 0;
   }
 
-  /* The art covers the first screen of the stage only (the stage can grow
-     taller than the viewport once the accordion opens). */
-  .exp-art {
+  [data-swarm="done"] {
+    animation: swarm-reveal 520ms var(--ease) backwards;
+  }
+
+  .swarm-layer {
     position: absolute;
-    inset: 0 0 auto;
-    height: 100svh;
+    inset: 0;
+    z-index: 30;
     overflow: hidden;
+    pointer-events: none;
   }
 
-  .exp-intro {
-    position: absolute;
-    inset: calc(var(--nav-h) + 1.2vw) 0 auto;
-    text-align: center;
-    will-change: transform, opacity;
-  }
-
-  /* 170px orb with a soft edge (Figma eea24: solid to 72%, fading to the rim).
-     "White" blends with difference, so it inverts the art and text it crosses. */
-  .exp-orb {
+  .swarm-agent {
     position: absolute;
     left: 0;
     top: 0;
-    z-index: 20;
-    width: 170px;
-    height: 170px;
-    border-radius: 50%;
-    pointer-events: none;
-    mix-blend-mode: difference;
-    background: radial-gradient(
-      circle closest-side,
-      var(--blend-white) 0,
-      var(--blend-white) 72%,
-      transparent 100%
-    );
+    z-index: 3;
     opacity: 0;
-    will-change: transform, opacity;
+    transition: opacity 300ms var(--ease);
+    will-change: transform;
   }
 
-  /* mix-blend-mode only sees what is inside the stage's own group, so in light
-     mode the stage carries the paper color for the orb to invert against. */
-  :root[data-theme="light"] .exp-stage {
-    background: var(--bg);
+  .swarm-agent.is-in {
+    opacity: 1;
   }
 
-  /* Header and rows wait for the scene to reveal them. */
-  @media (prefers-reduced-motion: no-preference) {
-    .exp-reveal {
-      opacity: 0;
-    }
+  .swarm-agent svg {
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
   }
 
-  /* Reduced motion: skip the mountain, no pin, show the final section. */
-  @media (prefers-reduced-motion: reduce) {
-    .exp-track::after {
-      display: none;
-    }
+  .swarm-name {
+    position: absolute;
+    left: 16px;
+    top: 18px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--c);
+    color: var(--agent-ink);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
 
-    .exp-stage {
-      position: relative;
-    }
+  .swarm-box {
+    position: absolute;
+    z-index: 2;
+    border: 1px solid var(--c);
+    background: color-mix(in srgb, var(--c) 8%, transparent);
+    opacity: 0;
+    transition: opacity 260ms var(--ease);
+  }
 
-    .exp-art,
-    .exp-orb {
-      display: none;
-    }
+  .swarm-box.is-on {
+    opacity: 1;
+  }
+
+  .swarm-handle {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: var(--agent-edge);
+    border: 1px solid var(--c);
+  }
+
+  .swarm-handle.tl {
+    left: -4px;
+    top: -4px;
+  }
+
+  .swarm-handle.tr {
+    right: -4px;
+    top: -4px;
+  }
+
+  .swarm-handle.bl {
+    left: -4px;
+    bottom: -4px;
+  }
+
+  .swarm-handle.br {
+    right: -4px;
+    bottom: -4px;
+  }
+
+  .swarm-size {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    margin-top: 9px;
+    transform: translateX(-50%);
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--c);
+    color: var(--agent-ink);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .swarm-guide {
+    position: absolute;
+    background: color-mix(in srgb, var(--c) 45%, transparent);
+    opacity: 0;
+    transition: opacity 260ms var(--ease);
+  }
+
+  .swarm-guide.is-on {
+    opacity: 1;
+  }
+
+  .swarm-guide-h {
+    left: 0;
+    width: 100%;
+    height: 1px;
+  }
+
+  .swarm-guide-v {
+    top: 0;
+    height: 100%;
+    width: 1px;
+  }
+
+  .swarm-hud {
+    position: fixed;
+    left: 50%;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 16px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--text-2);
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, 10px);
+    transition:
+      opacity 300ms var(--ease),
+      transform 300ms var(--ease);
+  }
+
+  .swarm-hud.is-on {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .swarm-dots {
+    display: flex;
+    gap: 4px;
+  }
+
+  .swarm-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--c);
   }
 
   /* Thin custom scrollbar for the See more list and the modal description. */
