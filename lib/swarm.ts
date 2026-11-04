@@ -33,6 +33,10 @@ const showHud = (hud: HTMLElement, on: boolean) => {
 };
 
 const HOLD = 420; // ms the box stays after the block appears
+// The fastest a cursor may move on screen, in px per ms (about 42px a frame at
+// 60fps). A safety net: normal moves stay below it, so it only steps in when a
+// frame stalls or something jumps, which would otherwise read as a teleport.
+const MAX_SPEED = 2.6;
 const HUD_LINGER = 1600; // ms the HUD stays after the last layer
 const MAX_STRAYS = 2; // agents rubber-banding empty space at once
 const MAX_AMBIENT = 2; // agents loitering without a job at once
@@ -55,7 +59,7 @@ type Agent = {
   from: Pt;
   to: Pt;
   bend: number; // sideways bow of the current path, in px
-  t0: number;
+  el: number; // ms spent in the current phase, advanced by capped frame time (see tick)
   dur: number;
   ease: Ease;
   rect: Rect;
@@ -70,6 +74,9 @@ type Agent = {
   speed: number; // personality: how fast this person moves
   wobble: number; // personality: how shaky their hand is
   drift: number;
+  sx: number; // where the cursor is actually drawn (speed-limited, see place)
+  sy: number;
+  snap: boolean; // draw the next position as is (a fresh entrance)
 };
 
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -151,7 +158,7 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
       phase: "away" as Phase,
       x: 0, y: 0, free: 1,
       from: { x: 0, y: 0 }, to: { x: 0, y: 0 },
-      bend: 0, t0: 0, dur: 1, ease: easeOut,
+      bend: 0, el: 0, dur: 1, ease: easeOut,
       rect: { x: 0, y: 0, w: 0, h: 0 },
       anchor: { x: 0, y: 0 }, far: { x: 0, y: 0 },
       dragBend: 0, overshoot: 0,
@@ -160,12 +167,15 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
       speed: rand(0.8, 1.3),
       wobble: rand(0.8, 2.6),
       drift: i * 1.7 + Math.random() * 2,
+      sx: 0, sy: 0, snap: true,
     };
   });
 
-  // The viewport, in section coordinates. `view` is the safe area a working
-  // cursor is kept inside (below the nav, above the HUD, with room for its name
-  // pill); `vp` is the whole screen, used to pick where agents come from and go to.
+  // The viewport, in section coordinates, measured when a decision is made. `view`
+  // is the safe area (below the nav, above the HUD, with room for the name pill)
+  // used to pick corners, wander points and stray boxes; `vp` is the whole screen,
+  // used to pick where agents come from and go to. Neither is used to move a
+  // cursor frame by frame vertically (see place).
   let view = { l: 12, r: 1000, t: 0, b: 800 };
   let vp = { l: 0, r: 1000, t: 0, b: 800, h: 2000 };
   const measureView = () => {
@@ -174,12 +184,37 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
     vp = { l: 0, r: hr.width, t: -hr.top, b: window.innerHeight - hr.top, h: hr.height };
   };
 
+  /* Cursors live in section coordinates, so they scroll with the page exactly
+     like the content does (on the compositor, with no help from script). Only x
+     is kept in the safe area (room for the name pill): that bound never moves
+     with scrolling. Never clamp y to the screen: on phones scrolling runs on
+     another thread and the address bar resizes the viewport, so a y worked out
+     from the scroll position every frame lags or jumps, and the cursor teleports. */
+  let frameDt = 16; // ms since the last frame, set by tick
   const place = (a: Agent) => {
     const cx = clamp(a.x, view.l, Math.max(view.l, view.r));
-    const cy = clamp(a.y, view.t, Math.max(view.t, view.b));
     const x = cx + (a.x - cx) * a.free;
-    const y = cy + (a.y - cy) * a.free;
-    a.cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    const y = a.y;
+    // While dragging, the cursor must sit exactly on the box corner it drags, and
+    // an entrance starts from wherever it was placed. Every other move is capped.
+    if (a.snap || a.phase === "draw" || a.phase === "hold") {
+      a.sx = x;
+      a.sy = y;
+      a.snap = false;
+    } else {
+      const dx = x - a.sx;
+      const dy = y - a.sy;
+      const d = Math.hypot(dx, dy);
+      const max = MAX_SPEED * frameDt;
+      if (d > max) {
+        a.sx += (dx / d) * max;
+        a.sy += (dy / d) * max;
+      } else {
+        a.sx = x;
+        a.sy = y;
+      }
+    }
+    a.cursor.style.transform = `translate3d(${a.sx}px, ${a.sy}px, 0)`;
   };
 
   // The box is whatever rectangle the anchor corner and the cursor span.
@@ -217,6 +252,7 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
   /* Where a newly arriving agent starts: just past a random screen edge, or (about
      one time in three) it simply pops into existence near where it is needed. */
   const arrive = (a: Agent, near: Pt) => {
+    a.snap = true;
     a.cursor.classList.remove("is-pop");
     if (Math.random() < 0.34) {
       const ang = rand(0, Math.PI * 2);
@@ -241,19 +277,20 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
 
   /* Sets an agent off toward `rect`: it picks which corner to grab (usually the
      nearest, otherwise any), where to end, and how its hand moves on the way. */
-  const approach = (a: Agent, rect: Rect, now: number) => {
+  const approach = (a: Agent, rect: Rect) => {
     a.rect = rect;
     if (a.phase === "away") arrive(a, { x: rect.x + rect.w / 2, y: rect.y + rect.h / 2 });
 
-    // A block taller than the screen is only grabbed by its top corners.
-    const tall = rect.h > window.innerHeight * 0.7;
+    // Grab a corner that is on screen right now (a tall block may have its top
+    // or bottom off screen); if none is, any corner will do.
     const corners: Pt[] = [
       { x: rect.x, y: rect.y },
       { x: rect.x + rect.w, y: rect.y },
       { x: rect.x, y: rect.y + rect.h },
       { x: rect.x + rect.w, y: rect.y + rect.h },
     ];
-    const pool = tall ? corners.slice(0, 2) : corners;
+    const onScreen = corners.filter((c) => c.y >= view.t && c.y <= view.b);
+    const pool = onScreen.length ? onScreen : corners;
     const nearest = pool.reduce((best, c) => (Math.hypot(c.x - a.x, c.y - a.y) < Math.hypot(best.x - a.x, best.y - a.y) ? c : best));
     a.anchor = Math.random() < 0.6 ? nearest : pick(pool);
     a.far = { x: rect.x + rect.w - (a.anchor.x - rect.x), y: rect.y + rect.h - (a.anchor.y - rect.y) };
@@ -264,9 +301,11 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
     a.to = a.anchor;
     const dist = Math.hypot(a.to.x - a.from.x, a.to.y - a.from.y);
     a.bend = sign() * dist * rand(0.06, 0.26);
-    a.dur = clamp(dist / (1.9 * a.speed), 300, 950);
-    a.ease = Math.random() < 0.5 ? easeOut : easeOutQuad;
-    a.t0 = now;
+    // A hand speeds up and slows down; a cubic ease-out would start at three times
+    // the average speed, which reads as a jump on a long trip.
+    a.dur = clamp(dist / a.speed, 380, 1400);
+    a.ease = Math.random() < 0.5 ? easeInOutQuad : easeOutQuad;
+    a.el = 0;
     a.phase = "travel";
   };
 
@@ -277,32 +316,32 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
     a.job = target;
     a.stray = false;
     status.set(target, "busy");
-    approach(a, { x: r.left - hr.left, y: r.top - hr.top, w: r.width, h: r.height }, now);
+    approach(a, { x: r.left - hr.left, y: r.top - hr.top, w: r.width, h: r.height });
     nextAssign = now + rand(90, 420);
   };
 
   // A rubber-band selection in empty space: drawn, held a moment, dropped.
-  const startStray = (a: Agent, now: number) => {
+  const startStray = (a: Agent) => {
     const w = rand(90, Math.min(420, (view.r - view.l) * 0.6));
     const h = rand(44, 190);
     const p = randomViewPoint();
     a.job = null;
     a.stray = true;
-    approach(a, { x: clamp(p.x - w / 2, 12, Math.max(12, vp.r - w - 12)), y: p.y - h / 2, w, h }, now);
+    approach(a, { x: clamp(p.x - w / 2, 12, Math.max(12, vp.r - w - 12)), y: p.y - h / 2, w, h });
   };
 
-  const wander = (a: Agent, now: number) => {
+  const wander = (a: Agent) => {
     a.from = { x: a.x, y: a.y };
     a.to = randomViewPoint();
     const dist = Math.hypot(a.to.x - a.from.x, a.to.y - a.from.y);
     a.bend = sign() * dist * rand(0.05, 0.22);
     a.dur = clamp(dist / (0.7 * a.speed), 600, 1700);
     a.ease = easeInOutQuad;
-    a.t0 = now;
+    a.el = 0;
     a.phase = "wander";
   };
 
-  const exit = (a: Agent, now: number) => {
+  const exit = (a: Agent) => {
     const side = pick(["l", "r", "t", "b"] as const);
     const to: Pt =
       side === "l" ? { x: vp.l - 80, y: a.y + rand(-160, 160) }
@@ -314,7 +353,7 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
     a.bend = sign() * Math.hypot(to.x - a.x, to.y - a.y) * rand(0.05, 0.2);
     a.dur = clamp(Math.hypot(to.x - a.x, to.y - a.y) / (1.5 * a.speed), 500, 1200);
     a.ease = (t) => t * t * (3 - 2 * t);
-    a.t0 = now;
+    a.el = 0;
     a.phase = "exit";
   };
 
@@ -331,7 +370,10 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
   };
 
   const step = (a: Agent, now: number) => {
-    const t = (now - a.t0) / a.dur;
+    // Phase time advances by the capped frame time, not the wall clock, so a
+    // stalled frame slows a move down for a moment instead of skipping ahead.
+    a.el += frameDt;
+    const t = a.el / a.dur;
     switch (a.phase) {
       case "travel": {
         const p = a.ease(clamp(t, 0, 1));
@@ -340,14 +382,17 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
         a.x = pt.x + Math.sin(now / 60 + a.drift) * shake;
         a.y = pt.y + Math.cos(now / 70 + a.drift) * shake;
         a.free = 1 - p;
-        if (t >= 1) {
+        // Start dragging only once the drawn cursor has really reached the corner
+        // (the speed cap can leave it a little behind after a slow frame).
+        const cornerX = clamp(a.anchor.x, view.l, Math.max(view.l, view.r));
+        if (t >= 1 && Math.hypot(a.sx - cornerX, a.sy - a.anchor.y) < 3) {
           a.x = a.anchor.x;
           a.y = a.anchor.y;
           a.free = 0;
           a.phase = "draw";
-          a.t0 = now;
+          a.el = 0;
           const span = Math.hypot(a.far.x - a.anchor.x, a.far.y - a.anchor.y);
-          a.dur = clamp((380 + span * 0.55) / a.speed, 450, 1000);
+          a.dur = clamp(Math.max((380 + span * 0.55) / a.speed, span * 0.8), 450, 1800);
           a.ease = pick(DRAG_EASES);
           a.guideH.style.top = `${a.anchor.y}px`;
           a.guideV.style.left = `${a.anchor.x}px`;
@@ -378,7 +423,7 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
           if (a.job) finish(a.job);
           a.cursor.classList.remove("is-down");
           a.phase = "hold";
-          a.t0 = now;
+          a.el = 0;
           a.dur = a.stray ? 260 : HOLD;
         }
         break;
@@ -399,7 +444,7 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
           };
           a.bend = sign() * d * rand(0.1, 0.3);
           a.phase = "leave";
-          a.t0 = now;
+          a.el = 0;
           a.dur = rand(550, 950);
           a.ease = easeOut;
           a.job = null;
@@ -426,15 +471,22 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
         break;
       }
       case "idle": {
+        // Scrolled well off screen: slip away unseen. When it is needed again it
+        // comes in from the nearest edge, instead of racing across the whole page.
+        if (a.y < vp.t - 120 || a.y > vp.b + 120) {
+          a.cursor.classList.remove("is-in", "is-pop", "is-down");
+          a.phase = "away";
+          break;
+        }
         // A small hover while waiting. Now and then: wander, rubber-band, or give up and leave.
         a.free = 1;
         a.x += Math.sin(now / 520 + a.drift) * 0.18;
         a.y += Math.cos(now / 610 + a.drift) * 0.18;
         if (now >= a.nextIdle) {
           const strays = agents.filter((o) => o.stray).length;
-          if (complete || now - a.idleSince > 6500) exit(a, now);
-          else if (hostVisible && strays < MAX_STRAYS && Math.random() < 0.3) startStray(a, now);
-          else if (hostVisible && Math.random() < 0.75) wander(a, now);
+          if (complete || now - a.idleSince > 6500) exit(a);
+          else if (hostVisible && strays < MAX_STRAYS && Math.random() < 0.3) startStray(a);
+          else if (hostVisible && Math.random() < 0.75) wander(a);
           else a.nextIdle = now + rand(600, 1600);
         }
         break;
@@ -457,8 +509,12 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
     place(a);
   };
 
+  let lastFrame = 0;
   const tick = (now: number) => {
     raf = 0;
+    // Capped, so a stalled frame makes a cursor lag briefly instead of leaping.
+    frameDt = lastFrame ? clamp(now - lastFrame, 1, 20) : 16;
+    lastFrame = now;
     measureView();
 
     while (queue.length && now >= nextAssign) {
@@ -479,7 +535,7 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
       if (loitering < MAX_AMBIENT && gone.length) {
         const a = pick(gone);
         arrive(a, randomViewPoint());
-        wander(a, now);
+        wander(a);
       }
     }
 
@@ -491,7 +547,10 @@ export function startSwarm(layer: HTMLElement, host: HTMLElement, all: HTMLEleme
   };
 
   const wake = () => {
-    if (!raf) raf = requestAnimationFrame(tick);
+    if (!raf) {
+      lastFrame = 0;
+      raf = requestAnimationFrame(tick);
+    }
   };
 
   // Observers -----------------------------------------------------------------
