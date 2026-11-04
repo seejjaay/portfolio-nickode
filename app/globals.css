@@ -400,6 +400,13 @@
 
   /* Achievement cards: pause the hovered or focused row so a card can be read
      and clicked (DESIGN.md 7.6). */
+  /* Clip the loop sideways only, so a card's hover lift is not cut off at the top.
+     (overflow: clip, unlike hidden, leaves the other axis visible.) */
+  .marquee-row.achv-row {
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+
   .achv-row:hover .marquee-track,
   .achv-row:focus-within .marquee-track {
     animation-play-state: paused;

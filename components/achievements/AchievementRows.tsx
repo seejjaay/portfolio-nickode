@@ -24,23 +24,23 @@ export function AchievementRows() {
 
   return (
     <>
-      <div className="achv-rows relative h-[500px] overflow-hidden max-md:h-[440px]">
-        <div className="marquee-slot absolute inset-x-0 top-0">
+      <div className="achv-rows relative -mt-2 h-[508px] overflow-hidden max-md:h-[448px]">
+        <div className="marquee-slot absolute inset-x-0 top-2">
           <CardRow items={achievementRows[0]} speed={68} phase={0.03} onOpen={open} />
         </div>
-        <div className="marquee-slot absolute inset-x-0 top-[196px] max-md:top-[168px]">
+        <div className="marquee-slot absolute inset-x-0 top-[204px] max-md:top-[176px]">
           <CardRow items={achievementRows[1]} speed={54} phase={0.5} reverse onOpen={open} />
         </div>
-        <div className="marquee-slot achv-depth pointer-events-none absolute inset-x-0 top-[392px] opacity-[0.22] blur-[2.5px] max-md:top-[336px]">
+        <div className="marquee-slot achv-depth pointer-events-none absolute inset-x-0 top-[400px] opacity-[0.22] blur-[2.5px] max-md:top-[344px]">
           <CardRow items={achievementRows[2]} speed={42} phase={0.25} decorative onOpen={open} />
         </div>
         <div
           aria-hidden
-          className="achv-fade pointer-events-none absolute left-0 top-0 h-[500px] w-[220px] bg-linear-to-r from-bg to-transparent max-md:w-[56px]"
+          className="achv-fade pointer-events-none absolute left-0 top-0 h-[508px] w-[220px] bg-linear-to-r from-bg to-transparent max-md:w-[56px]"
         />
         <div
           aria-hidden
-          className="achv-fade pointer-events-none absolute right-0 top-0 h-[500px] w-[220px] bg-linear-to-r from-transparent to-bg max-md:w-[56px]"
+          className="achv-fade pointer-events-none absolute right-0 top-0 h-[508px] w-[220px] bg-linear-to-r from-transparent to-bg max-md:w-[56px]"
         />
       </div>
 
