@@ -54,39 +54,8 @@ export const projects: Project[] = [
     liveUrl: "https://github.com/seejjaay/BarkStudy/releases", // installer downloads
   },
   {
-    slug: "nikki-and-nicka",
-    index: 2,
-    title: "Nikki & Nicka",
-    category: "MOBILE APP",
-    summary: "An offline-first study app where two chibi cat assistants answer from your own notes and documents.",
-    meta: { role: "Full-stack Developer", year: "2026", timeline: "Ongoing, started Oct 2026", team: "Solo project", client: "Personal", status: "In development" },
-    video: { src: "", poster: "", duration: "0:00" }, // /projects/nikki-and-nicka/demo.mp4, poster.webp
-    overview: [
-      "Students keep notes, slides and PDFs in different places, and most AI study tools send all of it to the cloud. Nikki & Nicka keeps everything on the device and runs one local AI assistant with two personalities, shown as two cats, that answers from the student's own materials with citations.",
-      "It is built milestone by milestone with a written spec, plan and verification report for each. Milestones 0 to 3b are done and handwritten notes are built, running on Windows, Chrome and Android, with iPhone testing set up through cloud builds since there is no Mac.",
-    ],
-    features: [
-      { title: "Library and notes", text: "Subjects, notebooks and pages with tags, favorites, a 30-day trash, autosave and version snapshots." },
-      { title: "Markdown editor", text: "Live styling, toolbar, shortcuts, preview and split view, plus pictures and Markdown export." },
-      { title: "Document import", text: "PDF, Word, slides, text and pictures by picker, drag-and-drop or camera, with a PDF viewer and note-to-page links." },
-      { title: "On-device text recognition", text: "Scans and pictures are read with each platform's own OCR engine, so they are searchable too." },
-      { title: "Handwritten notes", text: "Pen, highlighter, erasers and lasso on ruled, grid or dotted paper, staying smooth at 2,000 strokes per page." },
-      { title: "Themes and mascots", text: "Eight presets or custom colors behind a contrast guard, with parametric Nikki and Nicka expressions and motion." },
-    ],
-    screenshots: [
-      { src: "/projects/nikki-and-nicka/01-home.webp", caption: "SCREENSHOT 01 · HOME" },
-      { src: "/projects/nikki-and-nicka/02-editor.webp", caption: "SCREENSHOT 02 · MARKDOWN EDITOR, SPLIT VIEW" },
-      { src: "/projects/nikki-and-nicka/03-ink.webp", caption: "SCREENSHOT 03 · HANDWRITTEN PAGE" },
-      { src: "/projects/nikki-and-nicka/04-appearance.webp", caption: "SCREENSHOT 04 · THEMES AND MASCOTS" },
-      { src: "/projects/nikki-and-nicka/05-library.webp", caption: "SCREENSHOT 05 · LIBRARY" },
-    ],
-    tech: ["Flutter", "Dart", "Riverpod", "Drift", "SQLite"],
-    repo: { url: "github.com/seejjaay/nikki-and-nicka", description: "Flutter app targeting Android, iOS, Windows, macOS and web. flutter pub get, then flutter run -d windows.", language: "Dart" },
-    liveUrl: "",
-  },
-  {
     slug: "lokal-md",
-    index: 3,
+    index: 2,
     title: "Lokal.MD",
     category: "AI / HEALTHCARE",
     summary: "An offline clinical documentation and medication-safety workstation for rural health units.",
@@ -117,7 +86,7 @@ export const projects: Project[] = [
   },
   {
     slug: "verifund-ph",
-    index: 4,
+    index: 3,
     title: "VeriFund PH",
     category: "WEB APP",
     summary: "A social aid distribution platform that gets ayuda to verified people and cuts ghost beneficiaries and duplicate claims.",
@@ -148,7 +117,7 @@ export const projects: Project[] = [
   },
   {
     slug: "orgavents",
-    index: 5,
+    index: 4,
     title: "OrgaVents",
     category: "WEB APP",
     summary: "Campus event management with calendar, venues and registrations, running on a mock backend or a live API.",
@@ -179,12 +148,12 @@ export const projects: Project[] = [
   },
   {
     slug: "jpcs-site",
-    index: 6,
+    index: 5,
     title: "JPCS Website",
     category: "WEB APP",
     summary: "The official site for the JPCS chapter at DLSL, with events, projects, gallery and an admin panel.",
     meta: { role: "Full-stack Developer and officer in charge", year: "2026", timeline: "13 months, ongoing", team: "Team project", client: "JPCS DLSL", status: "Live" },
-    video: { src: "", poster: "", duration: "0:00" }, // /projects/jpcs-site/demo.mp4, poster.webp
+    video: { src: "/projects/jpcs-site/demo.mp4", poster: "/projects/jpcs-site/poster.webp", duration: "0:21" },
     overview: [
       "The chapter needed a public face for its events, projects and officers, and a way for officers to update it without touching code. This is a Next.js site with an animated homepage, a programs section, a calendar and a gallery, plus a protected admin panel for content.",
       "The first version ran on an in-memory placeholder with a hard-coded fallback secret. I developed the site and went on to handle it further, replacing the data layer with Supabase: Postgres tables with row-level security, auth for the admin panel, and storage for images. It has been verified against a local Supabase stack.",
@@ -210,7 +179,7 @@ export const projects: Project[] = [
   },
   {
     slug: "santa-for-hire",
-    index: 7,
+    index: 6,
     title: "Santa for Hire",
     category: "WEB APP",
     summary: "A festive booking site for a Santa Claus performer in the Philippines, with services, video greetings and a booking form.",

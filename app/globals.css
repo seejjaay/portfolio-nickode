@@ -1299,6 +1299,26 @@
   .swarm-agent svg {
     display: block;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+    transform-origin: 3px 2px;
+    transition: transform 120ms var(--ease);
+  }
+
+  /* Mouse button held while dragging: the arrow squeezes a little. */
+  .swarm-agent.is-down svg {
+    transform: scale(0.86);
+  }
+
+  /* An agent that appears out of nowhere instead of flying in from an edge. */
+  @keyframes swarm-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+  }
+
+  .swarm-agent.is-pop svg,
+  .swarm-agent.is-pop .swarm-name {
+    animation: swarm-pop 320ms var(--ease) backwards;
   }
 
   .swarm-name {

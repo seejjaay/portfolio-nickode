@@ -2,9 +2,7 @@
    values are placeholders until real content is supplied. */
 export const site = {
   name: "NICK.ODE",
-  role: "[YOUR ROLE]",
-  fullName: "YOUR FULL NAME",
-  website: "YOURWEBSITE.COM",
+  role: "Full Stack Developer",
 } as const;
 
 /* Titles divider (DESIGN.md 7.3): job titles, certifications and awards.

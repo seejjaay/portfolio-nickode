@@ -116,6 +116,13 @@ export const achievements: Achievement[] = [
     description:
       "DEVCON Manila recognised me twice for the online webinar Code Smarter: Modern Software Development with AI, as an attendee and as an event volunteer. Four expert-led sessions covered writing better prompts, building apps faster from frontend to APIs, an AI-powered workflow for testing, debugging, code review and documentation, and what it takes to be an AI-ready developer. The volunteer certificate credits my service behind the scenes in making the event run.",
   }),
+  cert("microsoft-student-ambassador", "Microsoft Student Ambassador", "Microsoft", "2026", ["MICROSOFT", "STUDENT AMBASSADOR"], {
+    issued: "July 2026",
+    expires: undefined,
+    verifyUrl: "https://mvp.microsoft.com/en-US/studentambassadors/profile/4bca9ee0-8066-4371-97a8-81494b320284",
+    description:
+      "Microsoft Student Ambassadors is Microsoft's global student community. I was accepted around July 2026 and I'm currently at the Student Ambassador level. As an ambassador I publish content and courses under Microsoft and Microsoft Learn. The certificate is signed by Pablo Veramendi, Global Director of Microsoft Student Ambassadors.",
+  }),
   cert("datacamp-sql", "Associate Data Engineer in SQL", "DataCamp", "2026", ["SQL", "DATA ENGINEERING"], {
     issued: "June 28, 2026",
     credentialId: "#882,854",

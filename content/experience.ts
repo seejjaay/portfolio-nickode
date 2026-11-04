@@ -20,35 +20,33 @@ export type Role = {
   title: string;
   company: string;
   location: string;
+  logo?: string; // /experiences/<name>.webp, 160px
   bullets: string[];
   related: RelatedItem[];
 };
 
-const annualTechSummit: Achievement = {
-  id: "annual-tech-summit",
-  kind: "event",
-  title: "Annual Tech Summit",
-  issuer: "Summit",
-  year: "2025",
-  tags: ["EVENT", "ORGANIZER", "TECH SUMMIT", "2025"],
-  description:
-    "Short description of the event and your part in it. Mention what you organized, the size of the audience, and one takeaway people left with. Swipe through the photos to see the day.",
-  posts: { linkedin: "#", facebook: "#", instagram: "#" },
-  event: {
-    name: "Annual Tech Summit",
-    date: "March 2025",
-    location: "City, Country",
-    role: "Organizer",
-  },
-};
-
 export const roles: Role[] = [
+  {
+    id: "dysrupit-mentee",
+    period: "2026 — PRESENT",
+    title: "Mentee",
+    company: "DysrupIT, AI Labs",
+    location: "Lipa City, Batangas, Philippines",
+    logo: "/experiences/dysrupit.webp",
+    bullets: [
+      "Mentee in the AI Labs of DysrupIT, an Australian tech company, at its De La Salle Lipa branch.",
+      "Work in person with Joan Marie Vale and the other AI Labs mentors, on Tuesdays and Thursdays.",
+      "The work is confidential, so its details stay private.",
+    ],
+    related: [],
+  },
   {
     id: "iteqs-manager",
     period: "2025 — PRESENT",
     title: "ITEQs Manager",
-    company: "Company Name",
+    company: "DLSL Junior Philippine Computer Society (JPCS)",
     location: "Lipa City, Batangas, Philippines",
+    logo: "/experiences/jpcs.webp",
     bullets: [
       "Developed software and hardware solutions to support the organization's operations and event requirements.",
       "Streamlined the Creatives Team's workflow by automating task reminders and notifications.",
@@ -62,13 +60,6 @@ export const roles: Role[] = [
         title: "ITEQs Website Redesign",
         text: "Rebuilt the organization site with a clearer structure and faster pages.",
       },
-      {
-        type: "event",
-        date: "MARCH 2025",
-        title: "Annual Tech Summit",
-        text: "Organized a full-day event with speakers, workshops and 300 attendees.",
-        event: annualTechSummit,
-      },
     ],
   },
   {
@@ -77,6 +68,7 @@ export const roles: Role[] = [
     title: "Volunteer / Backend Engineer Volunteer",
     company: "Devcon",
     location: "Manila, Philippines",
+    logo: "/experiences/devcon.webp",
     bullets: [
       "Supported event management activities, including the preparation and creation of participant certificates.",
       "Contributed as a volunteer developer, helping build and maintain software solutions for organizational projects.",
@@ -90,6 +82,7 @@ export const roles: Role[] = [
     title: "Computer Science Program Coordinator",
     company: "DLSL Student Government - CITE Council",
     location: "Lipa City, Batangas, Philippines",
+    logo: "/experiences/cite.webp",
     bullets: [
       "Represented the Computer Science program in the De La Salle Lipa Student Government, serving as a liaison between students and the council.",
       "Assisted Computer Science students with academic concerns, inquiries, and program-related matters.",

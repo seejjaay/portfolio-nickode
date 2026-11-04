@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import { AchievementModal } from "@/components/achievements/AchievementModal";
@@ -103,6 +104,16 @@ function RoleItem({
           <span className="hidden w-[190px] shrink-0 font-display text-[13px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text-muted md:block">
             {role.period}
           </span>
+          {role.logo && (
+            <Image
+              src={role.logo}
+              alt=""
+              width={64}
+              height={64}
+              unoptimized
+              className="cert-sheet size-12 shrink-0 rounded-card object-contain p-1 md:size-16"
+            />
+          )}
           <span className="flex min-w-0 flex-1 flex-col gap-[6px]">
             <span className="block font-display text-[13px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text-muted md:hidden">
               {role.period}
