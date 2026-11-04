@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useId, useMemo, useState, type RefObject } from "react";
 import { MaskIcon } from "@/components/ui/MaskIcon";
 import { achievements, type Achievement } from "@/content/achievements";
@@ -109,10 +110,21 @@ export function AchievementListModal({ open, triggerRef, onClose, onSelect }: Pr
                       onClick={(e) => onSelect(a, e.currentTarget)}
                       className="group flex w-full cursor-pointer items-center gap-5 rounded-card border border-transparent px-4 py-3 text-left transition-colors duration-300 hover:border-border-strong hover:bg-surface-hover"
                     >
-                      <span
-                        aria-hidden
-                        className="size-14 shrink-0 rounded-control border border-border [background:linear-gradient(to_bottom,var(--thumb-from),var(--thumb-to))]"
-                      />
+                      {a.thumb ? (
+                        <Image
+                          src={a.thumb}
+                          alt=""
+                          width={56}
+                          height={56}
+                          unoptimized
+                          className="size-14 shrink-0 rounded-control border border-border object-cover"
+                        />
+                      ) : (
+                        <span
+                          aria-hidden
+                          className="size-14 shrink-0 rounded-control border border-border [background:linear-gradient(to_bottom,var(--thumb-from),var(--thumb-to))]"
+                        />
+                      )}
                       <span className="flex min-w-0 flex-1 flex-col gap-1">
                         <span className="whitespace-pre-wrap font-display text-[10px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">
                           {`${a.kind.toUpperCase()}  ·  ${a.issuer.toUpperCase()}  ·  ${a.year}`}

@@ -116,9 +116,11 @@ function ModalPanel({
           ))}
         </dl>
         <div aria-hidden className="h-px w-full shrink-0 bg-border" />
-        <p className="text-[17px] leading-[1.7] text-text-2">{a.description}</p>
-
-        <div className="flex-1" />
+        {/* On desktop only the description scrolls, so the verify link and share row
+            stay in view. Under 1024px the whole pane scrolls instead. */}
+        <div className="achv-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain pr-3 max-lg:flex-none max-lg:overflow-visible max-lg:pr-0">
+          <p className="text-[17px] leading-[1.7] text-text-2">{a.description}</p>
+        </div>
 
         {a.verifyUrl && !isEvent && (
           <a
@@ -131,10 +133,14 @@ function ModalPanel({
             <MaskIcon name="arrow-up-right" width={14} />
           </a>
         )}
-        <p className="font-display text-[10px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">
-          {isEvent ? "See the post" : "Shared on"}
-        </p>
-        <SocialRow a={a} />
+        {(a.posts.linkedin || a.posts.facebook || a.posts.instagram) && (
+          <>
+            <p className="font-display text-[10px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">
+              {isEvent ? "See the post" : "Shared on"}
+            </p>
+            <SocialRow a={a} />
+          </>
+        )}
       </div>
 
       <button

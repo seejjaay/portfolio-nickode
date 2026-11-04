@@ -1330,10 +1330,33 @@
     }
   }
 
-  /* Thin scrollbar for the See more list. */
-  .achv-list {
+  /* Thin custom scrollbar for the See more list and the modal description. */
+  .achv-list,
+  .achv-scroll {
     scrollbar-width: thin;
-    scrollbar-color: var(--border-strong) transparent;
+    scrollbar-color: color-mix(in srgb, var(--text) 40%, transparent) transparent;
+  }
+
+  .achv-list::-webkit-scrollbar,
+  .achv-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .achv-list::-webkit-scrollbar-track,
+  .achv-scroll::-webkit-scrollbar-track {
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+    border-radius: 999px;
+  }
+
+  .achv-list::-webkit-scrollbar-thumb,
+  .achv-scroll::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--text) 40%, transparent);
+    border-radius: 999px;
+  }
+
+  .achv-list::-webkit-scrollbar-thumb:hover,
+  .achv-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
   }
 
   /* The certificate sheet is always a light sheet with dark ink (DESIGN.md

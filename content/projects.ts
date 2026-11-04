@@ -90,7 +90,7 @@ export const projects: Project[] = [
     title: "Lokal.MD",
     category: "AI / HEALTHCARE",
     summary: "An offline clinical documentation and medication-safety workstation for rural health units.",
-    meta: { role: "Full-stack Developer", year: "2026", timeline: "Hackathon, 2 days", team: "Team of 3", client: "AppBuildersPH Hackathon 2026", status: "Functional MVP" },
+    meta: { role: "Full-stack Developer", year: "2026", timeline: "Hackathon, 2 days", team: "Team PLACEHOLDER, 3 people", client: "AppBuildersPH Hackathon 2026", status: "Functional MVP" },
     video: { src: "/projects/lokal-md/demo.mp4", poster: "/projects/lokal-md/poster.webp", duration: "0:25" },
     overview: [
       "Rural health units and disaster-response missions often have no reliable internet, and sending patient consultations to cloud servers creates real risk under the Data Privacy Act. Lokal.MD does transcription, note writing and medication checks entirely on the clinic's own machine, and it is built so it keeps working when the cloud disappears.",
@@ -121,11 +121,11 @@ export const projects: Project[] = [
     title: "VeriFund PH",
     category: "WEB APP",
     summary: "A social aid distribution platform that gets ayuda to verified people and cuts ghost beneficiaries and duplicate claims.",
-    meta: { role: "Full-stack Developer", year: "2026", timeline: "3 weeks", team: "Team of 4", client: "InterCICSkwela Hackathon 2026", status: "Live" },
+    meta: { role: "Full-stack Developer", year: "2026", timeline: "3 weeks", team: "Team Null Set, 4 people", client: "Batang Techno · InterCICSkwela Hackathon 2026", status: "Live" },
     video: { src: "/projects/verifund-ph/demo.mp4", poster: "/projects/verifund-ph/poster.webp", duration: "0:23" },
     overview: [
       "Every time the Philippine government distributes aid, the same problems come back: deceased or non-existent recipients on the list, the same person claiming at several sites, and paper-based checks with long lines. VeriFund PH targets the last mile for local government units.",
-      "It has three interfaces: a Citizen Portal with a personal QR card, a mobile-first Field Console where barangay officers register and verify people, and a Management System with a dashboard, scheduling and an append-only audit log. Built for the InterCICSkwela Hackathon 2026, Governance challenge.",
+      "It has three interfaces: a Citizen Portal with a personal QR card, a mobile-first Field Console where barangay officers register and verify people, and a Management System with a dashboard, scheduling and an append-only audit log. Built by Team Null Set for the Batang Techno · InterCICSkwela Hackathon 2026, Governance challenge, where it finished 3rd Runner Up.",
     ],
     features: [
       { title: "QR identity", text: "Each verified recipient gets a unique QR card, printable or by SMS, with no app to install." },
