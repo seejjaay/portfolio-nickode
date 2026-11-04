@@ -351,7 +351,7 @@
       --pt-top: 82cqw;
       --pt-h: min(110cqw, max(60cqw, 100svh - 82cqw));
       --pt-w: calc(var(--pt-h) * 2088 / 1530); /* the cutout's aspect */
-      --pt-left: calc(50cqw - var(--pt-w) * 0.48);
+      --pt-left: calc(50cqw - var(--pt-w) * 0.72);
     }
   }
 
