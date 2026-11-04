@@ -72,6 +72,19 @@ export function isScrolling() {
   return Boolean(lenisInstance?.isScrolling);
 }
 
+/** Collapses the scroll spacer of a CSS-sticky pinned scene once it has finished
+ *  playing, so scrolling past it (up or down) costs one screen instead of
+ *  several. The page is moved by exactly the height that went away, so nothing
+ *  on screen moves. Call it only while the page is at rest (see isScrolling):
+ *  a glide to a lower section would otherwise land short. */
+export function collapsePin(track: HTMLElement, stage: HTMLElement) {
+  if (track.classList.contains("is-played")) return;
+  const before = stage.getBoundingClientRect().top;
+  track.classList.add("is-played");
+  jumpScrollBy(stage.getBoundingClientRect().top - before);
+  refreshScroll();
+}
+
 /** Re-measures the page for the smooth scroller and the pinned scenes: call after
  *  the page's size changed under them (a restored route, for example). */
 export function refreshScroll() {

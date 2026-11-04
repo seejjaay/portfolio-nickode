@@ -13,6 +13,7 @@ type Props = {
   onOpen: (a: Achievement, trigger: HTMLElement) => void;
   passive?: boolean;
   decorative?: boolean;
+  fill?: boolean; // grid cell: take the cell's width instead of the marquee's fixed one
 };
 
 const card =
@@ -20,7 +21,7 @@ const card =
 const interactive =
   "cursor-pointer transition-[transform,background-color,border-color] duration-[400ms] ease-brand hover:-translate-y-1 hover:border-border-strong hover:bg-[color-mix(in_srgb,var(--text)_10%,transparent)] motion-reduce:transition-none";
 
-function Body({ a }: { a: Achievement }) {
+function Body({ a, fill }: { a: Achievement; fill?: boolean }) {
   return (
     <>
       {a.thumb ? (
@@ -38,7 +39,7 @@ function Body({ a }: { a: Achievement }) {
           className="size-20 shrink-0 rounded-card border border-border [background:linear-gradient(to_bottom,var(--thumb-from),var(--thumb-to))] max-md:size-14"
         />
       )}
-      <span className="flex w-[260px] flex-col items-start gap-2 max-md:w-[156px] max-md:gap-1">
+      <span className={`flex flex-col items-start gap-2 max-md:gap-1 ${fill ? "min-w-0 flex-1" : "w-[260px] max-md:w-[156px]"}`}>
         <span className="block whitespace-pre-wrap font-display text-[10px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted">
           {`${a.kind.toUpperCase()}  ·  ${a.issuer.toUpperCase()}  ·  ${a.year}`}
         </span>
@@ -53,11 +54,11 @@ function Body({ a }: { a: Achievement }) {
   );
 }
 
-export function AchievementCard({ a, onOpen, passive = false, decorative = false }: Props) {
+export function AchievementCard({ a, onOpen, passive = false, decorative = false, fill = false }: Props) {
   if (decorative) {
     return (
       <div className={card}>
-        <Body a={a} />
+        <Body a={a} fill={fill} />
       </div>
     );
   }
@@ -67,9 +68,9 @@ export function AchievementCard({ a, onOpen, passive = false, decorative = false
       tabIndex={passive ? -1 : 0}
       aria-haspopup="dialog"
       onClick={(e) => onOpen(a, e.currentTarget)}
-      className={`${card} ${interactive}`}
+      className={`${card} ${interactive} ${fill ? "w-full" : ""}`}
     >
-      <Body a={a} />
+      <Body a={a} fill={fill} />
     </button>
   );
 }

@@ -407,6 +407,40 @@
     overflow-y: visible;
   }
 
+  /* The two Achievements layouts (AchievementRows). The one not showing is collapsed
+     to nothing and hidden, but keeps its width, so the marquee keeps measuring. */
+  .achv-layer.is-off {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* The marquee box clips its rows (each row also clips sideways on its own). */
+  .achv-rows {
+    overflow: hidden;
+  }
+
+  /* Stand-in copies of cards in flight (lib/vortex.ts), laid over the page in page
+     coordinates. Under the See all button (z-20) and the nav. */
+  .vortex-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    overflow: visible;
+    z-index: 15;
+    pointer-events: none;
+  }
+
+  /* The marquee holds still while it is swallowed or refilled, so cards land where they belong. */
+  .achv-layer[data-hold] .marquee-track {
+    animation-play-state: paused;
+  }
+
   .achv-row:hover .marquee-track,
   .achv-row:focus-within .marquee-track {
     animation-play-state: paused;
@@ -473,7 +507,13 @@
   .lp-track::after {
     content: "";
     display: block;
-    height: 400vh;
+    height: 220vh;
+  }
+
+  /* Played once: the scroll spacer is removed (see collapsePin in lib/scroll.ts). */
+  .lp-track.is-played::after,
+  .nw-track.is-played::after {
+    display: none;
   }
 
   .lp-stage {
@@ -1699,12 +1739,6 @@
       padding: 0 var(--gutter);
     }
 
-    /* The static card list grows the section, so the button joins the flow. */
-    .achv-more {
-      position: static !important;
-      align-self: flex-end;
-      margin-right: var(--gutter);
-    }
   }
 
   /* Theme toggle shows the icon for the theme you would switch to. Driven by

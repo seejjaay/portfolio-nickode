@@ -3,14 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { MaskIcon } from "@/components/ui/MaskIcon";
 import { clamp, smoothstep } from "@/lib/motion";
+import { collapsePin, isScrolling } from "@/lib/scroll";
 import { NetworkCanvas } from "./NetworkCanvas";
 import { NetworkModal } from "./NetworkModal";
 
 /* What I use scene (DESIGN.md 7.5, Figma 3:27 / storyboard 37:203). Pinned for
    300vh; scroll progress drives the network's growth (NetworkCanvas). The big
    title sits dim behind the sphere; "drag to rotate" and the expand button arrive
-   with the logos. Once the network is complete it stays complete when you scroll
-   back up. Under reduced motion there is no pin and the finished network is shown. */
+   with the logos. Once the network is complete it stays complete, and its scroll
+   spacer is removed, so scrolling back up passes it in one screen. Under reduced motion there is no pin and the finished network is shown. */
 const PIN_VH = 3;
 const LABEL = "Network of the technologies I use, grown from a single node; drag to rotate";
 
@@ -30,18 +31,30 @@ export function StackScene() {
     const hint = hintRef.current!;
     let frame = 0;
     let inView = true;
-    const io = new IntersectionObserver(([e]) => (inView = e.isIntersecting), { rootMargin: "200px" });
+    let passed = false; // scrolled fully past it: the scene is finished, wherever the visitor went
+    const io = new IntersectionObserver(
+      ([e]) => {
+        inView = e.isIntersecting;
+        passed = !e.isIntersecting && e.boundingClientRect.bottom < 0;
+      },
+      { rootMargin: "200px" },
+    );
     io.observe(track);
     const tick = () => {
       frame = requestAnimationFrame(tick);
-      if (!inView) return;
-      const raw = clamp(-track.getBoundingClientRect().top / (window.innerHeight * PIN_VH), 0, 1);
+      if (!inView && !passed) return;
+      const raw = passed ? 1 : clamp(-track.getBoundingClientRect().top / (window.innerHeight * PIN_VH), 0, 1);
       if (raw >= 0.999) {
-        // Fully grown: it stays grown, scrolling back up included, so the loop ends here.
+        // Fully grown: it stays grown, scrolling back up included.
         progress.current.p = 1;
         hint.style.opacity = "1";
         hint.removeAttribute("inert");
-        cancelAnimationFrame(frame); // nothing left to drive
+        // Once the page is at rest the scroll spacer goes, so passing the section
+        // (up or down) takes one screen; the loop has nothing left to drive after that.
+        if (!isScrolling()) {
+          collapsePin(track, track.querySelector<HTMLElement>(".nw-stage")!);
+          cancelAnimationFrame(frame);
+        }
         return;
       }
       const p = raw;

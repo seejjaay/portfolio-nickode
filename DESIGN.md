@@ -264,7 +264,9 @@ Placeholder services, in order: **Data Engineering & Pipelines**, **SQL & Databa
 - Reduced motion: no pin; show the folder open with the five cards as a plain stacked list.
 - Mobile: same scene, `100svh` pin, folder about 300px wide, cards full width minus the 24px gutters. See section 12.1.
 
-### 7.4 What I've done (3D laptop, pinned 400vh)
+### 7.4 What I've done (3D laptop, pinned 220vh, then released)
+**Changed 2026-11-05:** scroll only opens the laptop now (pin 220vh, lid 0–0.35, carousel in 0.35–0.55 of the opening). The old 180vh carousel scrub is gone: cards are chosen with the buttons, dots or a swipe (on phones the pop-out cards glide to the chosen card). Once opened, and once the page is at rest, the scroll spacer is removed (`collapsePin` in `lib/scroll.ts`, the page is moved by the exact height that went away), so passing the section up or down costs one screen, open or closed. Clicking the keyboard still closes it; it stays shut until clicked open. Scrolling fully past the section also finishes it. Everything below this note about the 400vh scrub is superseded.
+
 Eyebrow `03 — SELECTED WORK`, title `WHAT I'VE DONE`. A 3D laptop (silver aluminium body in dark mode; same object in light) sits **closed** in the middle. As the user scrolls the lid opens; **only once it's open** does the project carousel appear on the screen, then the camera pushes in so the cards are large enough to read.
 - Build in three.js or CSS 3D: perspective 1800px, camera elevation about 12°, lid rotates on the rear hinge. Idle: ±1° slow float on the closed laptop.
 - 0–0.35: lid `rotateX 0° → 105°`, `--ease`; screen emissive 0 to 1; carousel layer hidden and non-interactive.
@@ -275,7 +277,9 @@ Eyebrow `03 — SELECTED WORK`, title `WHAT I'VE DONE`. A 3D laptop (silver alum
 - Clicking a card opens the Project Detail page.
 - Reduced motion: laptop already open, carousel visible, no pin.
 
-### 7.5 What I use (network sphere, pinned 300vh)
+### 7.5 What I use (network sphere, pinned 300vh, then released)
+**Changed 2026-11-05:** growth still follows scroll over 300vh. Once the network is complete and the page is at rest (or the visitor has scrolled fully past it), the scroll spacer is removed with `collapsePin`, so scrolling back up passes the section in one screen. It stays complete.
+
 Eyebrow `04 — TECH STACK`, title `WHAT I USE`. A 3D node-network sphere, about 600–700px, centered.
 - **Structure:** roughly spherical graph of connected nodes. Large circular logo nodes (1.5px ring, filled with `--bg`, monochrome logo inside) and small solid dot nodes at intersections. Edges vary 1px to 6px and 15–80% opacity; depth cue: back edges 15%, mid 27%, front 50%.
 - **Growth on scroll:** the model starts as one pulsing root node. Scroll progress drives a growth value 0 to 7 (one unit per graph generation).
@@ -294,7 +298,7 @@ Eyebrow `05 — ACHIEVEMENTS`, title `WHAT I HAVE ACHIEVED`. **Two infinite rows
 - **Card (16px radius, translucent surface, backdrop blur, 1px border):** small thumbnail left; meta line `CERTIFICATE · DATACAMP · 2026` (or `EVENT · HACKATHON · 2025`, `AWARD · CAPSTONE · 2024`); title (Oswald); `VIEW DETAILS →`.
 - Hover pauses the row and brightens the card (border strong, lift 4px). Edges fade via gradient mask. Rows stop on keyboard focus.
 - Clicking a card opens the matching modal (7.6.1 or 7.6.2).
-- **Added:** a `SEE MORE` button opens a filterable list of every achievement, newest first; its rows open the detail modal on top. Cards are buttons whose accessible name comes from their visible text (the loop's duplicate copy is out of the tab order and `aria-hidden`).
+- **SEE ALL (changed 2026-11-05):** the button sits centred above the rows (not sticky) and replaces SEE MORE and its list modal. It swaps the marquee for a grid of every achievement (3 columns, 2 under 1024px, 1 under 768px; newest first) with a suck-and-puke (`lib/vortex.ts`): the marquee pauses and every on-screen card spirals into the button (560ms, nearest first, accelerating, with a spin) while the button gulps (scale pulses and a ring); the layouts swap; the button burps and spits the grid cards back out into place one after another (720ms each, 34ms apart, one small overshoot). The label becomes SHOW LESS (chevron up) and the same thing runs in reverse: the grid is swallowed and the marquee's cards are spat out to their places, nearest first. Clicks during the animation are ignored. Under reduced motion the swap is instant. **How it is built (fixed 2026-11-05):** the real cards never animate. Each on-screen card gets a stand-in copy in a page-coordinate overlay (`.vortex-layer`, under the button), the real card is hidden while its copy flies and shown the moment it lands, and the marquee holds still during the swap. Animating the real cards left blank strips in the marquee: Chrome draws the moving track as one wide layer and sometimes never redrew a card into it after its own animation ended. Cards in the faint depth row are not flown. Each phase has a time cap and the end always restores every card, so nothing can stay hidden. Both layouts stay mounted; the hidden one is collapsed, `inert` and `aria-hidden`. Cards are buttons whose accessible name comes from their visible text; the marquee's duplicate copy is out of the tab order.
 - Modals use a native `<dialog>` (focus trap, Esc, focus return) with counted page-scroll locking.
 
 #### 7.6.1 Certificate modal
