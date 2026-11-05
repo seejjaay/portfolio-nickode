@@ -37,6 +37,9 @@ export function AchievementModal({ achievement, triggerRef, onClose }: Props) {
     <dialog
       ref={dialogRef}
       aria-labelledby={titleId}
+      // lockScroll() stops Lenis, and a stopped Lenis cancels every wheel and touch-move
+      // that is not inside a data-lenis-prevent element, which would freeze the modal's own scrolling.
+      data-lenis-prevent
       className={`achv-dialog ${achievement ? "" : "is-closing"}`}
       onCancel={(e) => {
         // Esc: close the zoom first, then the modal.
@@ -77,9 +80,12 @@ function ModalPanel({
 }) {
   const isEvent = a.kind === "event";
   return (
-    // Under 640px it is a full-screen sheet: media on top, the details scroll below,
-    // and the panel itself never scrolls, so the close button stays put.
-    <div className="achv-panel relative flex h-[680px] w-[1120px] max-w-[calc(100vw-48px)] overflow-hidden rounded-marquee border border-border-strong bg-surface shadow-[0_24px_60px_0_var(--shadow-modal)] max-lg:h-svh max-lg:w-full max-lg:max-w-none max-lg:flex-col max-lg:rounded-none max-lg:border-0">
+    // Under 1024px it is a full-screen sheet. The panel itself never scrolls (so the close
+    // button stays put); the inner wrapper does, carrying the media and the details together
+    // so the details get the whole screen once the image has scrolled away. On desktop the
+    // wrapper is `display: contents`, so the two columns lay out exactly as before.
+    <div className="achv-panel relative flex h-[680px] w-[1120px] max-w-[calc(100vw-48px)] overflow-hidden rounded-marquee border border-border-strong bg-surface shadow-[0_24px_60px_0_var(--shadow-modal)] max-lg:h-dvh max-lg:w-full max-lg:max-w-none max-lg:flex-col max-lg:rounded-none max-lg:border-0">
+      <div className="contents max-lg:block max-lg:min-h-0 max-lg:flex-1 max-lg:overflow-y-auto max-lg:overscroll-contain">
       <div className="relative h-full w-[600px] shrink-0 overflow-hidden [background:linear-gradient(123.57deg,var(--media-from)_0%,var(--media-to)_71.429%)] max-lg:h-auto max-lg:w-full">
         {isEvent ? (
           <EventMedia a={a} />
@@ -88,7 +94,7 @@ function ModalPanel({
         )}
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-[22px] px-10 pb-10 pt-12 max-lg:min-h-0 max-lg:gap-5 max-lg:overflow-y-auto max-lg:overscroll-contain max-lg:px-6 max-lg:pb-10 max-lg:pt-6">
+      <div className="flex min-w-0 flex-1 flex-col gap-[22px] px-10 pb-10 pt-12 max-lg:gap-5 max-lg:px-6 max-lg:pb-[max(40px,env(safe-area-inset-bottom))] max-lg:pt-6">
         <div className="flex flex-wrap gap-2">
           {a.tags.map((tag) => (
             <span
@@ -141,6 +147,7 @@ function ModalPanel({
             <SocialRow a={a} />
           </>
         )}
+      </div>
       </div>
 
       <button

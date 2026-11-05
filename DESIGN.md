@@ -424,7 +424,7 @@ Figma shows 1440 desktop only. Rules for the rest:
 - **Network:** smaller (about 340px), touch-drag, labels on tap.
 - **Marquees:** same two rows, smaller cards, slower speed.
 - **Experience:** accordion unchanged; the two expanded columns stack; the dust scene runs shorter (150vh).
-- **Modals:** full-screen sheets under 1024px (not just phones): image on top, details scroll below; the certificate zooms upright or sideways, whichever fills the screen more.
+- **Modals:** full-screen sheets under 1024px (not just phones): image on top, details below, and the whole sheet scrolls as one (the close button stays fixed) so the details are never boxed into a small window; the certificate zooms upright or sideways, whichever fills the screen more.
 - **Nav:** the burger drawer at every width. **Theme toggle:** in the drawer footer on desktop; under 768px a 44px round sun/moon button also sits beside the burger so it stays visible (this settles the earlier contradiction between this section and 5.2).
 - Touch targets at least 44px. Pinned scenes use `100svh`.
 
