@@ -7,7 +7,7 @@ export function StackSection() {
   return (
     <section id="stack">
       <div className="pb-14 pt-[72px]">
-        <SectionHeader eyebrow="04 — TECH STACK" title="WHAT I USE" />
+        <SectionHeader eyebrow="05 — TECH STACK" title="WHAT I USE" />
       </div>
       <StackScene />
     </section>

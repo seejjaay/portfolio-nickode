@@ -7,7 +7,7 @@ import { AchievementRows } from "./AchievementRows";
 export function AchievementsSection() {
   return (
     <section id="achievements" className="relative flex flex-col gap-14 py-[72px]">
-      <SectionHeader eyebrow="05 — ACHIEVEMENTS" title="WHAT I HAVE ACHIEVED" />
+      <SectionHeader eyebrow="06 — ACHIEVEMENTS" title="WHAT I HAVE ACHIEVED" />
       <AchievementRows />
     </section>
   );

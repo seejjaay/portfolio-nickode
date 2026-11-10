@@ -12,7 +12,15 @@ const RINGS = [260, 420, 580, 740];
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 const parse = (d: string) => d.split(":").reduce((a, n) => a * 60 + Number(n), 0);
 
-export function VideoPlayer({ video, title }: { video: Project["video"]; title: string }) {
+export function VideoPlayer({
+  video,
+  title,
+  label = "PROJECT DEMO",
+}: {
+  video: Project["video"];
+  title: string;
+  label?: string;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
   const boxRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -86,7 +94,7 @@ export function VideoPlayer({ video, title }: { video: Project["video"]; title: 
       )}
 
       <p className="absolute left-8 top-7 font-display text-[12px] uppercase leading-[1.4] tracking-[0.18em] text-text-muted">
-        PROJECT DEMO · {video.duration}
+        {label} · {video.duration}
       </p>
 
       <button

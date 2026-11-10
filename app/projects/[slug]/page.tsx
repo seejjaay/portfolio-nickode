@@ -8,6 +8,8 @@ import { ProjectNav } from "@/components/project/ProjectNav";
 import { RepoCard } from "@/components/project/RepoCard";
 import { TechChips } from "@/components/project/TechChips";
 import { VideoPlayer } from "@/components/project/VideoPlayer";
+import { Reveal } from "@/components/ui/Reveal";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { projects } from "@/content/projects";
 
 /* Project Detail (DESIGN.md 8, Figma 15:2 dark / 59:1255 light): one static page
@@ -32,10 +34,12 @@ export default async function ProjectPage({ params }: Props) {
   const prev = projects[(i - 1 + projects.length) % projects.length];
   const next = projects[(i + 1) % projects.length];
 
+  // Keyed by slug so going previous/next remounts the page and plays it again.
   return (
-    <div className="flex flex-col gap-24">
+    <div key={slug} className="flex flex-col gap-24">
+      <ScrollProgress />
       <ProjectHeader project={project} />
-      <div className="-mt-10 px-[var(--gutter)]">
+      <div data-reveal="zoom" className="-mt-10 px-[var(--gutter)]">
         <VideoPlayer video={project.video} title={project.title} />
       </div>
       <Overview project={project} />
@@ -44,6 +48,7 @@ export default async function ProjectPage({ params }: Props) {
       <TechChips tech={project.tech} />
       <RepoCard repo={project.repo} />
       <ProjectNav prev={prev} next={next} />
+      <Reveal />
     </div>
   );
 }
