@@ -15,7 +15,7 @@ export function ContactSection() {
         data-swarm-target
         className="font-display text-[13px] font-normal uppercase leading-[1.4] tracking-[0.18em] text-text-muted"
       >
-        07 — CONTACT
+        08 — CONTACT
       </p>
       <h2
         data-swarm-target

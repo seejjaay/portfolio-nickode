@@ -179,36 +179,26 @@ export function Gallery({ screenshots }: { screenshots: Shot[] }) {
 
   return (
     <div>
-      <SectionHeader eyebrow="03 — GALLERY" title="SCREENSHOTS" />
+      <SectionHeader reveal eyebrow="03 — GALLERY" title="SCREENSHOTS" />
       <div className="mt-12 flex flex-col gap-12 px-[var(--gutter)]">
         <div className="grid gap-6 lg:grid-cols-[772fr_404fr]">
           {a && (
-            <Card
-              shot={a}
-              index={0}
-              onOpen={openAt}
-              className="h-[300px] lg:h-[440px]"
-            />
+            <div data-reveal="zoom">
+              <Card shot={a} index={0} onOpen={openAt} className="h-[300px] lg:h-[440px]" />
+            </div>
           )}
           {b && (
-            <Card
-              shot={b}
-              index={1}
-              onOpen={openAt}
-              className="h-[300px] lg:h-[440px]"
-            />
+            <div data-reveal="zoom" style={{ "--i": 1 } as React.CSSProperties}>
+              <Card shot={b} index={1} onOpen={openAt} className="h-[300px] lg:h-[440px]" />
+            </div>
           )}
         </div>
         {rest.length > 0 && (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {rest.map((s, i) => (
-              <Card
-                key={s.caption}
-                shot={s}
-                index={i + 2}
-                onOpen={openAt}
-                className="h-[300px]"
-              />
+              <div key={s.caption} data-reveal="zoom" style={{ "--i": i % 3 } as React.CSSProperties}>
+                <Card shot={s} index={i + 2} onOpen={openAt} className="h-[300px]" />
+              </div>
             ))}
           </div>
         )}

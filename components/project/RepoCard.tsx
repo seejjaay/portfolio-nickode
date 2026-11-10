@@ -9,8 +9,8 @@ export function RepoCard({ repo }: { repo: Project["repo"] }) {
   const stat = "flex min-h-[25px] items-center gap-[8px] font-display text-[12px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text-2";
   return (
     <div>
-      <SectionHeader eyebrow="05 — SOURCE CODE" title="GITHUB REPOSITORY" />
-      <div className="mt-12 px-[var(--gutter)]">
+      <SectionHeader reveal eyebrow="05 — SOURCE CODE" title="GITHUB REPOSITORY" />
+      <div className="mt-12 px-[var(--gutter)]" data-reveal="zoom">
         <div className="flex flex-col gap-8 rounded-card border border-border bg-surface/60 p-[41px] backdrop-blur-sm md:flex-row md:items-center md:justify-between">
           <div className="min-w-0 max-w-[867px]">
             <p className="flex items-center gap-[14px] font-display text-[clamp(20px,5.5vw,28px)] font-medium leading-[1.2] text-text">

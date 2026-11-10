@@ -9,6 +9,7 @@ import { gsap, scrollToSection, scrollToY } from "@/lib/scroll";
 const links = [
   { id: "about", label: "ABOUT" },
   { id: "services", label: "WHAT I OFFER" },
+  { id: "process", label: "HOW WE'LL WORK" },
   { id: "work", label: "WHAT I'VE DONE" },
   { id: "stack", label: "WHAT I USE" },
   { id: "achievements", label: "WHAT I HAVE ACHIEVED" },
@@ -66,8 +67,8 @@ const pad = (n: number) => String(n + 1).padStart(2, "0");
 export function Nav() {
   const pathname = usePathname();
   const onHome = pathname === "/";
-  // On a project page the Projects link is the active one (Figma 15:2).
-  const active = useActiveSection(onHome) ?? (pathname.startsWith("/projects/") ? "work" : null);
+  // On a project page the Projects link is the active one (Figma 15:2); on /process, How we'll work.
+  const active = useActiveSection(onHome) ?? (pathname.startsWith("/projects/") ? "work" : pathname === "/process" ? "process" : null);
   const [open, setOpen] = useState(false);
 
   const headerRef = useRef<HTMLElement>(null);

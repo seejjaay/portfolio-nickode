@@ -827,6 +827,199 @@
     background: var(--screen-text);
   }
 
+  /* ---- How we'll work: process rail (DESIGN.md 7.3.2) -----------------------
+     Pinned 200vh. ProcessScene turns scroll progress into the drawn line, the
+     sideways pan and each step lighting up (the --lit variable, 0 to 1). */
+  .pr-track {
+    --pr-w: 300px;
+  }
+
+  .pr-track::after {
+    content: "";
+    display: block;
+    height: 200vh;
+  }
+
+  .pr-track.is-played::after {
+    display: none;
+  }
+
+  .pr-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    min-height: 560px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-top: 96px;
+    padding-bottom: 48px;
+  }
+
+  /* A real horizontal scroller (no visible bar): the scene sets scrollLeft until
+     the visitor takes over with a swipe, a sideways wheel, a mouse drag, the
+     arrows or the keyboard. */
+  .pr-rail {
+    position: relative;
+    margin-block: auto;
+    padding-block: 32px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    cursor: grab;
+  }
+
+  .pr-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pr-rail.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .pr-arrow {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-strong);
+    border-radius: 9999px;
+    color: var(--text);
+    transition: border-color 300ms var(--ease), opacity 300ms var(--ease);
+  }
+
+  .pr-arrow:hover:not(:disabled) {
+    border-color: var(--text);
+  }
+
+  .pr-arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .pr-row {
+    position: relative;
+    display: flex;
+    width: max-content;
+    padding-inline: var(--gutter);
+  }
+
+  /* The line runs from the first marker's centre to the last one's. */
+  .pr-line,
+  .pr-progress {
+    position: absolute;
+    top: 9px;
+    height: 1px;
+    left: calc(var(--gutter) + 10px);
+    right: calc(var(--gutter) + var(--pr-w) - 10px);
+  }
+
+  .pr-line {
+    background: var(--border-strong);
+  }
+
+  .pr-progress {
+    background: var(--text);
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  .pr-step {
+    --lit: 0;
+    flex: none;
+    width: var(--pr-w);
+    padding-right: 32px;
+  }
+
+  .pr-mark {
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border-strong);
+    border-radius: 9999px;
+    background: var(--bg);
+  }
+
+  .pr-mark-fill {
+    position: absolute;
+    inset: 4px;
+    border-radius: 9999px;
+    background: var(--text);
+    opacity: var(--lit);
+  }
+
+  .pr-body {
+    margin-top: 24px;
+    transform: translateY(calc((1 - var(--lit)) * 8px));
+  }
+
+  .pr-index {
+    color: var(--text-muted);
+  }
+
+  .pr-title {
+    color: color-mix(in srgb, var(--text) calc(var(--lit) * 100%), var(--text-muted));
+  }
+
+  .pr-gist {
+    color: color-mix(in srgb, var(--text-2) calc(var(--lit) * 100%), var(--text-muted));
+  }
+
+  /* Reduced motion: no pin, no line; the six steps sit in a grid, all lit. */
+  @media (prefers-reduced-motion: reduce) {
+    .pr-track::after {
+      display: none;
+    }
+
+    .pr-stage {
+      position: relative;
+      height: auto;
+      min-height: 0;
+    }
+
+    .pr-rail {
+      overflow: visible;
+      cursor: auto;
+    }
+
+    .pr-arrows {
+      display: none;
+    }
+
+    .pr-row {
+      display: grid;
+      width: auto;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px 32px;
+    }
+
+    .pr-line,
+    .pr-progress {
+      display: none;
+    }
+
+    .pr-step {
+      --lit: 1 !important;
+      width: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) and (max-width: 767px) {
+    .pr-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .pr-track {
+      --pr-w: 260px;
+    }
+  }
+
   /* ---- What I use: network scene (DESIGN.md 7.5) ----------------------------
      Pinned 300vh; StackScene feeds scroll progress to the network canvas. */
   .nw-track::after {
@@ -1753,5 +1946,95 @@
 
   :root[data-theme="light"] .theme-icon-moon {
     display: block;
+  }
+
+  /* ---- Inner-page motion (DESIGN.md 9.1) ------------------------------------
+     Pages other than home (/process, /projects/[slug]). Two attributes:
+     data-enter  plays on load, pure CSS, for the first screen (no JS wait).
+     data-reveal is added by <Reveal /> when the element scrolls into view.
+     Both stagger with --i (a small integer). Only transform and opacity. */
+  @keyframes enter-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+  }
+
+  [data-enter] {
+    animation: enter-up 800ms var(--ease) backwards;
+    animation-delay: calc(60ms + var(--i, 0) * 90ms);
+  }
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    transition:
+      opacity 700ms var(--ease),
+      transform 700ms var(--ease);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  [data-reveal="pop"] {
+    transform: scale(0.6);
+  }
+
+  [data-reveal="zoom"] {
+    transform: translate3d(0, 24px, 0) scale(0.97);
+  }
+
+  [data-reveal="grow-x"],
+  [data-reveal="grow-y"] {
+    opacity: 1;
+    transition-duration: 1000ms;
+  }
+
+  [data-reveal="grow-x"] {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  [data-reveal="grow-y"] {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Reading progress under the nav (ScrollProgress). */
+  .read-progress {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 45;
+    height: 2px;
+    background: var(--text);
+    transform: scaleX(0);
+    transform-origin: left;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-enter] {
+      animation: none !important;
+    }
+
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+
+    .read-progress {
+      display: none;
+    }
+  }
+
+  @media (scripting: none) {
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+    }
   }
 }

@@ -5,7 +5,7 @@ This file is the build spec for the portfolio. The matching Figma file is the vi
 - **Figma file key:** `lyivE8qd8BlzVDRmFzWD2m` (see section 14 for node IDs)
 - **Precedence:** Figma for layout, spacing and copy. This file for motion, interaction, tokens and build decisions. Where they disagree, ask before guessing.
 - **Figma shows desktop at 1440 wide.** Mobile (390) frames are specified in section 12.1 and are being added to Figma; until they exist, section 12 is the source for mobile. Tablet is by rules only.
-- **Status:** build steps 1–12 are done. A second change batch (section 15, steps 13–19: hero fit, shorter intro, services section, mountain redraw + dust, mobile pass, two removals) is specified here and **not yet built**. Where the build departs from the spec below, the relevant section is edited in place and section 17 lists every departure, the batch, and what is still open (including which Figma frames are still stale).
+- **Status:** build steps 1–12 are done; a third batch (steps 20–24, process section and `/process` page) was specified 2026-11-10. A second change batch (section 15, steps 13–19: hero fit, shorter intro, services section, mountain redraw + dust, mobile pass, two removals) is specified here and **not yet built**. Where the build departs from the spec below, the relevant section is edited in place and section 17 lists every departure, the batch, and what is still open (including which Figma frames are still stale).
 
 ---
 
@@ -22,13 +22,14 @@ A black-and-white editorial portfolio for **NICK.ODE**, set against a calm space
 3. About Me (wave transition in, dot-matrix portrait)
 4. Titles divider (two marquees)
 5. What can I offer (services: a folder that opens and deals out a deck of cards)
-6. What I've done (3D laptop, project carousel)
-7. What I use (growing network sphere)
-8. What I have achieved (two-row marquee + modals)
-9. Where I've been so far (mountain turns to dust, experience accordion)
-10. Contact + footer
+6. How we'll work (a line drawn left to right through six steps)
+7. What I've done (3D laptop, project carousel)
+8. What I use (growing network sphere)
+9. What I have achieved (two-row marquee + modals)
+10. Where I've been so far (swarm-built experience accordion)
+11. Contact + footer
 
-Plus a **Project Detail** page and two **achievement modals** (certificate, event). Dark and light themes both ship.
+Plus a **Project Detail** page, a **Process & pricing** page (section 8.1) and two **achievement modals** (certificate, event). Dark and light themes both ship.
 
 ---
 
@@ -127,18 +128,19 @@ Fixed, full-viewport, behind everything. Sections are transparent so stars show 
 
 ### 5.2 Navigation
 **As built (replaces the original top bar at every width):** no bar. The `NICK.ODE` logo and a burger float over the page; the burger opens a right-side dialog drawer (GSAP: burger morphs to a close icon in place, scrim fades, panel slides, links stagger in; reversed a little faster to close). The page is **not** scroll-locked while the drawer is open. Links, in this order and wording:
-`ABOUT` · `WHAT I OFFER` · `WHAT I'VE DONE` · `WHAT I USE` · `WHAT I HAVE ACHIEVED` · `WHERE I'VE BEEN SO FAR` · `CONTACT`
+`ABOUT` · `WHAT I OFFER` · `HOW WE'LL WORK` · `WHAT I'VE DONE` · `WHAT I USE` · `WHAT I HAVE ACHIEVED` · `WHERE I'VE BEEN SO FAR` · `CONTACT`
 Active link uses `--text` with a 1px underline; others `--text-muted`. Active state follows scroll position (the last section whose top has crossed a probe line at 40% of the viewport); About is active until a later section takes over. On `/projects/[slug]` the `WHAT I'VE DONE` link is the active one. Links glide to their section (smooth scroll). The theme toggle lives in the drawer.
 
 ### 5.3 Section headers
 Eyebrow with number, big Oswald title, 1px divider (`--border`) beneath, left-aligned.
 - `02 — WHAT I OFFER` / WHAT CAN I OFFER
-- `03 — SELECTED WORK` / WHAT I'VE DONE
-- `04 — TECH STACK` / WHAT I USE
-- `05 — ACHIEVEMENTS` / WHAT I HAVE ACHIEVED
-- `06 — EXPERIENCE` / WHERE I'VE BEEN SO FAR
-- `07 — CONTACT` / LET'S WORK TOGETHER
-About uses the eyebrow `DISCOVER` and no numeral (the giant faded `01` was removed). The old numbers 02–06 each moved down one when services became 02.
+- `03 — PROCESS` / HOW WE'LL WORK
+- `04 — SELECTED WORK` / WHAT I'VE DONE
+- `05 — TECH STACK` / WHAT I USE
+- `06 — ACHIEVEMENTS` / WHAT I HAVE ACHIEVED
+- `07 — EXPERIENCE` / WHERE I'VE BEEN SO FAR
+- `08 — CONTACT` / LET'S WORK TOGETHER
+About uses the eyebrow `DISCOVER` and no numeral (the giant faded `01` was removed). The old numbers 02–06 each moved down one when services became 02, and 03–07 moved down again when the process section became 03.
 
 ### 5.4 Components
 - **Primary button:** solid `--text` background, `--text-inverse` text, Oswald uppercase, 4px radius. Hover: lift 2px and soft glow (dark) or soft shadow (light).
@@ -264,10 +266,24 @@ Placeholder services, in order: **Data Engineering & Pipelines**, **SQL & Databa
 - Reduced motion: no pin; show the folder open with the five cards as a plain stacked list.
 - Mobile: same scene, `100svh` pin, folder about 300px wide, cards full width minus the 24px gutters. See section 12.1.
 
+### 7.3.2 How we'll work (process rail; pinned 200vh)
+Sits directly **below What I offer**. Eyebrow `03 — PROCESS`, title `HOW WE'LL WORK` (the drawer link is `HOW WE'LL WORK`, id `process`). The gist of how a freelance engagement runs, with a button to the full page (8.1). **Not drawn in Figma**; this section is the spec.
+
+- **Steps (six, from `content/process.ts`):** `01 Discuss`, `02 Quote`, `03 Sign`, `04 Kick off in MilePlan`, `05 Build & review`, `06 Deliver`. Each has a one-line gist (Source Serif, about two lines).
+- **Rail:** one horizontal 1px `--border` line through six step nodes laid out left to right (about 300px per step, 260px on phones, so the row is wider than the screen). Each node: a circle marker on the line, the index (Oswald, muted), the title (Oswald) and the gist. A `--text` progress line sits over the border line.
+- **Scroll map (pin 200vh, CSS sticky stage, progress from the track's position as in 7.5):**
+  - 0–1: the progress line grows `scaleX 0 → 1`, and the row pans left (`translateX 0 → -(rowWidth - stageWidth)`, `--ease`) so the head of the line stays in view.
+  - Step *n* lights as the line reaches its marker: the marker fills with `--text` (opacity), the title and gist go from `--text-muted` to `--text` / `--text-2` (a `--lit` variable, 0 to 1), 8px rise. The pan and the line use `transform` only. The header sits inside the pinned stage so it stays on screen.
+  - Once complete it stays complete; when the page is at rest the scroll spacer is removed (`collapsePin`), so scrolling back up passes the section in one screen.
+- **Free horizontal scroll:** the rail is a real horizontal scroller (no visible bar). Scroll drives its position until the visitor takes over: a swipe, a sideways wheel or trackpad gesture, a mouse drag (grab cursor), the keyboard (the rail is focusable; arrow keys) or the round prev/next buttons (one step per click, disabled at the ends, bottom right next to the button). From then on the pan is theirs while the line and the lit steps keep following vertical scroll; scrolling back above the scene hands the pan back to the scrub. `overscroll-behavior-x: contain` stops a sideways swipe from triggering browser back. The buttons are hidden under reduced motion (the grid has nothing to scroll).
+- **Button:** below the rail, always visible and focusable (not tied to progress): primary `PRICES & PROCESS →` linking to `/process`, plus a text link `DOWNLOAD PRICE LIST ↓` to the PDF.
+- Reduced motion: no pin and no line; the steps sit in a static grid, all lit (3×2 desktop, a vertical list under 768px).
+- Mobile: same scene, `100svh` stage, 24px gutters.
+
 ### 7.4 What I've done (3D laptop, pinned 220vh, then released)
 **Changed 2026-11-05:** scroll only opens the laptop now (pin 220vh, lid 0–0.35, carousel in 0.35–0.55 of the opening). The old 180vh carousel scrub is gone: cards are chosen with the buttons, dots or a swipe (on phones the pop-out cards glide to the chosen card). Once opened, and once the page is at rest, the scroll spacer is removed (`collapsePin` in `lib/scroll.ts`, the page is moved by the exact height that went away), so passing the section up or down costs one screen, open or closed. Clicking the keyboard still closes it; it stays shut until clicked open. Scrolling fully past the section also finishes it. Everything below this note about the 400vh scrub is superseded.
 
-Eyebrow `03 — SELECTED WORK`, title `WHAT I'VE DONE`. A 3D laptop (silver aluminium body in dark mode; same object in light) sits **closed** in the middle. As the user scrolls the lid opens; **only once it's open** does the project carousel appear on the screen, then the camera pushes in so the cards are large enough to read.
+Eyebrow `04 — SELECTED WORK`, title `WHAT I'VE DONE`. A 3D laptop (silver aluminium body in dark mode; same object in light) sits **closed** in the middle. As the user scrolls the lid opens; **only once it's open** does the project carousel appear on the screen, then the camera pushes in so the cards are large enough to read.
 - Build in three.js or CSS 3D: perspective 1800px, camera elevation about 12°, lid rotates on the rear hinge. Idle: ±1° slow float on the closed laptop.
 - 0–0.35: lid `rotateX 0° → 105°`, `--ease`; screen emissive 0 to 1; carousel layer hidden and non-interactive.
 - 0.35–0.55: carousel fades/slides in on the screen (`translateY 24px → 0`, 700ms feel, 80ms stagger on cards).
@@ -280,7 +296,7 @@ Eyebrow `03 — SELECTED WORK`, title `WHAT I'VE DONE`. A 3D laptop (silver alum
 ### 7.5 What I use (network sphere, pinned 300vh, then released)
 **Changed 2026-11-05:** growth still follows scroll over 300vh. Once the network is complete and the page is at rest (or the visitor has scrolled fully past it), the scroll spacer is removed with `collapsePin`, so scrolling back up passes the section in one screen. It stays complete.
 
-Eyebrow `04 — TECH STACK`, title `WHAT I USE`. A 3D node-network sphere, about 600–700px, centered.
+Eyebrow `05 — TECH STACK`, title `WHAT I USE`. A 3D node-network sphere, about 600–700px, centered.
 - **Structure:** roughly spherical graph of connected nodes. Large circular logo nodes (1.5px ring, filled with `--bg`, monochrome logo inside) and small solid dot nodes at intersections. Edges vary 1px to 6px and 15–80% opacity; depth cue: back edges 15%, mid 27%, front 50%.
 - **Growth on scroll:** the model starts as one pulsing root node. Scroll progress drives a growth value 0 to 7 (one unit per graph generation).
   - An edge of generation *g* starts growing at growth = *g−1* and finishes at *g* (`--ease`); a child's edges start only once the child node has appeared.
@@ -294,7 +310,7 @@ Eyebrow `04 — TECH STACK`, title `WHAT I USE`. A 3D node-network sphere, about
 - Reduced motion / low power: show the finished network as a static image.
 
 ### 7.6 What I have achieved
-Eyebrow `05 — ACHIEVEMENTS`, title `WHAT I HAVE ACHIEVED`. **Two infinite rows of cards:** top row scrolls **left**, bottom row scrolls **right**, offset so cards don't align; a faint third row below at low opacity and blurred for depth. No stat numbers (removed). Every card is a certificate or an event.
+Eyebrow `06 — ACHIEVEMENTS`, title `WHAT I HAVE ACHIEVED`. **Two infinite rows of cards:** top row scrolls **left**, bottom row scrolls **right**, offset so cards don't align; a faint third row below at low opacity and blurred for depth. No stat numbers (removed). Every card is a certificate or an event.
 - **Card (16px radius, translucent surface, backdrop blur, 1px border):** small thumbnail left; meta line `CERTIFICATE · DATACAMP · 2026` (or `EVENT · HACKATHON · 2025`, `AWARD · CAPSTONE · 2024`); title (Oswald); `VIEW DETAILS →`.
 - Hover pauses the row and brightens the card (border strong, lift 4px). Edges fade via gradient mask. Rows stop on keyboard focus.
 - Clicking a card opens the matching modal (7.6.1 or 7.6.2).
@@ -311,7 +327,7 @@ Centered modal (about 1120×680) over a scrim (`rgba(bg, .72)`), close `✕` top
 Same shell. **Left:** photo carousel with `02 / 05` counter pill (top-left), prev/next round buttons, image placeholder, and a thumbnail strip of 5 (active thumbnail has a strong border). **Right:** tags (`EVENT`, `SPEAKER`, `TECH CONFERENCE`, `2025`), title, meta grid (Event, Date, Location, Role), description, then `SEE THE POST` with the same `LINKEDIN POST ↗` button and social icons. Arrow keys and swipe change photos.
 
 ### 7.7 Where I've been so far (swarm build, then accordion)
-Eyebrow `06 — EXPERIENCE`, title `WHERE I'VE BEEN SO FAR`. **The mountain, dust and orb are removed.** The section is now built live by a swarm of multicolor cursors (`lib/swarm.ts`, `components/swarm/SwarmBuild.tsx`, shared with Contact, 7.8). It replaces the old mountain scene (user decision, 2026-11-04).
+Eyebrow `07 — EXPERIENCE`, title `WHERE I'VE BEEN SO FAR`. **The mountain, dust and orb are removed.** The section is now built live by a swarm of multicolor cursors (`lib/swarm.ts`, `components/swarm/SwarmBuild.tsx`, shared with Contact, 7.8). It replaces the old mountain scene (user decision, 2026-11-04).
 - **Targets:** every block marked `data-swarm-target` (the header and each role row; on Contact the eyebrow, headline, paragraph, the three detail blocks and the form). Each starts hidden and is built once, then stays built (no replay on scroll back or re-entry).
 - **Agents:** five, named Layout, Type, Motion, Color and Copy, each a Figma-style arrow cursor with a name pill, in the `--agent-1..5` tokens (coral, amber, mint, blue, violet; the only multicolor in the site, by request). Each behaves like a separate person on a separate mouse, with its own speed (0.8–1.3×) and hand shake. Blocks are claimed by a random free agent, 90–420ms apart, up to five at once.
 - **Arriving:** an agent with nothing on screen either flies in from a random screen edge (left, right, or top/bottom when that edge is inside the section) or, about one time in three, pops into existence 120–300px from where it is needed. Paths are curved and slightly shaky, never straight lines.
@@ -326,7 +342,7 @@ Eyebrow `06 — EXPERIENCE`, title `WHERE I'VE BEEN SO FAR`. **The mountain, dus
 - Reduced motion: nothing is hidden and nothing runs; the final section is simply there.
 
 ### 7.8 Contact
-Eyebrow `07 — CONTACT`. Oversized Oswald headline `LET'S WORK TOGETHER`, a short Source Serif 4 invitation. Two columns: left has **EMAIL**, **LOCATION**, **SOCIALS** (GitHub, LinkedIn, Instagram as text links with `↗`); right has a minimal form (Name, Email, Message) with underline inputs (1px bottom border at `--border-strong`, full `--text` on focus) and a primary `SEND MESSAGE →` button. Validate client-side. **Submit target decided:** `POST /api/contact` emails through Resend (honeypot field, fill-time check, rate limit, header-injection safe); `RESEND_API_KEY=dry-run` logs instead of sending; `.env.example` documents the variables. Contact details live in `content/contact.ts`.
+Eyebrow `08 — CONTACT`. Oversized Oswald headline `LET'S WORK TOGETHER`, a short Source Serif 4 invitation. Two columns: left has **EMAIL**, **LOCATION**, **SOCIALS** (GitHub, LinkedIn, Instagram as text links with `↗`); right has a minimal form (Name, Email, Message) with underline inputs (1px bottom border at `--border-strong`, full `--text` on focus) and a primary `SEND MESSAGE →` button. Validate client-side. **Submit target decided:** `POST /api/contact` emails through Resend (honeypot field, fill-time check, rate limit, header-injection safe); `RESEND_API_KEY=dry-run` logs instead of sending; `.env.example` documents the variables. Contact details live in `content/contact.ts`.
 
 **Swarm build (added 2026-11-04):** Contact is built live by the same cursor swarm as Experience (7.7); targets are the eyebrow, headline, invitation, the three detail blocks and the form.
 
@@ -347,6 +363,17 @@ Same nav (Projects active), same background. Order of content:
 7. **GitHub repository** (`05 — SOURCE CODE`): wide card with the `github.com/username/project-four` path, short description, stars, forks, language dot, license, and a primary `VIEW ON GITHUB ↗` button. Optionally fetch stars/forks from the GitHub API at build time.
 8. **Previous / Next project** links at the bottom (`← PREVIOUS PROJECT` / `NEXT PROJECT →`) with large titles. Then the footer.
 
+### 8.1 Page: Process & pricing (`/process`)
+
+Static page, same nav (How we'll work active), same background, same conventions as Project Detail: sections 96px apart, `SectionHeader`, tokens only. **Not drawn in Figma.** Content lives in `content/process.ts` and `content/pricing.ts`.
+1. **Header:** `← BACK TO HOME` (to `/#process`), eyebrow `FREELANCE · 2026`, giant Oswald title `HOW WE'LL WORK`, one-line summary. Buttons: primary `DOWNLOAD PRICE LIST (PDF) ↓` (a plain `<a download>` to the file in `public/pricing`), secondary `START A PROJECT →` (to `/#contact`).
+2. **The process** (`01 — THE PROCESS`): the six steps as a numbered vertical list on the same rail motif (static), each with a detail paragraph and short `YOU DO` / `YOU GET` lists. Step 3 names the four documents (service contract, project agreement, SRS, milestone plan).
+3. **MilePlan** (`02 — MILEPLAN`, title `WHERE YOUR PROJECT LIVES`): an intro, the walkthrough clip in the project `VideoPlayer`, a caption that the names and figures in the clip are made up (the clip shows the same 50% downpayment as the price list; if it is ever re-cut with a different split, say so here), then a 3-up grid of what the client can do in the portal (follow the milestone route, approve or request changes, upload payment proof, acknowledge plan changes, message, keep the signed documents; the project becomes a read-only record at close-out).
+4. **Pricing** (`03 — PRICING`, title `WHAT IT COSTS`): three groups (Web development, Application development, Simple & student projects). The first two are 3-up package cards: name, `FROM ₱3,500` (Oswald), italic timeline, summary, inclusions. Simple & student projects are 4-up compact cards. Then two columns: the add-ons as a hairline table and `HOW IT WORKS` (start, payment, revisions, not included, delivery). A disclaimer line (starting prices, valid through 2026) and a second PDF button.
+5. **Closing call:** `HAVE A PROJECT IN MIND?` with a primary `LET'S TALK →` to `/#contact`. Footer as usual.
+- Responsive: package cards 3 → 2 → 1 columns at lg and md; add-ons and terms stack under md; no horizontal scroll at 390.
+- The price list PDF, `content/pricing.ts` and `mileplan/templates/prices.json` carry the same prices and change together.
+
 ---
 
 ## 9. Motion catalog (quick reference)
@@ -366,6 +393,17 @@ Same nav (Projects active), same background. Order of content:
 | Scroll reveals | scroll | — | fade up 24px, 700ms, 80ms stagger |
 
 General rules: ease with `--ease`; hover transitions 300–400ms; no bouncing except where specified; honor `prefers-reduced-motion` everywhere (each scene above lists its fallback). Never animate layout properties in scrubbed scenes; use `transform` and `opacity`.
+
+### 9.1 Inner-page motion (added 2026-11-10)
+
+The pages other than home (`/process`, `/projects/[slug]`) get a light, scroll-aware layer so they feel alive without competing with the home set pieces. It is CSS plus three small client pieces; nothing is pinned or scrubbed. Home does not use it (`SectionHeader` only reveals when passed `reveal`).
+- **Enter (`data-enter`):** the first screen (back link, eyebrow, title, summary, meta, buttons) rises 20px and fades in, 800ms `--ease`, staggered 90ms by `--i`. Pure CSS keyframes, so it plays on first paint without waiting for JS and does not hold back LCP.
+- **Reveal (`data-reveal`, `components/ui/Reveal.tsx`):** everything below the fold fades and rises 24px (700ms, 90ms stagger, columns restart the stagger per row) as it enters the viewport, once. Variants: `zoom` (rises and settles from 97%), `pop` (step markers, from 60%), `grow-x` (section divider draws left to right) and `grow-y` (the connector between process steps draws downward). Elements already scrolled past on load are shown at once.
+- **Section headers:** with `reveal`, the eyebrow and title rise in and the divider line draws across.
+- **Reading progress (`ScrollProgress`):** a 2px `--text` line along the very top, filling with page scroll, under the nav.
+- **Price count-up (`CountUp`):** each package price counts up from 0 over about 1.1s the first time it is 60% on screen. The final value is in the HTML and an invisible copy holds the width, so nothing shifts.
+- **Previous / next project:** the project page is keyed by slug, so moving between projects remounts it and the enter and reveal play again.
+- **Safety:** under `prefers-reduced-motion` and with scripting off everything is simply shown (CSS, not JS), and the progress line is hidden. Only `transform` and `opacity` animate. Animate a wrapper, not an element that has its own hover transition (the price cards are an `li` wrapper around the card).
 
 ---
 
@@ -408,6 +446,14 @@ type Role = { id: string; period: string; title: string; company: string; locati
   related: { type: 'project' | 'event'; refId: string; date: string; title: string; text: string }[] };
 
 type Tech = { name: string; logo: string; weight: 1 | 2 | 3 }; // weight sets node size
+```
+
+```ts
+type ProcessStep = { id: string; index: number; title: string; gist: string; detail: string; youDo: string[]; youGet: string[] };
+type Package = { name: string; from: number; timeline?: string; summary: string; inclusions?: string[] };
+type PriceGroup = { id: string; title: string; kicker: string; packages: Package[] };
+// content/process.ts also holds the MilePlan intro, its clip { src, poster, duration } and its feature cards;
+// content/pricing.ts holds groups, addOns { label, price }[], terms { label, text }[], the disclaimer and the PDF { href, file, label }.
 ```
 
 Site-level: name `NICK.ODE`, role, full name, website, email, location, socials, CV file URL, `titles[]` for the divider, About info fields.
@@ -527,6 +573,13 @@ Steps 1–12 are built and committed.
 18. **Intro:** retime to the 3s timeline (6).
 19. **Mobile pass (built):** the 390 frames, the modal sheets, slower marquees, 150vh mountain, visible theme toggle (12.1, 17).
 
+**Third batch (specified and built 2026-11-10): process section and page, then inner-page motion (9.1).**
+20. **Spec:** this file (5.2, 5.3, 7.3.2, 8.1, 11, 17).
+21. **Content, assets, fonts:** `content/process.ts`, `content/pricing.ts`, the PDF and the MilePlan clip in `public`, `latin-ext` on both fonts so `₱` renders in Oswald and Source Serif.
+22. **`/process` page** (8.1).
+23. **Home process rail** (7.3.2), between Services and What I've done.
+24. **Nav link and eyebrow renumbering** (5.2, 5.3).
+
 **Acceptance checklist** (state after step 12; the unticked items need a person looking at a real browser)
 - [ ] Dark and light both pass a visual diff against the Figma frames at 1440.
 - [ ] Hero wordmark in the intro and the hero land on exactly the same pixels (no jump at handoff).
@@ -585,3 +638,5 @@ Sections above are already edited in place; this is the one-stop list.
 - ~~**Network size on phones, tap-for-label, touch-drag**~~ **Verified/fixed:** about 340px at 390 wide (the radius follows the canvas width), horizontal drag spins and vertical scrolls the page, a tap on a logo shows its label until the next tap; the hint adds `TAP A LOGO` on touch screens.
 - ~~**Laptop on phones:** replaced by the card list.~~ **Fixed:** phones run the laptop scene and the cards pop out of the screen (7.4, 12).
 - **Audited at 390×844 (dark and light):** no horizontal scroll anywhere; every visible link and button is at least 44px (logo, footer back-to-top, contact email and socials were raised on mobile; the footer stacks under 640px).
+
+**Figma status (2026-11-10):** the process section (7.3.2) and the `/process` page (8.1) are specified here only and not drawn in Figma; the eyebrow numbers on the Work, Stack, Achievements, Experience and Contact frames are stale by one (now 04–08). This file wins until the frames are redrawn.

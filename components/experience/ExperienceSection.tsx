@@ -10,7 +10,7 @@ export function ExperienceSection() {
     <SwarmBuild id="experience">
       <div className="flex flex-col gap-16 pb-[72px] pt-[120px]">
         <div data-swarm-target>
-          <SectionHeader eyebrow="06 — EXPERIENCE" title="WHERE I'VE BEEN SO FAR" />
+          <SectionHeader eyebrow="07 — EXPERIENCE" title="WHERE I'VE BEEN SO FAR" />
         </div>
         <div className="px-[var(--gutter)]">
           <ExperienceList roles={roles} />

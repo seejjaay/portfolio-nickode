@@ -11,7 +11,7 @@ export function WorkSection() {
   return (
     <section id="work">
       <div className="pb-14 pt-[72px]">
-        <SectionHeader eyebrow="03 — SELECTED WORK" title="WHAT I'VE DONE" />
+        <SectionHeader eyebrow="04 — SELECTED WORK" title="WHAT I'VE DONE" />
       </div>
       <div className="work-scene-wrap">
         <WorkScene projects={projects} />
