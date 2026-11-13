@@ -162,7 +162,7 @@ export function Nav() {
             scrollToY(0);
             history.replaceState(null, "", "/");
           }}
-          className="nav-chip pointer-events-auto flex min-h-11 items-center rounded-full px-5 py-2 font-display text-[18px] font-medium uppercase leading-[1.4] tracking-[0.08em] text-text"
+          className="nav-chip nav-chip-logo pointer-events-auto flex min-h-11 items-center rounded-full px-5 py-2 font-display text-[18px] font-medium uppercase leading-[1.4] tracking-[0.08em] text-text"
         >
           NICK.ODE
         </Link>
