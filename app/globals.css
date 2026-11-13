@@ -484,6 +484,11 @@
     border-color: var(--text);
   }
 
+  /* The NICK.ODE logo chip carries a slightly heavier border than the burger. */
+  .nav-chip-logo {
+    border-width: 2px;
+  }
+
   /* Menu drawer scrim; the drawer itself is animated by GSAP (Nav.tsx). */
   .nav-scrim {
     background: color-mix(in srgb, var(--bg) 72%, transparent);
