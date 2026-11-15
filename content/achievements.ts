@@ -100,6 +100,13 @@ export const event = (
 
 /* Newest first. The row dealer below spreads neighbours across the three rows. */
 export const achievements: Achievement[] = [
+  cert("founding-dev-hackathon", "Founding.dev Design Hackathon", "Founding.dev", "2026", ["HACKATHON", "ONLINE"], {
+    issued: "November 14, 2026",
+    credentialId: "4K99NPMT",
+    verifyUrl: "https://founding.dev/hackathon/design/certificate/4K99NPMT",
+    description:
+      "An online design hackathon held November 6 to 9, 2026. I took part and shipped Mystique, a landing page for a fictional clothing brand built around the idea that hidden things come to light: the page stays monochrome and color only appears when you reveal it under the cursor. It is live. Founding.dev issued this certificate of participation.",
+  }),
   cert("pandesal-wackathon", "Pandesal.DEV Wackathon", "Pandesal.DEV", "2026", ["HACKATHON", "VIRTUAL"], {
     issued: "October 26, 2026",
     credentialId: "PDEV-WCKTHN-2026-025",
