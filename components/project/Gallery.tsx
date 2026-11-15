@@ -34,7 +34,7 @@ const Card = ({
     type="button"
     onClick={(e) => onOpen(index, e.currentTarget)}
     aria-label={`Open ${shot.caption.toLowerCase()}`}
-    className={`group relative block cursor-zoom-in overflow-hidden rounded-card border border-border text-left transition-colors duration-300 hover:border-border-strong ${className}`}
+    className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-card border border-border text-left transition-colors duration-300 hover:border-border-strong ${className}`}
     style={{
       background: "linear-gradient(135deg, var(--media-from), var(--media-to))",
     }}
