@@ -18,12 +18,44 @@ export type Project = {
   tech: string[];
   repo: { url: string; description: string; license?: string; stars?: number; forks?: number; language?: string };
   liveUrl?: string;
+  extraLinks?: { label: string; url: string }[]; // more outlined buttons after the repo, e.g. a competition submission
 };
 
 export const projects: Project[] = [
   {
-    slug: "barkstudy",
+    slug: "mystique",
     index: 1,
+    title: "Mystique",
+    category: "LANDING PAGE",
+    summary: "A clothing-brand landing page where the page stays monochrome and color only shows up when something is revealed under your cursor.",
+    meta: { role: "Designer and Front-end Developer", year: "2026", timeline: "4 days, Nov 6 to 9, 2026", team: "Solo project", client: "Founding.dev Design Hackathon", status: "Shipped" },
+    video: { src: "/projects/mystique/demo.mp4", poster: "/projects/mystique/poster.webp", duration: "0:20" },
+    overview: [
+      "Mystique is a fictional clothing brand, and this is the single page that sells its collection. I built it for the Founding.dev Design Hackathon around one idea: hidden things come to light. The page is black and white, and color only appears when you reveal it: a design under the cursor, a garment under the spotlight, a doodle layer under the final call to action.",
+      "It is one primary action (shop the collection) with an early-access email sign-up behind it, written for the judging criteria of visual design, clarity, creativity and conversion. It runs on Vite, vanilla JavaScript modules and plain CSS with no runtime dependencies. Each section is one module with an init and destroy, and the pointer-follow effects share one tracker and one soft radial-mask reveal instead of repeating the logic.",
+    ],
+    features: [
+      { title: "Color on reveal", text: "The hero garment sits in monochrome until your cursor passes over it, then its true color blooms through a soft radial mask." },
+      { title: "Flowing ink background", text: "A raw WebGL shader draws a slow ink flow behind the hero, with a CSS fallback when WebGL is missing or motion is reduced." },
+      { title: "Collection carousel", text: "Sixteen garments in a carousel with color swatches sampled from the product images, plus a grid view for the full range." },
+      { title: "Spotlight layers", text: "Light layers and drifting particles follow the pointer so a garment is lit by your attention." },
+      { title: "Doodle reveal", text: "The final section hides a doodle layer that is uncovered under the cursor, behind a single early-access email field." },
+      { title: "One module per section", text: "Every section exports init and destroy, and the shared pointer and reveal-mask helpers keep the effects consistent." },
+    ],
+    screenshots: [
+      { src: "/projects/mystique/01-hero.webp", caption: "SCREENSHOT 01 · HERO, COLOR REVEALED UNDER THE CURSOR" },
+      { src: "/projects/mystique/02-collection.webp", caption: "SCREENSHOT 02 · THE COLLECTION CAROUSEL" },
+      { src: "/projects/mystique/03-why.webp", caption: "SCREENSHOT 03 · WHY MYSTIQUE AND TESTIMONIALS" },
+      { src: "/projects/mystique/04-final.webp", caption: "SCREENSHOT 04 · DOODLE REVEAL AND EARLY ACCESS" },
+    ],
+    tech: ["Vite", "JavaScript", "WebGL", "CSS", "Vercel"],
+    repo: { url: "github.com/seejjaay/mystique", description: "Vite + vanilla JS, no runtime dependencies. npm install, then npm run dev.", language: "JavaScript" },
+    liveUrl: "https://mystique-pearl.vercel.app/",
+    extraLinks: [{ label: "HACKATHON SUBMISSION", url: "https://mystique.foundingdev.com/" }],
+  },
+  {
+    slug: "barkstudy",
+    index: 2,
     title: "BarkStudy",
     category: "DESKTOP APP",
     featured: true,
@@ -55,7 +87,7 @@ export const projects: Project[] = [
   },
   {
     slug: "lokal-md",
-    index: 2,
+    index: 3,
     title: "Lokal.MD",
     category: "AI / HEALTHCARE",
     summary: "An offline clinical documentation and medication-safety workstation for rural health units.",
@@ -86,7 +118,7 @@ export const projects: Project[] = [
   },
   {
     slug: "verifund-ph",
-    index: 3,
+    index: 4,
     title: "VeriFund PH",
     category: "WEB APP",
     summary: "A social aid distribution platform that gets ayuda to verified people and cuts ghost beneficiaries and duplicate claims.",
@@ -117,7 +149,7 @@ export const projects: Project[] = [
   },
   {
     slug: "orgavents",
-    index: 4,
+    index: 5,
     title: "OrgaVents",
     category: "WEB APP",
     summary: "Campus event management with calendar, venues and registrations, running on a mock backend or a live API.",
@@ -148,7 +180,7 @@ export const projects: Project[] = [
   },
   {
     slug: "jpcs-site",
-    index: 5,
+    index: 6,
     title: "JPCS Website",
     category: "WEB APP",
     summary: "The official site for the JPCS chapter at DLSL, with events, projects, gallery and an admin panel.",
@@ -179,7 +211,7 @@ export const projects: Project[] = [
   },
   {
     slug: "santa-for-hire",
-    index: 6,
+    index: 7,
     title: "Santa for Hire",
     category: "WEB APP",
     summary: "A festive booking site for a Santa Claus performer in the Philippines, with services, video greetings and a booking form.",
