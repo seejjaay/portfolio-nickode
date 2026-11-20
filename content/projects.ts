@@ -23,8 +23,39 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "mystique",
+    slug: "pencil-whiskers",
     index: 1,
+    title: "Pencil Whiskers",
+    category: "WEB GAME",
+    summary: "A browser game where you draw shapes in the air with your fingers in front of the webcam to send household threats away from a napping cat.",
+    meta: { role: "Game Developer", year: "2026", timeline: "4 days, Nov 16 to 19, 2026", team: "Solo project", status: "Shipped" },
+    video: { src: "/projects/pencil-whiskers/demo.mp4", poster: "/projects/pencil-whiskers/poster.webp", duration: "0:23" },
+    overview: [
+      "Thomas the cat is napping, and household threats creep toward him: a grumpy vacuum, a spray bottle, a cucumber, a thunder cloud, a bathtub. Each one is thinking of a shape. You pinch your thumb and index finger in front of the webcam and draw that shape in the air to send it packing. There is a mouse mode too, and everything runs in the browser with no backend, no accounts and no analytics, so the camera image never leaves your device.",
+      "The game is inspired by Thomas, the real pet cat of a woman I love and am courting as I write this. I wanted to make something small and warm for her out of the thing she is fondest of, so the cat on the screen is hers and the whole game is built around keeping him asleep.",
+      "Under the hood, a Web Worker runs MediaPipe hand tracking so the 60+ fps render loop never waits on the camera. Pinches are detected with hysteresis (separate on and off thresholds, so the pinch does not flicker) and smoothed with a One Euro filter, and a $1-style template matcher recognizes the shapes, tuned on real recorded camera strokes. The game rules are pure and seeded, so a run can be replayed exactly. All the art and sound are generated in code.",
+    ],
+    features: [
+      { title: "Draw in the air", text: "Pinch thumb and index finger and draw the shape each threat is thinking of. No camera, or prefer a mouse? Hold the button and drag instead." },
+      { title: "Shape recognition", text: "A $1-style template matcher with per-shape rotation and corner rules, tuned on real camera strokes, plus a calibration screen, Teach Thomas my shapes, that learns your own handwriting." },
+      { title: "Waves, a boss and power-ups", text: "Waves of threats get faster, then the Bath Time boss asks for every shape on the tub. Falling gifts are caught by drawing their shape, then spent with a spiral, an infinity loop or an arch." },
+      { title: "Private and offline", text: "Hand tracking runs fully in the browser with the model bundled locally. A service worker caches everything, so after one visit with the camera on it also works offline." },
+      { title: "Replayable and tested", text: "Seeded game rules mean ?seed=123 replays the same game, and the test suite replays real recorded camera strokes through the recognizer." },
+      { title: "Hand-made feel", text: "A solid orange cat on a soft pink background, with the art, particles and sounds all generated in code using Canvas and Web Audio." },
+    ],
+    screenshots: [
+      { src: "/projects/pencil-whiskers/01-title.webp", caption: "SCREENSHOT 01 · THOMAS NAPPING ON THE TITLE SCREEN" },
+      { src: "/projects/pencil-whiskers/02-pounce.webp", caption: "SCREENSHOT 02 · A DRAWN CIRCLE SENDS THE THREAT PACKING" },
+      { src: "/projects/pencil-whiskers/03-boss.webp", caption: "SCREENSHOT 03 · THE BATH TIME BOSS" },
+      { src: "/projects/pencil-whiskers/04-bath-cancelled.webp", caption: "SCREENSHOT 04 · BATH CANCELLED" },
+    ],
+    tech: ["TypeScript", "Vite", "MediaPipe", "Canvas", "Web Audio", "Vitest"],
+    repo: { url: "github.com/seejjaay/pencil-whiskers", description: "TypeScript + Vite, with MediaPipe hand tracking in a Web Worker. npm install, then npm run dev. Needs desktop Chrome or Edge with a webcam.", language: "TypeScript" },
+    liveUrl: "https://pencil-whiskers.vercel.app",
+  },
+  {
+    slug: "mystique",
+    index: 2,
     title: "Mystique",
     category: "LANDING PAGE",
     summary: "A clothing-brand landing page where the page stays monochrome and color only shows up when something is revealed under your cursor.",
@@ -55,7 +86,7 @@ export const projects: Project[] = [
   },
   {
     slug: "barkstudy",
-    index: 2,
+    index: 3,
     title: "BarkStudy",
     category: "DESKTOP APP",
     featured: true,
@@ -87,7 +118,7 @@ export const projects: Project[] = [
   },
   {
     slug: "lokal-md",
-    index: 3,
+    index: 4,
     title: "Lokal.MD",
     category: "AI / HEALTHCARE",
     summary: "An offline clinical documentation and medication-safety workstation for rural health units.",
@@ -118,7 +149,7 @@ export const projects: Project[] = [
   },
   {
     slug: "verifund-ph",
-    index: 4,
+    index: 5,
     title: "VeriFund PH",
     category: "WEB APP",
     summary: "A social aid distribution platform that gets ayuda to verified people and cuts ghost beneficiaries and duplicate claims.",
@@ -149,7 +180,7 @@ export const projects: Project[] = [
   },
   {
     slug: "orgavents",
-    index: 5,
+    index: 6,
     title: "OrgaVents",
     category: "WEB APP",
     summary: "Campus event management with calendar, venues and registrations, running on a mock backend or a live API.",
@@ -180,7 +211,7 @@ export const projects: Project[] = [
   },
   {
     slug: "jpcs-site",
-    index: 6,
+    index: 7,
     title: "JPCS Website",
     category: "WEB APP",
     summary: "The official site for the JPCS chapter at DLSL, with events, projects, gallery and an admin panel.",
@@ -211,7 +242,7 @@ export const projects: Project[] = [
   },
   {
     slug: "santa-for-hire",
-    index: 7,
+    index: 8,
     title: "Santa for Hire",
     category: "WEB APP",
     summary: "A festive booking site for a Santa Claus performer in the Philippines, with services, video greetings and a booking form.",
