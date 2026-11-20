@@ -1,6 +1,5 @@
 /* How a freelance project runs (DESIGN.md 7.3.2 and 8.1). The steps follow the
-   engagement flow in mileplan's spec and the "How it works" terms on the price
-   list (content/pricing.ts). */
+   engagement flow in mileplan's spec. */
 
 export type ProcessStep = {
   id: string;
@@ -21,9 +20,9 @@ export const steps: ProcessStep[] = [
     title: "Discuss",
     gist: "We talk through your goals, who it is for and what it needs to do.",
     detail:
-      "A call or chat about what you want built, who will use it, what has to be in the first version and what can wait. No commitment, and no prices yet beyond a rough range.",
+      "A call or chat about what you want built, who will use it, what has to be in the first version and what can wait. No commitment.",
     youDo: ["Tell me the goal and the deadline", "Share any examples, files or branding you already have"],
-    youGet: ["Honest feedback on scope and timeline", "A rough range from the price list"],
+    youGet: ["Honest feedback on scope and timeline", "A clear idea of what the first version covers"],
   },
   {
     id: "quote",
@@ -31,9 +30,9 @@ export const steps: ProcessStep[] = [
     title: "Quote",
     gist: "I send a written quote and timeline, so you know the cost before anything starts.",
     detail:
-      "I turn the conversation into a written quote with the scope, the timeline and the price. Final price depends on scope, complexity and timeline, and the price list is where it starts from.",
+      "I turn the conversation into a written quote with the scope, the timeline and the price. The price depends on scope, complexity and timeline, and you see it before anything starts.",
     youDo: ["Read the quote and ask about anything unclear", "Confirm or adjust the scope"],
-    youGet: ["A written quote and timeline", "Add-ons priced separately, if you want them"],
+    youGet: ["A written quote and timeline", "Add-ons quoted separately, if you want them"],
   },
   {
     id: "sign",
