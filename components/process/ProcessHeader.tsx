@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { MaskIcon } from "@/components/ui/MaskIcon";
-import { priceListPdf } from "@/content/pricing";
-import { btnPrimary, btnSecondary, eyebrow } from "./styles";
+import { btnPrimary, eyebrow } from "./styles";
 
-/* Process & pricing page header (DESIGN.md 8.1). Same shape as ProjectHeader. */
+/* Process page header (DESIGN.md 8.1). Same shape as ProjectHeader. */
 export function ProcessHeader() {
   return (
     <header className="px-[var(--gutter)] pt-14">
@@ -24,18 +23,15 @@ export function ProcessHeader() {
         FREELANCE · 2026
       </p>
       <h1 data-enter="" style={{ "--i": 2 } as React.CSSProperties} className="mt-7 font-display text-[clamp(56px,8.33vw,120px)] font-semibold uppercase leading-[1.1] tracking-[0.01em] text-text">
-        HOW WE&apos;LL WORK
+        HOW WE COULD WORK
       </h1>
       <p data-enter="" style={{ "--i": 3 } as React.CSSProperties} className="mt-7 max-w-[760px] font-body text-[20px] leading-[1.7] text-text-2">
-        From the first conversation to the handover: what happens at each step, where your project lives once it starts, and what
-        it costs.
+        From the first conversation to the handover: what could happen at each step, and where your project would live once it
+        starts.
       </p>
 
       <div data-enter="" style={{ "--i": 4 } as React.CSSProperties} className="mt-10 flex flex-wrap items-start gap-4">
-        <a href={priceListPdf.href} download={priceListPdf.file} className={btnPrimary}>
-          {priceListPdf.label} ↓
-        </a>
-        <Link href="/#contact" className={btnSecondary}>
+        <Link href="/#contact" className={btnPrimary}>
           START A PROJECT →
         </Link>
       </div>
