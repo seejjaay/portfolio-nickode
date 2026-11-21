@@ -4,13 +4,12 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { MaskIcon } from "@/components/ui/MaskIcon";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { priceListPdf } from "@/content/pricing";
 import { steps } from "@/content/process";
 import { clamp, smoothstep } from "@/lib/motion";
 import { collapsePin, isScrolling } from "@/lib/scroll";
-import { btnPrimary, textLink } from "./styles";
+import { btnPrimary } from "./styles";
 
-/* How we'll work (DESIGN.md 7.3.2). A pinned scene, 200vh of scroll: a line is
+/* How we could work (DESIGN.md 7.3.2). A pinned scene, 200vh of scroll: a line is
    drawn left to right through six steps, the row pans sideways to keep the
    head of the line in view, and each step lights as the line reaches it. Once
    complete it stays complete, and the scroll spacer is removed so scrolling
@@ -159,7 +158,7 @@ export function ProcessScene() {
   return (
     <div ref={trackRef} className="pr-track">
       <div className="pr-stage">
-        <SectionHeader eyebrow="03 — PROCESS" title="HOW WE'LL WORK" />
+        <SectionHeader eyebrow="03 — PROCESS" title="HOW WE COULD WORK" />
 
         <div ref={railRef} className="pr-rail" tabIndex={0} role="region" aria-label="The six steps. Scroll sideways to browse them.">
           <div ref={rowRef} className="pr-row">
@@ -188,11 +187,8 @@ export function ProcessScene() {
 
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3 px-[var(--gutter)]">
           <Link href="/process" className={btnPrimary}>
-            PRICES &amp; PROCESS →
+            SEE THE FULL PROCESS →
           </Link>
-          <a href={priceListPdf.href} download={priceListPdf.file} className={textLink}>
-            DOWNLOAD PRICE LIST ↓
-          </a>
           <div className="pr-arrows ml-auto flex gap-3">
             <button ref={prevRef} type="button" aria-label="Previous steps" className="pr-arrow">
               <MaskIcon name="arrow-left" width={18} />

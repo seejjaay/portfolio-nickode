@@ -22,14 +22,14 @@ A black-and-white editorial portfolio for **NICK.ODE**, set against a calm space
 3. About Me (wave transition in, dot-matrix portrait)
 4. Titles divider (two marquees)
 5. What can I offer (services: a folder that opens and deals out a deck of cards)
-6. How we'll work (a line drawn left to right through six steps)
+6. How we could work (a line drawn left to right through six steps)
 7. What I've done (3D laptop, project carousel)
 8. What I use (growing network sphere)
 9. What I have achieved (two-row marquee + modals)
 10. Where I've been so far (swarm-built experience accordion)
 11. Contact + footer
 
-Plus a **Project Detail** page, a **Process & pricing** page (section 8.1) and two **achievement modals** (certificate, event). Dark and light themes both ship.
+Plus a **Project Detail** page, a **How we could work** page (section 8.1) and two **achievement modals** (certificate, event). Dark and light themes both ship.
 
 ---
 
@@ -128,13 +128,13 @@ Fixed, full-viewport, behind everything. Sections are transparent so stars show 
 
 ### 5.2 Navigation
 **As built (replaces the original top bar at every width):** no bar. The `NICK.ODE` logo and a burger float over the page; the burger opens a right-side dialog drawer (GSAP: burger morphs to a close icon in place, scrim fades, panel slides, links stagger in; reversed a little faster to close). The page is **not** scroll-locked while the drawer is open. Links, in this order and wording:
-`ABOUT` · `WHAT I OFFER` · `HOW WE'LL WORK` · `WHAT I'VE DONE` · `WHAT I USE` · `WHAT I HAVE ACHIEVED` · `WHERE I'VE BEEN SO FAR` · `CONTACT`
+`ABOUT` · `WHAT I OFFER` · `HOW WE COULD WORK` · `WHAT I'VE DONE` · `WHAT I USE` · `WHAT I HAVE ACHIEVED` · `WHERE I'VE BEEN SO FAR` · `CONTACT`
 Active link uses `--text` with a 1px underline; others `--text-muted`. Active state follows scroll position (the last section whose top has crossed a probe line at 40% of the viewport); About is active until a later section takes over. On `/projects/[slug]` the `WHAT I'VE DONE` link is the active one. Links glide to their section (smooth scroll). The theme toggle lives in the drawer.
 
 ### 5.3 Section headers
 Eyebrow with number, big Oswald title, 1px divider (`--border`) beneath, left-aligned.
 - `02 — WHAT I OFFER` / WHAT CAN I OFFER
-- `03 — PROCESS` / HOW WE'LL WORK
+- `03 — PROCESS` / HOW WE COULD WORK
 - `04 — SELECTED WORK` / WHAT I'VE DONE
 - `05 — TECH STACK` / WHAT I USE
 - `06 — ACHIEVEMENTS` / WHAT I HAVE ACHIEVED
@@ -266,8 +266,8 @@ Placeholder services, in order: **Data Engineering & Pipelines**, **SQL & Databa
 - Reduced motion: no pin; show the folder open with the five cards as a plain stacked list.
 - Mobile: same scene, `100svh` pin, folder about 300px wide, cards full width minus the 24px gutters. See section 12.1.
 
-### 7.3.2 How we'll work (process rail; pinned 200vh)
-Sits directly **below What I offer**. Eyebrow `03 — PROCESS`, title `HOW WE'LL WORK` (the drawer link is `HOW WE'LL WORK`, id `process`). The gist of how a freelance engagement runs, with a button to the full page (8.1). **Not drawn in Figma**; this section is the spec.
+### 7.3.2 How we could work (process rail; pinned 200vh)
+Sits directly **below What I offer**. Eyebrow `03 — PROCESS`, title `HOW WE COULD WORK` (the drawer link is `HOW WE COULD WORK`, id `process`). The gist of how a freelance engagement runs, with a button to the full page (8.1). **Not drawn in Figma**; this section is the spec.
 
 - **Steps (six, from `content/process.ts`):** `01 Discuss`, `02 Quote`, `03 Sign`, `04 Kick off in MilePlan`, `05 Build & review`, `06 Deliver`. Each has a one-line gist (Source Serif, about two lines).
 - **Rail:** one horizontal 1px `--border` line through six step nodes laid out left to right (about 300px per step, 260px on phones, so the row is wider than the screen). Each node: a circle marker on the line, the index (Oswald, muted), the title (Oswald) and the gist. A `--text` progress line sits over the border line.
@@ -276,7 +276,7 @@ Sits directly **below What I offer**. Eyebrow `03 — PROCESS`, title `HOW WE'LL
   - Step *n* lights as the line reaches its marker: the marker fills with `--text` (opacity), the title and gist go from `--text-muted` to `--text` / `--text-2` (a `--lit` variable, 0 to 1), 8px rise. The pan and the line use `transform` only. The header sits inside the pinned stage so it stays on screen.
   - Once complete it stays complete; when the page is at rest the scroll spacer is removed (`collapsePin`), so scrolling back up passes the section in one screen.
 - **Free horizontal scroll:** the rail is a real horizontal scroller (no visible bar). Scroll drives its position until the visitor takes over: a swipe, a sideways wheel or trackpad gesture, a mouse drag (grab cursor), the keyboard (the rail is focusable; arrow keys) or the round prev/next buttons (one step per click, disabled at the ends, bottom right next to the button). From then on the pan is theirs while the line and the lit steps keep following vertical scroll; scrolling back above the scene hands the pan back to the scrub. `overscroll-behavior-x: contain` stops a sideways swipe from triggering browser back. The buttons are hidden under reduced motion (the grid has nothing to scroll).
-- **Button:** below the rail, always visible and focusable (not tied to progress): primary `PRICES & PROCESS →` linking to `/process`, plus a text link `DOWNLOAD PRICE LIST ↓` to the PDF.
+- **Button:** below the rail, always visible and focusable (not tied to progress): primary `SEE THE FULL PROCESS →` linking to `/process`.
 - Reduced motion: no pin and no line; the steps sit in a static grid, all lit (3×2 desktop, a vertical list under 768px).
 - Mobile: same scene, `100svh` stage, 24px gutters.
 
@@ -363,16 +363,14 @@ Same nav (Projects active), same background. Order of content:
 7. **GitHub repository** (`05 — SOURCE CODE`): wide card with the `github.com/username/project-four` path, short description, stars, forks, language dot, license, and a primary `VIEW ON GITHUB ↗` button. Optionally fetch stars/forks from the GitHub API at build time.
 8. **Previous / Next project** links at the bottom (`← PREVIOUS PROJECT` / `NEXT PROJECT →`) with large titles. Then the footer.
 
-### 8.1 Page: Process & pricing (`/process`)
+### 8.1 Page: How we could work (`/process`)
 
-Static page, same nav (How we'll work active), same background, same conventions as Project Detail: sections 96px apart, `SectionHeader`, tokens only. **Not drawn in Figma.** Content lives in `content/process.ts` and `content/pricing.ts`.
-1. **Header:** `← BACK TO HOME` (to `/#process`), eyebrow `FREELANCE · 2026`, giant Oswald title `HOW WE'LL WORK`, one-line summary. Buttons: primary `DOWNLOAD PRICE LIST (PDF) ↓` (a plain `<a download>` to the file in `public/pricing`), secondary `START A PROJECT →` (to `/#contact`).
+Static page, same nav (How we could work active), same background, same conventions as Project Detail: sections 96px apart, `SectionHeader`, tokens only. **Not drawn in Figma.** Content lives in `content/process.ts`. No prices anywhere on the site: the quote is worked out per project.
+1. **Header:** `← BACK TO HOME` (to `/#process`), eyebrow `FREELANCE · 2026`, giant Oswald title `HOW WE COULD WORK`, one-line summary. One primary button, `START A PROJECT →` (to `/#contact`).
 2. **The process** (`01 — THE PROCESS`): the six steps as a numbered vertical list on the same rail motif (static), each with a detail paragraph and short `YOU DO` / `YOU GET` lists. Step 3 names the four documents (service contract, project agreement, SRS, milestone plan).
-3. **MilePlan** (`02 — MILEPLAN`, title `WHERE YOUR PROJECT LIVES`): an intro, the walkthrough clip in the project `VideoPlayer`, a caption that the names and figures in the clip are made up (the clip shows the same 50% downpayment as the price list; if it is ever re-cut with a different split, say so here), then a 3-up grid of what the client can do in the portal (follow the milestone route, approve or request changes, upload payment proof, acknowledge plan changes, message, keep the signed documents; the project becomes a read-only record at close-out).
-4. **Pricing** (`03 — PRICING`, title `WHAT IT COSTS`): three groups (Web development, Application development, Simple & student projects). The first two are 3-up package cards: name, `FROM ₱3,500` (Oswald), italic timeline, summary, inclusions. Simple & student projects are 4-up compact cards. Then two columns: the add-ons as a hairline table and `HOW IT WORKS` (start, payment, revisions, not included, delivery). A disclaimer line (starting prices, valid through 2026) and a second PDF button.
-5. **Closing call:** `HAVE A PROJECT IN MIND?` with a primary `LET'S TALK →` to `/#contact`. Footer as usual.
-- Responsive: package cards 3 → 2 → 1 columns at lg and md; add-ons and terms stack under md; no horizontal scroll at 390.
-- The price list PDF, `content/pricing.ts` and `mileplan/templates/prices.json` carry the same prices and change together.
+3. **MilePlan** (`02 — MILEPLAN`, title `WHERE YOUR PROJECT LIVES`): an intro, the walkthrough clip in the project `VideoPlayer`, a caption that the names and figures in the clip are made up (the clip shows a 50% downpayment; if it is ever re-cut with a different split, say so here), then a 3-up grid of what the client can do in the portal (follow the milestone route, approve or request changes, upload payment proof, acknowledge plan changes, message, keep the signed documents; the project becomes a read-only record at close-out).
+4. **Closing call:** `HAVE A PROJECT IN MIND?` with a primary `LET'S TALK →` to `/#contact`. Footer as usual.
+- Responsive: the step list and MilePlan grid collapse to one column under md; no horizontal scroll at 390.
 
 ---
 
@@ -401,9 +399,8 @@ The pages other than home (`/process`, `/projects/[slug]`) get a light, scroll-a
 - **Reveal (`data-reveal`, `components/ui/Reveal.tsx`):** everything below the fold fades and rises 24px (700ms, 90ms stagger, columns restart the stagger per row) as it enters the viewport, once. Variants: `zoom` (rises and settles from 97%), `pop` (step markers, from 60%), `grow-x` (section divider draws left to right) and `grow-y` (the connector between process steps draws downward). Elements already scrolled past on load are shown at once.
 - **Section headers:** with `reveal`, the eyebrow and title rise in and the divider line draws across.
 - **Reading progress (`ScrollProgress`):** a 2px `--text` line along the very top, filling with page scroll, under the nav.
-- **Price count-up (`CountUp`):** each package price counts up from 0 over about 1.1s the first time it is 60% on screen. The final value is in the HTML and an invisible copy holds the width, so nothing shifts.
 - **Previous / next project:** the project page is keyed by slug, so moving between projects remounts it and the enter and reveal play again.
-- **Safety:** under `prefers-reduced-motion` and with scripting off everything is simply shown (CSS, not JS), and the progress line is hidden. Only `transform` and `opacity` animate. Animate a wrapper, not an element that has its own hover transition (the price cards are an `li` wrapper around the card).
+- **Safety:** under `prefers-reduced-motion` and with scripting off everything is simply shown (CSS, not JS), and the progress line is hidden. Only `transform` and `opacity` animate. Animate a wrapper, not an element that has its own hover transition (cards in a list sit in an `li` wrapper around the card).
 
 ---
 
@@ -450,10 +447,7 @@ type Tech = { name: string; logo: string; weight: 1 | 2 | 3 }; // weight sets no
 
 ```ts
 type ProcessStep = { id: string; index: number; title: string; gist: string; detail: string; youDo: string[]; youGet: string[] };
-type Package = { name: string; from: number; timeline?: string; summary: string; inclusions?: string[] };
-type PriceGroup = { id: string; title: string; kicker: string; packages: Package[] };
-// content/process.ts also holds the MilePlan intro, its clip { src, poster, duration } and its feature cards;
-// content/pricing.ts holds groups, addOns { label, price }[], terms { label, text }[], the disclaimer and the PDF { href, file, label }.
+// content/process.ts also holds the MilePlan intro, its clip { src, poster, duration } and its feature cards.
 ```
 
 Site-level: name `NICK.ODE`, role, full name, website, email, location, socials, CV file URL, `titles[]` for the divider, About info fields.
@@ -575,7 +569,7 @@ Steps 1–12 are built and committed.
 
 **Third batch (specified and built 2026-11-10): process section and page, then inner-page motion (9.1).**
 20. **Spec:** this file (5.2, 5.3, 7.3.2, 8.1, 11, 17).
-21. **Content, assets, fonts:** `content/process.ts`, `content/pricing.ts`, the PDF and the MilePlan clip in `public`, `latin-ext` on both fonts so `₱` renders in Oswald and Source Serif.
+21. **Content, assets, fonts:** `content/process.ts` and the MilePlan clip in `public`, `latin-ext` on both fonts so `₱` renders in Oswald and Source Serif.
 22. **`/process` page** (8.1).
 23. **Home process rail** (7.3.2), between Services and What I've done.
 24. **Nav link and eyebrow renumbering** (5.2, 5.3).

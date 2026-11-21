@@ -832,7 +832,7 @@
     background: var(--screen-text);
   }
 
-  /* ---- How we'll work: process rail (DESIGN.md 7.3.2) -----------------------
+  /* ---- How we could work: process rail (DESIGN.md 7.3.2) -----------------------
      Pinned 200vh. ProcessScene turns scroll progress into the drawn line, the
      sideways pan and each step lighting up (the --lit variable, 0 to 1). */
   .pr-track {
