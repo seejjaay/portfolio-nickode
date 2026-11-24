@@ -52,13 +52,15 @@ export function ProjectHeader({ project }: { project: Project }) {
             <MaskIcon name="arrow-up-right" width={16} />
           </a>
         )}
-        <a
-          href={`https://${project.repo.url}`}
-          className="inline-flex h-[54px] items-center gap-[10px] rounded-control border border-border-strong px-8 font-display text-[14px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text transition-colors duration-300 hover:border-text"
-        >
-          <MaskIcon name="git-branch" width={16} />
-          GITHUB REPO
-        </a>
+        {project.repo.url && (
+          <a
+            href={`https://${project.repo.url}`}
+            className="inline-flex h-[54px] items-center gap-[10px] rounded-control border border-border-strong px-8 font-display text-[14px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-text transition-colors duration-300 hover:border-text"
+          >
+            <MaskIcon name="git-branch" width={16} />
+            GITHUB REPO
+          </a>
+        )}
         {project.extraLinks?.map((l) => (
           <a
             key={l.url}
