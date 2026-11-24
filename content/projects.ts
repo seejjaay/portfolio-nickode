@@ -16,15 +16,47 @@ export type Project = {
   features: { title: string; text: string }[];
   screenshots: { src: string; caption: string }[];
   tech: string[];
-  repo: { url: string; description: string; license?: string; stars?: number; forks?: number; language?: string };
+  // No url = private repository (client work): the page shows a private note instead of a GitHub link.
+  repo: { url?: string; description: string; license?: string; stars?: number; forks?: number; language?: string };
   liveUrl?: string;
   extraLinks?: { label: string; url: string }[]; // more outlined buttons after the repo, e.g. a competition submission
 };
 
 export const projects: Project[] = [
   {
-    slug: "pencil-whiskers",
+    slug: "explore-amadeo",
     index: 1,
+    title: "Explore Amadeo",
+    category: "ANDROID APP",
+    summary: "A native Android guide to Amadeo, Cavite, the cradle of Philippine coffee, with a map, a directory, audio tour guides and emergency numbers that all work offline.",
+    cover: "/projects/explore-amadeo/01-home-search.webp",
+    meta: { role: "Android Developer", year: "2026", timeline: "11 days, Nov 14 to 24, 2026", team: "Solo project", client: "Client project", status: "Signed APK built" },
+    video: { src: "/projects/explore-amadeo/demo.mp4", poster: "/projects/explore-amadeo/poster.webp", duration: "0:30" },
+    overview: [
+      "Explore Amadeo is a tourism app for Amadeo, Cavite, built for a client who wanted visitors to find places, hear about them and reach help without signing up for anything. It has exactly five screens: Home, an interactive Map, a Directory of destinations, a Digital Tour Guide with audio narration, and an Emergency directory with tap-to-call. It covers ten destinations across five categories: attractions, coffee farms, restaurants, cafés and resorts.",
+      "It is native Kotlin with Jetpack Compose, and the map uses osmdroid on OpenStreetMap tiles, so there is no API key and no billing account behind it. Every destination, guide script, narration file and emergency contact is bundled inside the app, so everything except the map tiles and the hand-off to a maps app works with no signal, which matters on the road to a coffee farm. There is no backend, no account and no analytics, and no personal data leaves the phone. Location is optional and only used to center the map.",
+      "The scope was a signed spec with fixed dates, so most of the work was holding that line: a content gate in the unit tests that rejects missing or malformed data, a script that strips Exif (the hidden GPS and camera data in photos) from the client's pictures before they are bundled, and adb-driven device checks for cold start and screen draw time against a two-second budget. It was tested on an Android 8.0 emulator, an Android 16 emulator and a real phone. The launch video's music is \"Happy Beats / Business Moves Vol. 11\" by Sascha Ende (ende.app), licensed CC BY 4.0.",
+    ],
+    features: [
+      { title: "Interactive map", text: "Destinations as markers on an OpenStreetMap map with zoom, a locate button and category filters. Tapping a marker opens a summary card with a Get Directions button that hands off to the maps app." },
+      { title: "Searchable directory", text: "A card list with photo, name and category, searchable by name and filterable by category. Each destination opens a details page with its description, hours, contact and services." },
+      { title: "Audio tour guides", text: "Each guide has an About section, the history and the cultural significance of the place, with a narration player: play, pause, seek, skip back and forward, and volume." },
+      { title: "Emergency numbers", text: "The local emergency and visitor-assistance contacts, each with a number and an address. One tap opens the dialer with the number filled in; the visitor presses call." },
+      { title: "Fully offline content", text: "All destination, guide, audio and emergency data lives inside the app. Only the map tiles and directions need a connection, and the app says so instead of failing quietly." },
+      { title: "Private and light", text: "No accounts, no analytics and no personal data sent anywhere. Location permission is optional. A minified, signed release APK for Android 8.0 and up." },
+    ],
+    screenshots: [
+      { src: "/projects/explore-amadeo/01-home-search.webp", caption: "SCREENSHOT 01 · HOME AND DESTINATION SEARCH" },
+      { src: "/projects/explore-amadeo/02-map.webp", caption: "SCREENSHOT 02 · MAP WITH A DESTINATION CARD" },
+      { src: "/projects/explore-amadeo/03-map-directory.webp", caption: "SCREENSHOT 03 · ALL DESTINATIONS ON THE MAP AND THE DIRECTORY" },
+      { src: "/projects/explore-amadeo/04-guide-emergency.webp", caption: "SCREENSHOT 04 · AUDIO TOUR GUIDE AND EMERGENCY NUMBERS" },
+    ],
+    tech: ["Kotlin", "Jetpack Compose", "osmdroid", "OpenStreetMap", "Android"],
+    repo: { description: "Built for a client, so the source stays private. The signed APK and a short technical guide were written for the handover.", language: "Kotlin" },
+  },
+  {
+    slug: "pencil-whiskers",
+    index: 2,
     title: "Pencil Whiskers",
     category: "WEB GAME",
     summary: "A browser game where you draw shapes in the air with your fingers in front of the webcam to send household threats away from a napping cat.",
@@ -55,7 +87,7 @@ export const projects: Project[] = [
   },
   {
     slug: "mystique",
-    index: 2,
+    index: 3,
     title: "Mystique",
     category: "LANDING PAGE",
     summary: "A clothing-brand landing page where the page stays monochrome and color only shows up when something is revealed under your cursor.",
@@ -86,7 +118,7 @@ export const projects: Project[] = [
   },
   {
     slug: "barkstudy",
-    index: 3,
+    index: 4,
     title: "BarkStudy",
     category: "DESKTOP APP",
     featured: true,
@@ -118,7 +150,7 @@ export const projects: Project[] = [
   },
   {
     slug: "lokal-md",
-    index: 4,
+    index: 5,
     title: "Lokal.MD",
     category: "AI / HEALTHCARE",
     summary: "An offline clinical documentation and medication-safety workstation for rural health units.",
@@ -149,7 +181,7 @@ export const projects: Project[] = [
   },
   {
     slug: "verifund-ph",
-    index: 5,
+    index: 6,
     title: "VeriFund PH",
     category: "WEB APP",
     summary: "A social aid distribution platform that gets ayuda to verified people and cuts ghost beneficiaries and duplicate claims.",
@@ -180,7 +212,7 @@ export const projects: Project[] = [
   },
   {
     slug: "orgavents",
-    index: 6,
+    index: 7,
     title: "OrgaVents",
     category: "WEB APP",
     summary: "Campus event management with calendar, venues and registrations, running on a mock backend or a live API.",
@@ -211,7 +243,7 @@ export const projects: Project[] = [
   },
   {
     slug: "jpcs-site",
-    index: 7,
+    index: 8,
     title: "JPCS Website",
     category: "WEB APP",
     summary: "The official site for the JPCS chapter at DLSL, with events, projects, gallery and an admin panel.",
@@ -242,7 +274,7 @@ export const projects: Project[] = [
   },
   {
     slug: "santa-for-hire",
-    index: 8,
+    index: 9,
     title: "Santa for Hire",
     category: "WEB APP",
     summary: "A festive booking site for a Santa Claus performer in the Philippines, with services, video greetings and a booking form.",
